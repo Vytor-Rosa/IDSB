@@ -8,22 +8,23 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "beneficioReal")
+@Table(name = "beneficioPotencial")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
-public class BeneficioReal {
+public class BeneficioPotencial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBenficioReal;
+    private Integer codigoBeneficioPotencial;
 
     @Column(nullable = false)
-    private Double valorMensalReal;
+    private Double valorMensalPotencial;
 
     @Column(nullable = false)
-    private String descricaoBeneficioReal;
+    private Boolean obrigacaoLegal;
 
     @Column(nullable = false)
-    private String moedaReal;
+    private String moedaPotencial;
+
 }

@@ -10,5 +10,5 @@ public class BeneficioRealDTO {
     private Integer codigoBenficioReal;
     private Double valorMensalReal;
     private String descricaoBeneficioReal;
-    private String moedaValorReal;
+    private String moedaReal;
 }
