@@ -19,7 +19,7 @@ public class BeneficioQualitativo {
     private Integer codigoBeneficioQualitativo;
 
     @Column(nullable = false)
-    private String frequeciaDeUso;
+    private String frequenciaDeUso;
 
     @Column(nullable = false)
     private boolean requisitosControlesInternos;

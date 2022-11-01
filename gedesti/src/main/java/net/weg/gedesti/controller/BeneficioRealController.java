@@ -8,10 +8,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,21 +26,28 @@ public class BeneficioRealController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(BeneficioRealDTO beneficioRealDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid BeneficioRealDTO beneficioRealDTO) {
         BeneficioReal beneficioReal = new BeneficioReal();
         BeanUtils.copyProperties(beneficioRealDTO, beneficioReal);
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficioRealService.save(beneficioReal));
     }
 
-    public Optional<BeneficioReal> findById(Integer integer) {
-        return beneficioRealService.findById(integer);
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
+        Optional<BeneficioReal> beneficioRealOptional = beneficioRealService.findById(codigo);
+        if(beneficioRealOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum benefecio real com codigo: " + codigo);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioRealService.findById(codigo));
     }
 
-    public boolean existsById(Integer integer) {
-        return beneficioRealService.existsById(integer);
-    }
-
-    public void deleteById(Integer integer) {
-        beneficioRealService.deleteById(integer);
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
+        Optional<BeneficioReal> beneficioRealOptional = beneficioRealService.findById(codigo);
+        if(beneficioRealOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum benefecio real com codigo: " + codigo);
+        }
+        beneficioRealService.deleteById(codigo);
+        return ResponseEntity.status(HttpStatus.OK).body("Beneficio real " + codigo + " deletado com sucesso!");
     }
 }

@@ -8,6 +8,6 @@ import javax.persistence.Column;
 @Getter @Setter
 public class BeneficioQualitativoDTO {
     private Integer codigoBeneficioQualitativo;
-    private String frequeciaDeUso;
+    private String frequenciaDeUso;
     private boolean requisitosControlesInternos;
 }
