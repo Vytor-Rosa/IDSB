@@ -3,7 +3,7 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.FuncionarioDTO;
 import net.weg.gedesti.model.entity.Funcionario;
-import net.weg.gedesti.model.service.FuncionarioSerivce;
+import net.weg.gedesti.model.service.FuncionarioService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/funcionarios")
 @AllArgsConstructor
 public class FuncionarioController {
-    private FuncionarioSerivce funcionarioSerivce;
+    private FuncionarioService funcionarioSerivce;
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> findAll() {

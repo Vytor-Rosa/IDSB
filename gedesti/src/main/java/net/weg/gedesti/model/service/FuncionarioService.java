@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class FuncionarioSerivce {
+public class FuncionarioService {
     private FuncionarioRepository funcionarioRepository;
 
     public List<Funcionario> findAll() {
