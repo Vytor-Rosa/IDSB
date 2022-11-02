@@ -7,7 +7,7 @@ import javax.persistence.Column;
 
 @Getter @Setter
 public class BeneficioRealDTO {
-    private Integer codigoBenficioReal;
+    private Integer codigoBeneficioReal;
     private Double valorMensalReal;
     private String descricaoBeneficioReal;
     private String moedaReal;

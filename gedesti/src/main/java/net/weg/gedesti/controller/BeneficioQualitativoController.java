@@ -40,7 +40,7 @@ public class BeneficioQualitativoController {
         if(beneficioQualitativoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio qualitativo com o codigo:" + codigo);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(beneficioQualitativoService.findById(codigo));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(beneficioQualitativoOptional);
     }
 
     @DeleteMapping("/{codigo}")

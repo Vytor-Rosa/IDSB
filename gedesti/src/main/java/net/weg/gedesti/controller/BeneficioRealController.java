@@ -38,7 +38,7 @@ public class BeneficioRealController {
         if(beneficioRealOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum benefecio real com codigo: " + codigo);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioRealService.findById(codigo));
+        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioRealOptional);
     }
 
     @DeleteMapping("/{codigo}")
