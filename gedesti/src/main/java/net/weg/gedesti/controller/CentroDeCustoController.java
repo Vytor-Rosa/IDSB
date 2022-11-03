@@ -8,10 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,11 +32,22 @@ public class CentroDeCustoController {
         return ResponseEntity.status(HttpStatus.FOUND).body(centroDeCustoService.findAll());
     }
 
-    public Optional<CentroDeCusto> findById(Integer integer) {
-        return centroDeCustoService.findById(integer);
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
+        Optional<CentroDeCusto> centroDeCustoOptional = centroDeCustoService.findById(codigo);
+        if(centroDeCustoOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum centro de custo com codigo: " + codigo);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(centroDeCustoOptional);
     }
 
-    public void deleteById(Integer integer) {
-        centroDeCustoService.deleteById(integer);
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
+        Optional<CentroDeCusto> centroDeCustoOptional = centroDeCustoService.findById(codigo);
+        if(centroDeCustoOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum centro de custo com codigo: " + codigo);
+        }
+        centroDeCustoService.deleteById(codigo);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Centro de custo " + codigo + " deletado com sucesso");
     }
 }
