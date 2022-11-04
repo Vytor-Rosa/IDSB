@@ -24,10 +24,12 @@ public class DemandaDTO {
     private String objetivoDemanda;
     @NotBlank
     private String statusDemanda;
-    @NotBlank
-    private String solicitante;
     @NotNull
-    private Funcionario matriculaFuncionario;
+    private Double score;
+    @NotNull
+    private String periodoDeExecucao;
+    @NotNull
+    private Funcionario matriculaSolicitante;
     @NotNull
     private BeneficioReal beneficioReal;
     @NotNull

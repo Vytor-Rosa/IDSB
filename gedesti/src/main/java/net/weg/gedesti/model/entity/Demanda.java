@@ -32,10 +32,13 @@ public class Demanda {
     private String statusDemanda;
 
     @Column(nullable = false)
-    private String solicitante;
+    private Double score;
+
+    @Column(nullable = false)
+    private String periodoDeExecucao;
 
     @ManyToOne
-    private Funcionario matriculaFuncionario;
+    private Funcionario matriculaSolicitante;
 
     @OneToOne
     private BeneficioReal beneficioReal;
