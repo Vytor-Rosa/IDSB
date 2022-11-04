@@ -1,13 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.AtaDTO;
-import net.weg.gedesti.dto.DespesaDTO;
 import net.weg.gedesti.model.entity.Ata;
-import net.weg.gedesti.model.entity.Despesa;
 import net.weg.gedesti.model.service.AtaService;
 import net.weg.gedesti.util.AtaUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

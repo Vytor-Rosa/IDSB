@@ -41,4 +41,8 @@ public class Despesa {
     @ManyToOne
     @JoinColumn(name = "codigo_centro_de_custo")
     private CentroDeCusto centroDeCusto;
+    
+//    @ManyToOne
+//    @JoinColumn(name = "codigo_proposta")
+//    private Proposta proposta;
 }

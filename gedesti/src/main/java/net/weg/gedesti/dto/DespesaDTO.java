@@ -28,4 +28,6 @@ public class DespesaDTO {
     private Double valorTotal;
     @NotNull
     private CentroDeCusto centroDeCusto;
+//    @NotNull
+//    private Proposta proposta;
 }
