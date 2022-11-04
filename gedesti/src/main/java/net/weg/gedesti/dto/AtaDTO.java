@@ -11,6 +11,5 @@ public class AtaDTO {
     private Integer codigoAta;
     private String nomeAta;
     private String problemaAta;
-    private Anexo anexo;
     private Pauta pauta;
 }

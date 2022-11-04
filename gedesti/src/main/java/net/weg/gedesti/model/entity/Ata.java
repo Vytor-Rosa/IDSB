@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "ata")
@@ -26,10 +29,23 @@ public class Ata {
     @Column(nullable = false)
     private String problemaAta;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Anexo anexo;
 
     @OneToOne
     private Pauta pauta;
+
+    @Bean
+    public void setAnexo(MultipartFile anexo){
+        try{
+            this.anexo = new Anexo(
+                    anexo.getOriginalFilename(),
+                    anexo.getContentType(),
+                    anexo.getBytes()
+            );
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
+        }
+    }
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "anexo")
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class Anexo {

@@ -6,11 +6,13 @@ import net.weg.gedesti.dto.DespesaDTO;
 import net.weg.gedesti.model.entity.Ata;
 import net.weg.gedesti.model.entity.Despesa;
 import net.weg.gedesti.model.service.AtaService;
+import net.weg.gedesti.util.AtaUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,10 +31,11 @@ public class AtaController {
     }
 
     @PostMapping
-    public  ResponseEntity<Object> save(@RequestBody @Valid AtaDTO ataDTO){
-        Ata ata = new Ata();
-        BeanUtils.copyProperties(ataDTO, ata);
-        return ResponseEntity.status(HttpStatus.FOUND).body(ataService.save(ata));
+    public  ResponseEntity<Object> save(@RequestParam(value = "ata") @Valid String ataJson, @RequestParam(value = "anexo") MultipartFile anexo){
+        AtaUtil util = new AtaUtil();
+        Ata ata = util.convertJsonToModel(ataJson);
+        ata.setAnexo(anexo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ataService.save(ata));
     }
 
     @GetMapping("/{codigo}")
