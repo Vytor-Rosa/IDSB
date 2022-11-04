@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class Despesa {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -41,7 +40,7 @@ public class Despesa {
     @ManyToOne
     @JoinColumn(name = "codigo_centro_de_custo")
     private CentroDeCusto centroDeCusto;
-    
+
 //    @ManyToOne
 //    @JoinColumn(name = "codigo_proposta")
 //    private Proposta proposta;
