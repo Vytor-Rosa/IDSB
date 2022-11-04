@@ -2,16 +2,15 @@ package net.weg.gedesti.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.weg.gedesti.model.entity.BeneficioPotencial;
-import net.weg.gedesti.model.entity.BeneficioQualitativo;
-import net.weg.gedesti.model.entity.BeneficioReal;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.*;
 
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter @Setter
 public class DemandaDTO {
@@ -36,4 +35,6 @@ public class DemandaDTO {
     private BeneficioQualitativo beneficioQualitativo;
     @NotNull
     private BeneficioPotencial beneficioPotencial;
+//    @NotNull
+//    private List<CentroDemanda> centrosDeCusto;
 }

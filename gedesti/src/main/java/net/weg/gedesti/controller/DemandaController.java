@@ -2,6 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandaDTO;
+import net.weg.gedesti.model.entity.CentroDemanda;
 import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.model.service.DemandaService;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +30,13 @@ public class DemandaController {
     public ResponseEntity<Object> save(@RequestBody @Valid DemandaDTO demandaDTO) {
         Demanda demanda = new Demanda();
         BeanUtils.copyProperties(demandaDTO, demanda);
+//        Demanda demandaSalva = demandaService.save(demanda);
+//
+//        for(CentroDemanda centroDemanda: demandaDTO.getCentrosDeCusto()){
+//            centroDemanda.se;
+//        }
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }
 
