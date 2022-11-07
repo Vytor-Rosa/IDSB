@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Year;
+import java.util.List;
 
 @Entity
 @Table(name = "pauta")
@@ -24,6 +25,9 @@ public class Pauta {
     private Integer numeroSequencial;
     @Column(nullable = false)
     private Year anoPauta;
+
+    @OneToMany(mappedBy = "codigoFuncionario")
+    private List<Comissao> funcionarios;
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;
 
