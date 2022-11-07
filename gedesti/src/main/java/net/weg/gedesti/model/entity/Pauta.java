@@ -27,7 +27,7 @@ public class Pauta {
     private Year anoPauta;
 
     @OneToMany(mappedBy = "codigoFuncionario")
-    private List<Comissao> funcionarios;
+    private List<Funcionario> funcionarios;
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;
 

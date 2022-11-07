@@ -23,5 +23,5 @@ public class PautaDTO {
     private Year anoPauta;
 
     @NotNull
-    private List<Comissao> funcionarios;
+    public List<Comissao> funcionarios;
 }

@@ -3,16 +3,20 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.PautaDTO;
 import net.weg.gedesti.model.entity.Comissao;
+import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Funcionario;
 import net.weg.gedesti.model.entity.Pauta;
 import net.weg.gedesti.model.service.ComissaoService;
 import net.weg.gedesti.model.service.PautaService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +37,11 @@ public class PautaController {
         Pauta pauta = new Pauta();
         BeanUtils.copyProperties(pautaDTO, pauta);
         Pauta pautaSalva = pautaService.save(pauta);
-        Integer codigoPauta;
-        for(Comissao comissao : pautaSalva.getFuncionarios()){
-            comissao.setCodigoPauta(pautaSalva);
+
+//        for (Comissao comissao : pautaSalva.getFuncionarios()) {
+//            comissao.setCodigoPauta(pautaSalva);
 //            comissaoService.save(comissao);
-        }
+//        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Pauta salva." + pautaSalva);
     }
@@ -45,16 +49,30 @@ public class PautaController {
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
         Optional<Pauta> pautaOptional = pautaService.findById(codigo);
-        if(pautaOptional.isEmpty()){
+
+        if (pautaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(pautaOptional);
+
+        List<Comissao> comissaoList = comissaoService.findAll();
+        List<Pauta> pautaLista = new ArrayList<>();
+        pautaLista.add(pautaOptional.get());
+
+        for (Comissao comissao : comissaoList) {
+            for(Pauta pauta: pautaLista){
+                if(comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
+                    pauta.getFuncionarios().add(comissao.getCodigoFuncionario());
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(pautaLista);
     }
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
         Optional<Pauta> pautaOptional = pautaService.findById(codigo);
-        if(pautaOptional.isEmpty()){
+        if (pautaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
         }
         pautaService.deleteById(codigo);

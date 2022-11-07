@@ -2,6 +2,8 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Comissao;
+import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Pauta;
 import net.weg.gedesti.repository.ComissaoRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,10 @@ public class ComissaoService {
     public Optional<Comissao> findById(Integer integer) {
         return comissaoRepository.findById(integer);
     }
+
+//    public List<Object> findByPauta(Pauta pauta) {
+//        return comissaoRepository.findByPauta(pauta);
+//    }
 
     public void deleteById(Integer integer) {
         comissaoRepository.deleteById(integer);
