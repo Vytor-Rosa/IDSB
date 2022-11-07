@@ -17,7 +17,7 @@ public class CentroDeCusto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigo;
+    private Integer codigoCentroDeCusto;
 
     @Column(nullable = false)
     private String centroDeCusto;

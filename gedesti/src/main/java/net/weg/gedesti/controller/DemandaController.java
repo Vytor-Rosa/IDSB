@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandaDTO;
 import net.weg.gedesti.model.entity.CentroDemanda;
 import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.service.CentroDemandaService;
 import net.weg.gedesti.model.service.DemandaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequestMapping("/api/demanda")
 public class DemandaController {
     private DemandaService demandaService;
+    private CentroDemandaService centroDemandaService;
 
     @GetMapping
     public ResponseEntity<List<Demanda>> findAll() {
@@ -30,14 +32,15 @@ public class DemandaController {
     public ResponseEntity<Object> save(@RequestBody @Valid DemandaDTO demandaDTO) {
         Demanda demanda = new Demanda();
         BeanUtils.copyProperties(demandaDTO, demanda);
-//        Demanda demandaSalva = demandaService.save(demanda);
-//
-//        for(CentroDemanda centroDemanda: demandaDTO.getCentrosDeCusto()){
-//            centroDemanda.se;
-//        }
+        Demanda demandaSalva = demandaService.save(demanda);
+
+        for(CentroDemanda centroDemanda: demandaSalva.getCentroDeCusto()){
+            centroDemanda.setCodigoDemanda(demandaSalva.getCodigoDemanda());
+            centroDemandaService.save(centroDemanda);
+        }
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandaSalva);
     }
 
     @GetMapping("/{codigo}")

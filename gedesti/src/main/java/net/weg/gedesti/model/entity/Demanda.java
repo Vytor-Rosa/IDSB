@@ -50,6 +50,6 @@ public class Demanda {
     @OneToOne
     private BeneficioPotencial beneficioPotencial;
 
-//    @OneToMany(mappedBy = "CentroDeCusto")
-//    private List<CentroDemanda> centrosDeCusto;
+    @OneToMany(mappedBy = "codigoCentroDeCusto")
+    List<CentroDemanda> centroDeCusto;
 }

@@ -35,6 +35,6 @@ public class DemandaDTO {
     private BeneficioQualitativo beneficioQualitativo;
     @NotNull
     private BeneficioPotencial beneficioPotencial;
-//    @NotNull
-//    private List<CentroDemanda> centrosDeCusto;
+    @NotNull
+    List<CentroDemanda> centroDeCusto;
 }

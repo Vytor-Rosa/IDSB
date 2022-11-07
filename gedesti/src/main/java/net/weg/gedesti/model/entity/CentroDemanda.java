@@ -19,9 +19,8 @@ public class CentroDemanda {
     @Column(nullable = false, unique = true)
     private Integer codigoCentroDemanda;
 
-    @ManyToOne
-    @JoinColumn(name = "codigo_demanda")
-    private Demanda codigoDemanda;
+    @Column(nullable = false)
+    private Integer codigoDemanda;
 
     @ManyToOne
     @JoinColumn(name = "codigo_centro_de_custo")
