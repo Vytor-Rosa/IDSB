@@ -1,7 +1,9 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.model.entity.CentroDeCusto;
 import net.weg.gedesti.model.entity.CentroDemanda;
+import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.repository.CentroDemandaRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,10 @@ public class CentroDemandaService {
 
     public boolean existsById(Integer integer) {
         return centroDemandaRepository.existsById(integer);
+    }
+
+    public List<Object> findByDemanda(Demanda demanda) {
+        return centroDemandaRepository.findByDemanda(demanda);
     }
 
     public void deleteById(Integer integer) {

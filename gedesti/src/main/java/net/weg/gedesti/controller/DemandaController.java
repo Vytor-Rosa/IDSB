@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class DemandaController {
         Demanda demandaSalva = demandaService.save(demanda);
 
         for(CentroDemanda centroDemanda: demandaSalva.getCentroDeCusto()){
-            centroDemanda.setCodigoDemanda(demandaSalva.getCodigoDemanda());
+            centroDemanda.setDemanda(demandaSalva);
             centroDemandaService.save(centroDemanda);
         }
 
@@ -49,6 +50,12 @@ public class DemandaController {
         if(demandaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
         }
+
+        List<Object> listaDemandas = new ArrayList<>();
+        listaDemandas.add(demandaOptional.get());
+        Demanda demandaTeste = demandaOptional.get();
+        listaDemandas.add(centroDemandaService.findByDemanda(demandaTeste));
+
         return ResponseEntity.status(HttpStatus.FOUND).body(demandaOptional);
     }
 
