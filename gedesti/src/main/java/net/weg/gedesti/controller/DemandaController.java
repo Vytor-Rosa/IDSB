@@ -53,10 +53,9 @@ public class DemandaController {
 
         List<Object> listaDemandas = new ArrayList<>();
         listaDemandas.add(demandaOptional.get());
-        Demanda demandaTeste = demandaOptional.get();
-        listaDemandas.add(centroDemandaService.findByDemanda(demandaTeste));
+        listaDemandas.add(centroDemandaService.findByDemanda(demandaOptional.get()));
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandaOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(listaDemandas);
     }
 
     @DeleteMapping("/{codigo}")
