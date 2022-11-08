@@ -39,7 +39,7 @@ public class DemandaController {
 //            centroDemanda.setDemanda(demandaSalva);
 //            centroDemandaService.save(centroDemanda);
 //        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(demanda);
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }
 
     @GetMapping("/{codigo}")

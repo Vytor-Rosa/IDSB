@@ -10,8 +10,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "CentroDeCustoDaDemanda")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class CentroDemanda {
 
     @Id

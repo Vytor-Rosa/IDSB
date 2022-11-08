@@ -36,15 +36,15 @@ public class PautaController {
     public ResponseEntity<Object> save(@RequestBody @Valid PautaDTO pautaDTO) {
         Pauta pauta = new Pauta();
         BeanUtils.copyProperties(pautaDTO, pauta);
-        Pauta pautaSalva = pautaService.save(pauta);
-        List<Comissao> comissao =pautaDTO.getFuncionarios();
+//        Pauta pautaSalva = pautaService.save(pauta);
+//        List<Comissao> comissao =pautaDTO.getFuncionarios();
+//
+//        for (Comissao comissoes : comissao) {
+//            comissoes.setCodigoPauta(pautaSalva);
+//            comissaoService.save(comissoes);
+//        }
 
-        for (Comissao comissoes : comissao) {
-            comissoes.setCodigoPauta(pautaSalva);
-            comissaoService.save(comissoes);
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Pauta salva." + pautaSalva);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.save(pauta));
     }
 
     @GetMapping("/{codigo}")
@@ -59,13 +59,13 @@ public class PautaController {
         List<Pauta> pautaLista = new ArrayList<>();
         pautaLista.add(pautaOptional.get());
 
-        for (Comissao comissao : comissaoList) {
-            for (Pauta pauta : pautaLista) {
-                if (comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
-                    pauta.getFuncionarios().add(comissao.getCodigoFuncionario());
-                }
-            }
-        }
+//        for (Comissao comissao : comissaoList) {
+//            for (Pauta pauta : pautaLista) {
+//                if (comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
+//                    pauta.getFuncionarios().add(comissao.getCodigoFuncionario());
+//                }
+//            }
+//        }
 
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaLista);
     }

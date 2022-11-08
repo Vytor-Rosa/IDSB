@@ -24,8 +24,12 @@ public class Pauta {
     @Column(nullable = false)
     private Year anoPauta;
 
-    @OneToMany(mappedBy = "codigoFuncionario")
-    private List<Funcionario> funcionarios;
+    @ManyToMany
+    @JoinTable(name = "comissao",
+            joinColumns = @JoinColumn(name = "codigoFuncionario"),
+            inverseJoinColumns = @JoinColumn(name = "codigoPauta"))
+    List<Funcionario> comissao;
+
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;
 

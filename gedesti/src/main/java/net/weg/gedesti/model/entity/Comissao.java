@@ -20,10 +20,10 @@ public class Comissao {
     private Integer codigoComissao;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_pauta")
+    @JoinColumn(name = "codigoPauta")
     private Pauta codigoPauta;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_funcionario")
+    @JoinColumn(name = "codigoFuncionario")
     private Funcionario codigoFuncionario;
 }
