@@ -17,13 +17,10 @@ import java.util.List;
 @ToString
 public class PautaDTO {
     private Integer codigoPauta;
-
     @NotNull
     private Integer numeroSequencial;
-
     @NotNull
     private Year anoPauta;
-
     @NotNull
     public List<Comissao> funcionarios;
 }

@@ -16,5 +16,6 @@ public class FuncionarioDTO {
     private String emailCorporativo;
     @NotBlank
     private String senhaFuncionario;
+    @NotBlank
     private Integer cargoFuncionario;
 }
