@@ -5,12 +5,14 @@ import net.weg.gedesti.dto.PropostaDTO;
 import net.weg.gedesti.model.entity.Proposta;
 import net.weg.gedesti.model.service.PropostaService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

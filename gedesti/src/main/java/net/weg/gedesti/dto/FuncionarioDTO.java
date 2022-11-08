@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter @Setter
 public class FuncionarioDTO {
@@ -16,6 +17,6 @@ public class FuncionarioDTO {
     private String emailCorporativo;
     @NotBlank
     private String senhaFuncionario;
-    @NotBlank
+    @PositiveOrZero
     private Integer cargoFuncionario;
 }

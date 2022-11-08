@@ -3,6 +3,7 @@ package net.weg.gedesti.model.service;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Proposta;
 import net.weg.gedesti.repository.PropostaRepository;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -34,4 +35,7 @@ public class PropostaService {
     public void deleteById(Integer integer) {
         propostaRepository.deleteById(integer);
     }
+
+    
+
 }

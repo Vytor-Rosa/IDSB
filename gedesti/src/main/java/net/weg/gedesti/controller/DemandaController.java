@@ -33,15 +33,13 @@ public class DemandaController {
     public ResponseEntity<Object> save(@RequestBody @Valid DemandaDTO demandaDTO) {
         Demanda demanda = new Demanda();
         BeanUtils.copyProperties(demandaDTO, demanda);
-        Demanda demandaSalva = demandaService.save(demanda);
-
-        for(CentroDemanda centroDemanda: demandaSalva.getCentroDeCusto()){
-            centroDemanda.setDemanda(demandaSalva);
-            centroDemandaService.save(centroDemanda);
-        }
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandaSalva);
+//        Demanda demandaSalva = demandaService.save(demanda);
+//
+//        for(CentroDemanda centroDemanda: demandaSalva.getCentroDeCusto()){
+//            centroDemanda.setDemanda(demandaSalva);
+//            centroDemandaService.save(centroDemanda);
+//        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(demanda);
     }
 
     @GetMapping("/{codigo}")
@@ -50,12 +48,12 @@ public class DemandaController {
         if(demandaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
         }
+//
+//        List<Object> listaDemandas = new ArrayList<>();
+//        listaDemandas.add(demandaOptional.get());
+//        listaDemandas.add(centroDemandaService.findByDemanda(demandaOptional.get()));
 
-        List<Object> listaDemandas = new ArrayList<>();
-        listaDemandas.add(demandaOptional.get());
-        listaDemandas.add(centroDemandaService.findByDemanda(demandaOptional.get()));
-
-        return ResponseEntity.status(HttpStatus.FOUND).body(listaDemandas);
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandaOptional);
     }
 
     @DeleteMapping("/{codigo}")

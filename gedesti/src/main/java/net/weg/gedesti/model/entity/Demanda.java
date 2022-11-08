@@ -50,6 +50,9 @@ public class Demanda {
     @OneToOne
     private BeneficioPotencial beneficioPotencial;
 
-    @OneToMany(mappedBy = "codigoCentroDeCusto")
-    List<CentroDemanda> centroDeCusto;
+    @ManyToMany
+    @JoinTable(name = "centroDemanda",
+            joinColumns = @JoinColumn(name = "codigoCentroDeCusto"),
+            inverseJoinColumns = @JoinColumn(name = "codigoDemanda"))
+    List<CentroDeCusto> centroDeCusto;
 }
