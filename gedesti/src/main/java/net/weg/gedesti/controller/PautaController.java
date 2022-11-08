@@ -37,11 +37,12 @@ public class PautaController {
         Pauta pauta = new Pauta();
         BeanUtils.copyProperties(pautaDTO, pauta);
         Pauta pautaSalva = pautaService.save(pauta);
+        List<Comissao> comissao =pautaDTO.getFuncionarios();
 
-//        for (Comissao comissao : pautaSalva.getFuncionarios()) {
-//            comissao.setCodigoPauta(pautaSalva);
-//            comissaoService.save(comissao);
-//        }
+        for (Comissao comissoes : comissao) {
+            comissoes.setCodigoPauta(pautaSalva);
+            comissaoService.save(comissoes);
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Pauta salva." + pautaSalva);
     }
@@ -59,8 +60,8 @@ public class PautaController {
         pautaLista.add(pautaOptional.get());
 
         for (Comissao comissao : comissaoList) {
-            for(Pauta pauta: pautaLista){
-                if(comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
+            for (Pauta pauta : pautaLista) {
+                if (comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
                     pauta.getFuncionarios().add(comissao.getCodigoFuncionario());
                 }
             }

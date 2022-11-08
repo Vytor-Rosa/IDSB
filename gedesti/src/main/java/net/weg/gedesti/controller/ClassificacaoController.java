@@ -31,6 +31,7 @@ public class ClassificacaoController {
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid ClassificacaoDTO classificacaoDTO) {
         Classificacao classificacao  = new Classificacao();
+        System.out.println(classificacaoDTO);
         BeanUtils.copyProperties(classificacaoDTO, classificacao);
         return ResponseEntity.status(HttpStatus.CREATED).body(classificacaoService.save(classificacao));
     }
