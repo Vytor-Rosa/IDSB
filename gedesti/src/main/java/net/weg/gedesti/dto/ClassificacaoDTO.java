@@ -9,6 +9,7 @@ import net.weg.gedesti.model.entity.Funcionario;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Getter @Setter @ToString
 public class ClassificacaoDTO {
@@ -30,7 +31,10 @@ public class ClassificacaoDTO {
     private Demanda demanda;
 
     @NotNull
-    private Bu bu;
+    private Bu buSolicitante;
+
+    @NotNull
+    private List<Bu> busBeneficiadas;
 
     @NotNull
     private Funcionario matriculaAnalista;

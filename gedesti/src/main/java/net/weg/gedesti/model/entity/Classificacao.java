@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 @Entity
 @Table(name = "classificacao")
@@ -38,7 +39,13 @@ public class Classificacao {
     private Demanda demanda;
 
     @OneToOne
-    private Bu bu;
+    private Bu buSolicitante;
+
+    @ManyToMany
+    @JoinTable(name = "busBeneficiadas",
+            joinColumns = @JoinColumn(name = "codigoBu"),
+            inverseJoinColumns = @JoinColumn(name = "codigoClassificacao"))
+    private List<Bu> busBeneficiadas;
 
     @ManyToOne
     private Funcionario matriculaAnalista;
