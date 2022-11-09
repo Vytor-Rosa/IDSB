@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Getter @Setter
 public class DespesaDTO {
@@ -18,7 +19,7 @@ public class DespesaDTO {
     private String tipoDespesa;
     @NotBlank
     private String perfilDespesa;
-    @NotNull
+    @NotNull @Positive
     private Integer periodoExecucao;
     @NotBlank
     private String quantidadeHoras;

@@ -25,7 +25,7 @@ public class DemandaDTO {
     private String statusDemanda;
     @NotNull
     private Double score;
-    @NotNull
+    @NotBlank
     private String periodoDeExecucao;
     @NotNull
     private Funcionario matriculaSolicitante;

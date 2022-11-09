@@ -9,6 +9,7 @@ import net.weg.gedesti.model.entity.Funcionario;
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.Year;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @ToString
 public class PautaDTO {
     private Integer codigoPauta;
-    @NotNull
+    @NotNull @Positive
     private Integer numeroSequencial;
     @NotNull
     private Year anoPauta;

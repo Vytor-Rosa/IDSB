@@ -10,8 +10,10 @@ import javax.validation.constraints.NotNull;
 @Getter @Setter
 public class BeneficioQualitativoDTO {
     private Integer codigoBeneficioQualitativo;
+
     @NotBlank
     private String frequenciaDeUso;
+
     @NotNull
     private boolean requisitosControlesInternos;
 }
