@@ -38,7 +38,7 @@ public class PautaController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Pauta>> findAll(@PageableDefault(page = 9, size = 1, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Pauta>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll(pageable));
     }
 
