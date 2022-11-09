@@ -3,6 +3,8 @@ package net.weg.gedesti.model.service;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Ata;
 import net.weg.gedesti.repository.AtaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class AtaService {
         return ataRepository.findAll();
     }
 
+    public Page<Ata> findAll(Pageable pageable) {
+        return ataRepository.findAll(pageable);
+    }
 
     public <S extends Ata> S save(S entity) {
         return ataRepository.save(entity);
