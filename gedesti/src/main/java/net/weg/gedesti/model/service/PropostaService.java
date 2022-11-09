@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Proposta;
 import net.weg.gedesti.repository.PropostaRepository;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class PropostaService {
 
     public List<Proposta> findAll() {
         return propostaRepository.findAll();
+    }
+
+    public Page<Proposta> findAll(Pageable pageable) {
+        return propostaRepository.findAll(pageable);
     }
 
     public <S extends Proposta> S save(S entity) {

@@ -6,6 +6,10 @@ import net.weg.gedesti.model.entity.Proposta;
 import net.weg.gedesti.model.service.PropostaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,6 +30,11 @@ public class PropostaController {
     @GetMapping
     public ResponseEntity<List<Proposta>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll());
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Proposta>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll(pageable));
     }
 
     @PostMapping
