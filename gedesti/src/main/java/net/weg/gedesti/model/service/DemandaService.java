@@ -3,6 +3,8 @@ package net.weg.gedesti.model.service;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.repository.DemandaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,10 @@ public class DemandaService {
 
     public List<Demanda> findAll() {
         return demandaRepository.findAll();
+    }
+
+    public Page<Demanda> findAll(Pageable pageable) {
+        return demandaRepository.findAll(pageable);
     }
 
     public <S extends Demanda> S save(S entity) {

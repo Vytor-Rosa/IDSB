@@ -7,6 +7,10 @@ import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.model.service.CentroDemandaService;
 import net.weg.gedesti.model.service.DemandaService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,6 +31,11 @@ public class DemandaController {
     @GetMapping
     public ResponseEntity<List<Demanda>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll());
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Demanda>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll(pageable));
     }
 
     @PostMapping
