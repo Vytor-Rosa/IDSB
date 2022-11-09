@@ -3,6 +3,9 @@ package net.weg.gedesti.model.service;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Pauta;
 import net.weg.gedesti.repository.PautaRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,10 @@ public class PautaService {
 
     public List<Pauta> findAll() {
         return pautaRepository.findAll();
+    }
+
+    public Page<Pauta> findAll(Pageable pageable) {
+        return pautaRepository.findAll(pageable);
     }
 
     public <S extends Pauta> S save(S entity) {

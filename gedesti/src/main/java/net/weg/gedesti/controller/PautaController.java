@@ -10,6 +10,11 @@ import net.weg.gedesti.model.service.ComissaoService;
 import net.weg.gedesti.model.service.PautaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,11 @@ public class PautaController {
     @GetMapping
     public ResponseEntity<List<Pauta>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll());
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Pauta>> findAll(@PageableDefault(page = 9, size = 1, direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll(pageable));
     }
 
     @PostMapping
