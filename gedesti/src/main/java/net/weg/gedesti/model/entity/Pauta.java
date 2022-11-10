@@ -22,7 +22,7 @@ public class Pauta {
     @Column(nullable = false, unique = true)
     private Integer numeroSequencial;
     @Column(nullable = false)
-    private Year anoPauta;
+    private Integer anoPauta;
 
     @ManyToMany
     @JoinTable(name = "comissao",
