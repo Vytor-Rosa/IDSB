@@ -2,9 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandaDTO;
-import net.weg.gedesti.model.entity.CentroDemanda;
 import net.weg.gedesti.model.entity.Demanda;
-import net.weg.gedesti.model.service.CentroDemandaService;
 import net.weg.gedesti.model.service.DemandaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +23,6 @@ import java.util.Optional;
 @RequestMapping("/api/demanda")
 public class DemandaController {
     private DemandaService demandaService;
-    private CentroDemandaService centroDemandaService;
 
     @GetMapping
     public ResponseEntity<List<Demanda>> findAll() {
