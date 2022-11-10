@@ -2,15 +2,9 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.PautaDTO;
-//import net.weg.gedesti.model.entity.Comissao;
-import net.weg.gedesti.model.entity.Demanda;
-import net.weg.gedesti.model.entity.Funcionario;
 import net.weg.gedesti.model.entity.Pauta;
-//import net.weg.gedesti.model.service.ComissaoService;
 import net.weg.gedesti.model.service.PautaService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,7 +24,6 @@ import java.util.Optional;
 @RequestMapping("/api/pauta")
 public class PautaController {
     private PautaService pautaService;
-//    private ComissaoService comissaoService;
 
     @GetMapping
     public ResponseEntity<List<Pauta>> findAll() {
@@ -58,18 +51,8 @@ public class PautaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
         }
 
-//        List<Comissao> comissaoList = comissaoService.findAll();
         List<Pauta> pautaLista = new ArrayList<>();
         pautaLista.add(pautaOptional.get());
-
-//        for (Comissao comissao : comissaoList) {
-//            for (Pauta pauta : pautaLista) {
-//                if (comissao.getCodigoPauta().getCodigoPauta() == pauta.getCodigoPauta()) {
-//                    pauta.getFuncionarios().add(comissao.getCodigoFuncionario());
-//                }
-//            }
-//        }
-
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaLista);
     }
 
