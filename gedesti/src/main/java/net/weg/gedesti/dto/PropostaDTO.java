@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
+import java.util.List;
 
 @Getter @Setter
 public class PropostaDTO {
@@ -32,4 +33,5 @@ public class PropostaDTO {
     private Funcionario analistaResponsavel;
     @NotNull
     private Pauta codigoPauta;
+    List<Funcionario> Funcionarios;
 }

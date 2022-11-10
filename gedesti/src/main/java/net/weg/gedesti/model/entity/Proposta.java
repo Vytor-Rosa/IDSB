@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "proposta")
@@ -36,4 +37,9 @@ public class Proposta {
     private Funcionario analistaResponsavel;
     @ManyToOne
     private Pauta codigoPauta;
+    @ManyToMany
+    @JoinTable(name = "responsaveis_pelo_negocio",
+            joinColumns = @JoinColumn(name = "codigoFuncionario"),
+            inverseJoinColumns = @JoinColumn(name = "codigoProposta"))
+    List<Funcionario> Funcionarios;
 }
