@@ -34,7 +34,7 @@ public class ClassificacaoDTO {
     private Bu buSolicitante;
 
     @NotNull
-    private List<Bu> busBeneficiadas;
+    List<Bu> busBeneficiadas;
 
     @NotNull
     private Funcionario matriculaAnalista;
