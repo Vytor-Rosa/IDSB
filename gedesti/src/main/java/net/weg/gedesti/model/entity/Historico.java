@@ -26,7 +26,7 @@ public class Historico {
     @OneToOne
     private Demanda demanda;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Anexo anexoHistorico;
 
     @Bean

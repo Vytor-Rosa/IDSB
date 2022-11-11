@@ -3,6 +3,7 @@ package net.weg.gedesti.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weg.gedesti.dto.HistoricoDTO;
 import net.weg.gedesti.model.entity.Historico;
+import org.springframework.beans.BeanUtils;
 
 public class HistoricoUtil {
 
@@ -22,6 +23,8 @@ public class HistoricoUtil {
     }
 
     private Historico convertDtoToModel(HistoricoDTO historicoDTO) {
-        return this.objectMapper.convertValue(historicoDTO, Historico.class);
+        Historico historico = new Historico();
+        BeanUtils.copyProperties(historicoDTO, historico);
+        return historico;
     }
 }
