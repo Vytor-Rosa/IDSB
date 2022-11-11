@@ -29,9 +29,9 @@ public class HistoricoController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "historico") @Valid String historicoJson, @RequestParam(value = "anexoHistorico") MultipartFile anexoHistorico) {
-        HistoricoUtil util = new HistoricoUtil();
-        Historico historico = util.convertJsonToModel(historicoJson);
-        historico.setAnexoHistorico(anexoHistorico);
+        HistoricoUtil historicoUtil = new HistoricoUtil();
+        Historico historico = historicoUtil.convertJsonToModel(historicoJson);
+        historico.setAnexo(anexoHistorico);
         return ResponseEntity.status(HttpStatus.CREATED).body(historicoService.save(historico));
     }
 

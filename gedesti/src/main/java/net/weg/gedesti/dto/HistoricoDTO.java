@@ -15,5 +15,5 @@ public class HistoricoDTO {
     private Demanda demanda;
 
     @NotNull
-    private Anexo anexo;
+    private Anexo anexoHistorico;
 }
