@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.List;
@@ -49,6 +51,22 @@ public class Demanda {
 
     @OneToOne
     private BeneficioPotencial beneficioPotencial;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private AnexoDemanda anexoDemanda;
+
+    @Bean
+    public void setAnexoDemanda(MultipartFile anexoDemanda){
+        try{
+            this.anexoDemanda = new AnexoDemanda(
+                    anexoDemanda.getOriginalFilename(),
+                    anexoDemanda.getContentType(),
+                    anexoDemanda.getBytes()
+            );
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
+        }
+    }
 
     @ManyToMany
     @JoinTable(name = "centroDemanda",

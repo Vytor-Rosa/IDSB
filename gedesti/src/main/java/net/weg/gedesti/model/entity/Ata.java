@@ -28,7 +28,7 @@ public class Ata {
     @Column(nullable = false)
     private String problemaAta;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Anexo anexo;
 
     @OneToOne

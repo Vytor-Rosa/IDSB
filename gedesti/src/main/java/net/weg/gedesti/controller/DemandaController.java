@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandaDTO;
 import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.model.service.DemandaService;
+import net.weg.gedesti.util.DemandaUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,15 +37,10 @@ public class DemandaController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid DemandaDTO demandaDTO) {
-        Demanda demanda = new Demanda();
-        BeanUtils.copyProperties(demandaDTO, demanda);
-//        Demanda demandaSalva = demandaService.save(demanda);
-//
-//        for(CentroDemanda centroDemanda: demandaSalva.getCentroDeCusto()){
-//            centroDemanda.setDemanda(demandaSalva);
-//            centroDemandaService.save(centroDemanda);
-//        }
+    public ResponseEntity<Object> save(@RequestParam(value = "demanda") @Valid String demandaJson, @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda) {
+        DemandaUtil demandaUtil = new DemandaUtil();
+        Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
+        demanda.setAnexoDemanda(anexoDemanda);
         return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }
 
