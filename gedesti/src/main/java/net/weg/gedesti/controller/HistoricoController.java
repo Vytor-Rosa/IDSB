@@ -7,12 +7,15 @@ import net.weg.gedesti.model.entity.Bu;
 import net.weg.gedesti.model.entity.Historico;
 import net.weg.gedesti.model.service.BuService;
 import net.weg.gedesti.model.service.HistoricoService;
+import net.weg.gedesti.util.HistoricoUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +34,10 @@ public class HistoricoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid HistoricoDTO historicoDTO) {
-        Historico historico = new Historico();
-        BeanUtils.copyProperties(historicoDTO, historico);
+    public ResponseEntity<Object> save(@RequestParam(value = "historico") @Valid String historicoJson, @RequestParam(value = "anexoHistorico") MultipartFile anexoHistorico) {
+        HistoricoUtil util = new HistoricoUtil();
+        Historico historico = util.convertJsonToModel(historicoJson);
+        historico.setAnexoHistorico(anexoHistorico);
         return ResponseEntity.status(HttpStatus.CREATED).body(historicoService.save(historico));
     }
 

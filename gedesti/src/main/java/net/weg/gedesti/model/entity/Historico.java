@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -24,6 +26,19 @@ public class Historico {
     @OneToOne
     private Demanda demanda;
 
-//    @OneToOne
-//    private Anexo anexo;
+    @OneToOne
+    private Anexo anexoHistorico;
+
+    @Bean
+    public void setAnexoHistorico(MultipartFile anexoHistorico){
+        try{
+            this.anexoHistorico = new Anexo(
+                    anexoHistorico.getOriginalFilename(),
+                    anexoHistorico.getContentType(),
+                    anexoHistorico.getBytes()
+            );
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
+        }
+    }
 }
