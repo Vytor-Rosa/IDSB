@@ -10,6 +10,8 @@ import javax.validation.constraints.*;
 public class FuncionarioDTO {
     @NotNull @Positive
     private Integer codigoFuncionario;
+    @NotBlank
+    private String nomeFuncionario;
     @Email
     private String emailCorporativo;
     @NotBlank

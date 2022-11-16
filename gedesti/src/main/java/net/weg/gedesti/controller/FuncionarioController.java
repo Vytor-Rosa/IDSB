@@ -52,8 +52,9 @@ public class FuncionarioController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Senha incorreta");
             }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Email não existe");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Erro no Login");
     }
 
 

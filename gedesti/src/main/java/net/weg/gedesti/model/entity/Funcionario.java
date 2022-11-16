@@ -16,6 +16,9 @@ public class Funcionario {
     @Column(nullable = false, unique = true)
     private Integer codigoFuncionario;
 
+    @Column(nullable = false)
+    private String nomeFuncionario;
+
     @Column(nullable = false, unique = true)
     private String emailCorporativo;
 
