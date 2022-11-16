@@ -2,6 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandaDTO;
+import net.weg.gedesti.model.entity.Classificacao;
 import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.model.service.DemandaService;
 import net.weg.gedesti.util.DemandaUtil;
@@ -9,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -50,10 +53,6 @@ public class DemandaController {
         if(demandaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
         }
-//
-//        List<Object> listaDemandas = new ArrayList<>();
-//        listaDemandas.add(demandaOptional.get());
-//        listaDemandas.add(centroDemandaService.findByDemanda(demandaOptional.get()));
 
         return ResponseEntity.status(HttpStatus.FOUND).body(demandaOptional);
     }
@@ -67,4 +66,23 @@ public class DemandaController {
         demandaService.deleteById(codigo);
         return ResponseEntity.status(HttpStatus.FOUND).body("Demanda " + codigo + " deletada com sucesso!");
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/{codigo}")
+    public ResponseEntity<Object> update(@RequestParam(value = "demanda") @Valid String demandaJson,
+                                         @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda,
+                                         @PathVariable(value = "codigo") Integer codigo) {
+        if(!demandaService.existsById(codigo)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe");
+        }
+
+        DemandaUtil demandaUtil = new DemandaUtil();
+        Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
+        demanda.setAnexoDemanda(anexoDemanda);
+        demanda.setCodigoDemanda(codigo);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
+    }
+
 }

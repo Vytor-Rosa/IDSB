@@ -1,9 +1,6 @@
 package net.weg.gedesti.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Demanda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,14 +54,14 @@ public class Demanda {
     private AnexoDemanda anexoDemanda;
 
     @Bean
-    public void setAnexoDemanda(MultipartFile anexoDemanda){
-        try{
+    public void setAnexoDemanda(MultipartFile anexoDemanda) {
+        try {
             this.anexoDemanda = new AnexoDemanda(
                     anexoDemanda.getOriginalFilename(),
                     anexoDemanda.getContentType(),
                     anexoDemanda.getBytes()
             );
-        }catch (Exception exception){
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -73,4 +71,12 @@ public class Demanda {
             joinColumns = @JoinColumn(name = "codigoCentroDeCusto"),
             inverseJoinColumns = @JoinColumn(name = "codigoDemanda"))
     List<CentroDeCusto> centroDeCusto;
+
+    @JoinColumn(nullable = true)
+    @OneToOne
+    private Classificacao classificacao;
+
+    @JoinColumn(nullable = true)
+    @OneToOne
+    private Proposta proposta;
 }

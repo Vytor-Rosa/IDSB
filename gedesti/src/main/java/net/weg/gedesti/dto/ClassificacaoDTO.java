@@ -28,9 +28,6 @@ public class ClassificacaoDTO {
     private String linkEpicJira;
 
     @NotNull
-    private Demanda demanda;
-
-    @NotNull
     private Bu buSolicitante;
 
     @NotNull

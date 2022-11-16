@@ -36,9 +36,6 @@ public class Classificacao {
     private String linkEpicJira;
 
     @OneToOne
-    private Demanda demanda;
-
-    @OneToOne
     private Bu buSolicitante;
 
     @ManyToMany
