@@ -28,12 +28,11 @@ public class Historico {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Anexo anexoHistorico;
-    private Anexo anexo;
 
     @Bean
     public void setAnexo(MultipartFile anexoHistorico){
         try{
-            this.anexo = new Anexo(
+            this.anexoHistorico = new Anexo(
                     anexoHistorico.getOriginalFilename(),
                     anexoHistorico.getContentType(),
                     anexoHistorico.getBytes()

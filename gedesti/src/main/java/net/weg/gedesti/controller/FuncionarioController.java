@@ -42,6 +42,21 @@ public class FuncionarioController {
         return ResponseEntity.status(HttpStatus.FOUND).body(optionalFuncionario);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody FuncionarioDTO funcionarioDTO) {
+        Optional<Funcionario> funcionario = funcionarioSerivce.findByEmailCorporativo(funcionarioDTO.getEmailCorporativo());
+        Funcionario funcionarios = funcionario.get();
+        if (funcionario.isPresent()) {
+            if (funcionarios.getSenhaFuncionario().equals(funcionarioDTO.getSenhaFuncionario())) {
+                    return ResponseEntity.status(HttpStatus.OK).body(funcionario);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Senha incorreta");
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Erro no Login");
+    }
+
+
     @DeleteMapping("/{codigoFuncionario}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigoFuncionario") Integer codigoFuncionario) {
         Optional<Funcionario> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);

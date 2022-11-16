@@ -32,4 +32,13 @@ public class FuncionarioService {
     public void deleteById(Integer integer) {
         funcionarioRepository.deleteById(integer);
     }
+
+    public Optional<Funcionario> findByEmailCorporativo(String emailCorporativo) {
+        return funcionarioRepository.findByEmailCorporativo(emailCorporativo);
+    }
+
+    public Funcionario findBySenhaFuncionario(String senhaFuncionario){
+        return funcionarioRepository.findBySenhaFuncionario(senhaFuncionario);
+    }
+
 }
