@@ -1,7 +1,6 @@
 package net.weg.gedesti.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
 import net.weg.gedesti.model.entity.Funcionario;
 
@@ -10,8 +9,7 @@ import javax.validation.constraints.Positive;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @ToString
 public class PautaDTO {
     private Integer codigoPauta;

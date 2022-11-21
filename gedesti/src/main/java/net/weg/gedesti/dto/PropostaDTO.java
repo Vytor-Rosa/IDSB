@@ -1,8 +1,6 @@
 package net.weg.gedesti.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.weg.gedesti.model.entity.Demanda;
+import lombok.Data;
 import net.weg.gedesti.model.entity.Funcionario;
 import net.weg.gedesti.model.entity.Pauta;
 
@@ -12,8 +10,7 @@ import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class PropostaDTO {
     private Integer codigoProposta;
 

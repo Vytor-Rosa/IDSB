@@ -1,18 +1,12 @@
 package net.weg.gedesti.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import net.weg.gedesti.model.entity.CentroDeCusto;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-@Getter @Setter
+@Data
 public class DespesaDTO {
     private Integer codigoDespesa;
     @NotBlank

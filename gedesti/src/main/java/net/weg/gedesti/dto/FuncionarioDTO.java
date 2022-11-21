@@ -1,12 +1,9 @@
 package net.weg.gedesti.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Column;
+import lombok.Data;
 import javax.validation.constraints.*;
 
-@Getter @Setter
+@Data
 public class FuncionarioDTO {
     @NotNull @Positive
     private Integer codigoFuncionario;

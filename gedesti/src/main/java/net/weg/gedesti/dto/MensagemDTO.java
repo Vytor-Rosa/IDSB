@@ -1,14 +1,13 @@
 package net.weg.gedesti.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import net.weg.gedesti.model.entity.Chat;
 import net.weg.gedesti.model.entity.Funcionario;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Getter @Setter
+@Data
 public class MensagemDTO {
     private Integer codigoMensagem;
     @NotBlank
