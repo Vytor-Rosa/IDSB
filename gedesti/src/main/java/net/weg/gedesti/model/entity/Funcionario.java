@@ -16,6 +16,7 @@ import java.util.Collection;
 @Getter @Setter
 public class Funcionario {
 //    implements UserDetails
+
     @Id
     @Column(nullable = false, unique = true)
     private Integer codigoFuncionario;

@@ -5,10 +5,13 @@
 //import net.weg.gedesti.model.entity.Funcionario;
 //import net.weg.gedesti.repository.FuncionarioRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.Bean;
 //import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 //import org.springframework.stereotype.Service;
 //
 //import java.util.Date;
@@ -49,6 +52,16 @@
 //            return false;
 //        }
 //    }
+//
+////    @Bean
+////    protected UserDetailsService userDetailsService(){
+////        UserDetails user = User.withDefaultPasswordEncoder()
+////                .username("admin")
+////                .password("admin")
+////                .roles("ADM")
+////                .build();
+////        return new InMemoryUserDetailsManager(user);
+////    }
 //
 //    public Funcionario getFuncionario(String token){
 //        Integer matricula = Integer.parseInt(Jwts.parser()
