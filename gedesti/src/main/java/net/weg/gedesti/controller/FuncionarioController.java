@@ -33,6 +33,16 @@ public class FuncionarioController {
         Funcionario funcionario = new Funcionario();
         BeanUtils.copyProperties(funcionarioDTO, funcionario);
 
+        if(cargoFuncionario == 1){
+            funcionario.setCargoFuncionario("Solicitante");
+        }else if(cargoFuncionario == 2){
+            funcionario.setCargoFuncionario("Analista de TI");
+        }else if(cargoFuncionario == 3){
+            funcionario.setCargoFuncionario("Gestor de TI");
+        }else if(cargoFuncionario == 4){
+            funcionario.setCargoFuncionario("Gerente de Negócio");
+        }
+
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        funcionario.setSenhaFuncionario(encoder.encode(funcionario.getSenhaFuncionario()));
 
