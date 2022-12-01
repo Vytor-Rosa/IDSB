@@ -1,10 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.BeneficioQualitativoDTO;
+import net.weg.gedesti.dto.QualitativeBenefitDTO;
 import net.weg.gedesti.model.entity.BeneficioQualitativo;
-import net.weg.gedesti.model.service.BeneficioQualitativoService;
-import net.weg.gedesti.repository.BeneficioQualitativoRepository;
+import net.weg.gedesti.model.service.QualitativeBenefitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/api/qualitativebenefit")
 public class BeneficioQualitativoController {
 
-    private BeneficioQualitativoService beneficioQualitativoService;
+    private QualitativeBenefitService beneficioQualitativoService;
 
     @GetMapping
     public ResponseEntity<List<BeneficioQualitativo>> findAll() {
@@ -28,7 +27,7 @@ public class BeneficioQualitativoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid BeneficioQualitativoDTO beneficioQualitativoDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid QualitativeBenefitDTO beneficioQualitativoDTO) {
         BeneficioQualitativo beneficioQualitativo = new BeneficioQualitativo();
         BeanUtils.copyProperties(beneficioQualitativoDTO, beneficioQualitativo);
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficioQualitativoService.save(beneficioQualitativo));

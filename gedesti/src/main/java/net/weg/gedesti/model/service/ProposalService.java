@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PropostaService {
+public class ProposalService {
 
     private PropostaRepository propostaRepository;
 

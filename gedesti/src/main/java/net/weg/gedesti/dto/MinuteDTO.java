@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
-public class AtaDTO {
+public class MinuteDTO {
     private Integer minuteCode;
 
     @NotBlank

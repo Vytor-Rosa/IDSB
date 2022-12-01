@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class BeneficioQualitativoService{
+public class QualitativeBenefitService {
     private BeneficioQualitativoRepository beneficioQualitativoRepository;
 
     public List<BeneficioQualitativo> findAll() {

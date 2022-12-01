@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class DespesaService {
+public class ExpenseService {
     private DespesaRepository despesaRepository;
 
     public List<Despesa> findAll() {

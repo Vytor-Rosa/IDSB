@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class DemandaService {
+public class DemandService {
 
     private DemandaRepository demandaRepository;
 

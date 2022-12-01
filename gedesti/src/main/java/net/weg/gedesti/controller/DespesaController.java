@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.DespesaDTO;
+import net.weg.gedesti.dto.ExpenseDTO;
 import net.weg.gedesti.model.entity.Despesa;
-import net.weg.gedesti.model.service.DespesaService;
+import net.weg.gedesti.model.service.ExpenseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/api/expense")
 public class DespesaController {
 
-    private DespesaService despesaService;
+    private ExpenseService despesaService;
 
     @GetMapping
     public ResponseEntity<List<Despesa>> findAll() {
@@ -27,7 +27,7 @@ public class DespesaController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid DespesaDTO despesaDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid ExpenseDTO despesaDTO) {
         Despesa despesa = new Despesa();
         BeanUtils.copyProperties(despesaDTO, despesa);
         return ResponseEntity.status(HttpStatus.FOUND).body(despesaService.save(despesa));

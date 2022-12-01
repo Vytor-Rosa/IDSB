@@ -4,7 +4,7 @@ import lombok.Data;
 import javax.validation.constraints.*;
 
 @Data
-public class FuncionarioDTO {
+public class WorkerDTO {
     @NotNull @Positive
     private Integer workerCode;
     @NotBlank

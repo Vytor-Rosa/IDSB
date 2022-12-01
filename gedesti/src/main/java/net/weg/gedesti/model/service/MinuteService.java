@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AtaService {
+public class MinuteService {
     private AtaRepository ataRepository;
 
     public List<Ata> findAll() {

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class BeneficioQualitativoDTO {
+public class QualitativeBenefitDTO {
     private Integer qualitativeBenefitCode;
 
     @NotBlank

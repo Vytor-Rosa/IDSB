@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @ToString
-public class PautaDTO {
+public class AgendaDTO {
     private Integer agendaCode;
     @NotNull @Positive
     private Integer sequentialNumber;

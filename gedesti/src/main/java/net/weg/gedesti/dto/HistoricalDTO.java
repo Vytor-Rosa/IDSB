@@ -6,7 +6,7 @@ import net.weg.gedesti.model.entity.Demanda;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class HistoricoDTO {
+public class HistoricalDTO {
     private Integer historicalCode;
 
     @NotNull

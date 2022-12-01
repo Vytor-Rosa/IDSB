@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Historico;
-import net.weg.gedesti.model.service.HistoricoService;
+import net.weg.gedesti.model.service.HistoricalService;
 import net.weg.gedesti.util.HistoricoUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/historical")
 public class HistoricoController {
 
-    private HistoricoService historicoService;
+    private HistoricalService historicoService;
 
     @GetMapping
     public ResponseEntity<List<Historico>> findAll() {

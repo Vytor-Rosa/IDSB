@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.MensagemDTO;
+import net.weg.gedesti.dto.MessageDTO;
 import net.weg.gedesti.model.entity.Mensagem;
-import net.weg.gedesti.model.service.MensagemService;
+import net.weg.gedesti.model.service.MessageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/message")
 public class MensagemController {
-    private MensagemService mensagemService;
+    private MessageService mensagemService;
 
     @GetMapping
     public ResponseEntity<List<Mensagem>> findAll() {
@@ -26,7 +26,7 @@ public class MensagemController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid MensagemDTO mensagemDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid MessageDTO mensagemDTO) {
         Mensagem mensagem = new Mensagem();
         BeanUtils.copyProperties(mensagemDTO, mensagem);
         return ResponseEntity.status(HttpStatus.CREATED).body(mensagemService.save(mensagem));

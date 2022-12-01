@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.CentroDeCustoDTO;
+import net.weg.gedesti.dto.CostCenterDTO;
 import net.weg.gedesti.model.entity.CentroDeCusto;
-import net.weg.gedesti.model.service.CentroDeCustoService;
+import net.weg.gedesti.model.service.CostCenterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/costcenter")
 public class CentroDeCustoController {
-    private CentroDeCustoService centroDeCustoService;
+    private CostCenterService centroDeCustoService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid CentroDeCustoDTO centroDeCustoDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid CostCenterDTO centroDeCustoDTO) {
         CentroDeCusto centroDeCusto = new CentroDeCusto();
         BeanUtils.copyProperties(centroDeCustoDTO, centroDeCusto);
         return ResponseEntity.status(HttpStatus.CREATED).body(centroDeCustoService.save(centroDeCusto));

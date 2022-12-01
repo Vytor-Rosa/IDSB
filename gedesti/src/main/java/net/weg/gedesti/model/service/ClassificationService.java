@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ClassificacaoService {
+public class ClassificationService {
 
     ClassificacaoRepository classificacaoRepository;
 

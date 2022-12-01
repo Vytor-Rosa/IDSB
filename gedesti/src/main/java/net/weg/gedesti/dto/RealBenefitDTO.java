@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
-public class BeneficioRealDTO {
+public class RealBenefitDTO {
     private Integer realBenefitCode;
 
     @NotNull @Positive

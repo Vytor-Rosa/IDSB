@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PautaService {
+public class AgendaService {
     private PautaRepository pautaRepository;
 
     public List<Pauta> findAll() {

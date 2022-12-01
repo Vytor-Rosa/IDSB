@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
-public class DespesaDTO {
+public class ExpenseDTO {
     private Integer expenseCode;
     @NotBlank
     private String expenseType;

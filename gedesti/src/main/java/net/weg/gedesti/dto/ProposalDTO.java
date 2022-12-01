@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class PropostaDTO {
+public class ProposalDTO {
     private Integer proposalCode;
 
     @NotBlank

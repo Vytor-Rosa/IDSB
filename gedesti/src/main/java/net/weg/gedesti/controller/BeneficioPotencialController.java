@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.BeneficioPotencialDTO;
+import net.weg.gedesti.dto.PotentialBenefitDTO;
 import net.weg.gedesti.model.entity.BeneficioPotencial;
-import net.weg.gedesti.model.service.BeneficioPotencialService;
+import net.weg.gedesti.model.service.PotentialBenefitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/api/potencialbenefit")
 public class BeneficioPotencialController {
 
-    private BeneficioPotencialService beneficioPotencialService;
+    private PotentialBenefitService beneficioPotencialService;
 
     @GetMapping
     public ResponseEntity<List<BeneficioPotencial>> findAll() {
@@ -27,7 +27,7 @@ public class BeneficioPotencialController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid BeneficioPotencialDTO beneficioPotencialDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid PotentialBenefitDTO beneficioPotencialDTO) {
         BeneficioPotencial beneficioPotencial = new BeneficioPotencial();
         BeanUtils.copyProperties(beneficioPotencialDTO, beneficioPotencial);
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficioPotencialService.save(beneficioPotencial));

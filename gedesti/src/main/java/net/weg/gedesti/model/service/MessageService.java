@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class MensagemService {
+public class MessageService {
     private MensagemRepository mensagemRepository;
 
     public List<Mensagem> findAll() {

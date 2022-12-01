@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Ata;
-import net.weg.gedesti.model.service.AtaService;
+import net.weg.gedesti.model.service.MinuteService;
 import net.weg.gedesti.util.AtaUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequestMapping("/api/minutes")
 public class AtaController {
 
-    private AtaService ataService;
+    private MinuteService ataService;
 
     @GetMapping
     public ResponseEntity<List<Ata>> findAll(){

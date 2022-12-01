@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class  BeneficioPotencialService {
+public class PotentialBenefitService {
 
     private BeneficioPotencialRepository beneficioPotencialRepository;
 

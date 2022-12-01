@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.PautaDTO;
+import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.model.entity.Pauta;
-import net.weg.gedesti.model.service.PautaService;
+import net.weg.gedesti.model.service.AgendaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/agenda")
 public class PautaController {
-    private PautaService pautaService;
+    private AgendaService pautaService;
 
     @GetMapping
     public ResponseEntity<List<Pauta>> findAll() {
@@ -36,7 +36,7 @@ public class PautaController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid PautaDTO pautaDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid AgendaDTO pautaDTO) {
         Pauta pauta = new Pauta();
         BeanUtils.copyProperties(pautaDTO, pauta);
 

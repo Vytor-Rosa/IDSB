@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-public class MensagemDTO {
+public class MessageDTO {
     private Integer messageCode;
     @NotBlank
     private String message;

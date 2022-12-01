@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @ToString
-public class ClassificacaoDTO {
+public class ClassificationDTO {
     private Integer classificationCode;
 
     @NotNull
