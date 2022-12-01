@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "demanda")
+@Table(name = "demand")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

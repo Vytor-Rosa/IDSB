@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "centroDeCusto")
+@Table(name = "costcenter")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

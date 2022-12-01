@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ata")
+@Table(name = "minute")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
