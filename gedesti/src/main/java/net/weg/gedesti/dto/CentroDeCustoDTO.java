@@ -7,6 +7,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CentroDeCustoDTO {
     @NotBlank
-    private String centroDeCusto;
+    private String costCenter;
 
 }

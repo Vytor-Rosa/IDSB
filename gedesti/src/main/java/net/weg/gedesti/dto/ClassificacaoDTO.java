@@ -12,26 +12,26 @@ import java.util.List;
 @Data
 @ToString
 public class ClassificacaoDTO {
-    private Integer codigoClassificacao;
+    private Integer classificationCode;
 
     @NotNull
-    private Integer tamanhoClassificacao;
+    private Integer classificationSize;
 
     @NotBlank
-    private String secaoTI;
+    private String ITSection;
 
     @NotNull @Positive
-    private Integer codigoPPM;
+    private Integer PPMCode;
 
     @NotBlank
-    private String linkEpicJira;
+    private String EpicJiraLink;
 
     @NotNull
-    private Bu buSolicitante;
+    private Bu requesterBu;
 
     @NotNull
-    List<Bu> busBeneficiadas;
+    List<Bu> beneficiaryBu;
 
     @NotNull
-    private Funcionario matriculaAnalista;
+    private Funcionario analistRegistry;
 }

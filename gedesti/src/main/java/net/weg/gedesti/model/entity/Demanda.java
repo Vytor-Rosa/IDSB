@@ -18,48 +18,48 @@ public class Demanda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoDemanda;
+    private Integer demandCode;
 
     @Column(nullable = false)
-    private String tituloDemanda;
+    private String demandTitle;
 
     @Column(nullable = false)
-    private String problemaAtual;
+    private String currentProblem;
 
     @Column(nullable = false)
-    private String objetivoDemanda;
+    private String demandObjective;
 
     @Column(nullable = false)
-    private String statusDemanda;
+    private String demandStatus;
 
     @Column(nullable = false)
     private Double score;
 
     @Column(nullable = false)
-    private String periodoDeExecucao;
+    private String executionPeriod;
 
     @ManyToOne
-    private Funcionario matriculaSolicitante;
+    private Funcionario requesterRegistration;
 
     @OneToOne
-    private BeneficioReal beneficioReal;
+    private BeneficioReal realBenefit;
 
     @OneToOne
-    private BeneficioQualitativo beneficioQualitativo;
+    private BeneficioQualitativo qualitativeBenefit;
 
     @OneToOne
-    private BeneficioPotencial beneficioPotencial;
+    private BeneficioPotencial potentialBenefit;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private AnexoDemanda anexoDemanda;
+    private AnexoDemanda demandAttachment;
 
     @Bean
-    public void setAnexoDemanda(MultipartFile anexoDemanda) {
+    public void setDemandAttachment(MultipartFile demandAttachment) {
         try {
-            this.anexoDemanda = new AnexoDemanda(
-                    anexoDemanda.getOriginalFilename(),
-                    anexoDemanda.getContentType(),
-                    anexoDemanda.getBytes()
+            this.demandAttachment = new AnexoDemanda(
+                    demandAttachment.getOriginalFilename(),
+                    demandAttachment.getContentType(),
+                    demandAttachment.getBytes()
             );
         } catch (Exception exception) {
             throw new RuntimeException(exception);

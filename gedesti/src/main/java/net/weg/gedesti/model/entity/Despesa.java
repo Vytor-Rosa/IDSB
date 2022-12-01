@@ -17,29 +17,29 @@ public class Despesa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoDespesa;
+    private Integer expenseCode;
 
     @Column(nullable = false)
-    private String tipoDespesa;
+    private String expenseType;
 
     @Column(nullable = false)
-    private String perfilDespesa;
+    private String expenseProfile;
 
     @Column(nullable = false)
-    private Integer periodoExecucao;
+    private Integer runTime;
 
     @Column(nullable = false)
-    private String quantidadeHoras;
+    private String amountOfHours;
 
     @Column(nullable = false)
-    private Double valorHora;
+    private Double hourValue;
 
     @Column(nullable = false)
-    private Double valorTotal;
+    private Double totalValue;
 
     @ManyToOne
     @JoinColumn(name = "codigo_centro_de_custo")
-    private CentroDeCusto centroDeCusto;
+    private CentroDeCusto costCenter;
 
 //    @ManyToOne
 //    @JoinColumn(name = "codigo_proposta")

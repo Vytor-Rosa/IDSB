@@ -20,27 +20,27 @@ public class Ata {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoAta;
+    private Integer minuteCode;
 
     @Column(nullable = false)
-    private String nomeAta;
+    private String minuteName;
 
     @Column(nullable = false)
-    private String problemaAta;
+    private String minuteProblem;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Anexo anexo;
+    private Anexo attachment;
 
     @OneToOne
-    private Pauta pauta;
+    private Pauta agenda;
 
     @Bean
-    public void setAnexo(MultipartFile anexo){
+    public void setAttachment(MultipartFile attachment){
         try{
-            this.anexo = new Anexo(
-                    anexo.getOriginalFilename(),
-                    anexo.getContentType(),
-                    anexo.getBytes()
+            this.attachment = new Anexo(
+                    attachment.getOriginalFilename(),
+                    attachment.getContentType(),
+                    attachment.getBytes()
             );
         }catch (Exception exception){
             throw new RuntimeException(exception);

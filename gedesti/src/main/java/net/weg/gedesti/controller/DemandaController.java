@@ -1,12 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.DemandaDTO;
-import net.weg.gedesti.model.entity.Classificacao;
 import net.weg.gedesti.model.entity.Demanda;
 import net.weg.gedesti.model.service.DemandaService;
 import net.weg.gedesti.util.DemandaUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -43,7 +40,7 @@ public class DemandaController {
     public ResponseEntity<Object> save(@RequestParam(value = "demanda") @Valid String demandaJson, @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda) {
         DemandaUtil demandaUtil = new DemandaUtil();
         Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
-        demanda.setAnexoDemanda(anexoDemanda);
+        demanda.setDemandAttachment(anexoDemanda);
         return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }
 
@@ -79,8 +76,8 @@ public class DemandaController {
 
         DemandaUtil demandaUtil = new DemandaUtil();
         Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
-        demanda.setAnexoDemanda(anexoDemanda);
-        demanda.setCodigoDemanda(codigo);
+        demanda.setDemandAttachment(anexoDemanda);
+        demanda.setDemandCode(codigo);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }

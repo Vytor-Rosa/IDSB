@@ -21,29 +21,29 @@ public class Classificacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoClassificacao;
+    private Integer classificationCode;
 
     @Column(nullable = false)
-    private Integer tamanhoClassificacao;
+    private Integer classificationSize;
 
     @Column(nullable = false)
-    private String secaoTI;
+    private String ITSection;
 
     @Column(nullable = false)
-    private Integer codigoPPM;
+    private Integer PPMCode;
 
     @Column(nullable = false)
-    private String linkEpicJira;
+    private String EpicJiraLink;
 
     @OneToOne
-    private Bu buSolicitante;
+    private Bu requesterBu;
 
     @ManyToMany
     @JoinTable(name = "busBeneficiadas",
             joinColumns = @JoinColumn(name = "codigoBu"),
             inverseJoinColumns = @JoinColumn(name = "codigoClassificacao"))
-    private List<Bu> busBeneficiadas;
+    private List<Bu> beneficiaryBu;
 
     @ManyToOne
-    private Funcionario matriculaAnalista;
+    private Funcionario analistRegistry;
 }

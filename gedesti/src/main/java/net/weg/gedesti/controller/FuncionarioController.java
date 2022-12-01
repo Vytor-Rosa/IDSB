@@ -29,18 +29,18 @@ public class FuncionarioController {
 
     @PostMapping("/{cargoFuncionario}")
     public ResponseEntity<Object> save(@RequestBody @Valid FuncionarioDTO funcionarioDTO, @PathVariable(value = "cargoFuncionario") Integer cargoFuncionario) {
-        funcionarioDTO.setCargoFuncionario(cargoFuncionario);
+        funcionarioDTO.setWorkerOffice(cargoFuncionario);
         Funcionario funcionario = new Funcionario();
         BeanUtils.copyProperties(funcionarioDTO, funcionario);
 
         if(cargoFuncionario == 1){
-            funcionario.setCargoFuncionario("Solicitante");
+            funcionario.setWorkerOffice("Solicitante");
         }else if(cargoFuncionario == 2){
-            funcionario.setCargoFuncionario("Analista de TI");
+            funcionario.setWorkerOffice("Analista de TI");
         }else if(cargoFuncionario == 3){
-            funcionario.setCargoFuncionario("Gestor de TI");
+            funcionario.setWorkerOffice("Gestor de TI");
         }else if(cargoFuncionario == 4){
-            funcionario.setCargoFuncionario("Gerente de Negócio");
+            funcionario.setWorkerOffice("Gerente de Negócio");
         }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -60,10 +60,10 @@ public class FuncionarioController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody FuncionarioDTO funcionarioDTO) {
-        Optional<Funcionario> funcionario = funcionarioSerivce.findByEmailCorporativo(funcionarioDTO.getEmailCorporativo());
+        Optional<Funcionario> funcionario = funcionarioSerivce.findByCorporateEmail(funcionarioDTO.getCorporateEmail());
         Funcionario funcionarios = funcionario.get();
         if (funcionario.isPresent()) {
-            if (funcionarios.getSenhaFuncionario().equals(funcionarioDTO.getSenhaFuncionario())) {
+            if (funcionarios.getWorkerPassword().equals(funcionarioDTO.getWorkerPassword())) {
                     return ResponseEntity.status(HttpStatus.OK).body(funcionario);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Senha incorreta");

@@ -6,13 +6,13 @@ import javax.validation.constraints.*;
 @Data
 public class FuncionarioDTO {
     @NotNull @Positive
-    private Integer codigoFuncionario;
+    private Integer workerCode;
     @NotBlank
-    private String nomeFuncionario;
+    private String workerName;
     @Email
-    private String emailCorporativo;
+    private String corporateEmail;
     @NotBlank
-    private String senhaFuncionario;
+    private String workerPassword;
     @PositiveOrZero
-    private Integer cargoFuncionario;
+    private Integer workerOffice;
 }

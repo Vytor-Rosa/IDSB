@@ -16,15 +16,15 @@ public class BeneficioPotencial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBeneficioPotencial;
+    private Integer potentialBenefitCode;
 
     @Column(nullable = false)
-    private Double valorMensalPotencial;
+    private Double potentialMonthlyValue;
 
     @Column(nullable = false)
-    private Boolean obrigacaoLegal;
+    private Boolean legalObrigation;
 
     @Column(nullable = false)
-    private String moedaPotencial;
+    private String potentialCurrency;
 
 }

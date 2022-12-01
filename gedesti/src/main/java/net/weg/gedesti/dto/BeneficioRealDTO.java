@@ -11,14 +11,14 @@ import javax.validation.constraints.Positive;
 
 @Data
 public class BeneficioRealDTO {
-    private Integer codigoBeneficioReal;
+    private Integer realBenefitCode;
 
     @NotNull @Positive
-    private Double valorMensalReal;
+    private Double realMonthlyValue;
 
     @NotBlank
-    private String descricaoBeneficioReal;
+    private String realBenefitDescription;
 
     @NotBlank
-    private String moedaReal;
+    private String realCurrency;
 }

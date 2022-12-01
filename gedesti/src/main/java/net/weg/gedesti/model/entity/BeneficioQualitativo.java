@@ -16,12 +16,12 @@ public class BeneficioQualitativo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBeneficioQualitativo;
+    private Integer qualitativeBenefitCode;
 
     @Column(nullable = false)
-    private String frequenciaDeUso;
+    private String frequencyOfUse;
 
     @Column(nullable = false)
-    private boolean requisitosControlesInternos;
+    private boolean interalControlsRequirements;
 
 }

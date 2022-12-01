@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class BeneficioQualitativoDTO {
-    private Integer codigoBeneficioQualitativo;
+    private Integer qualitativeBenefitCode;
 
     @NotBlank
-    private String frequenciaDeUso;
+    private String frequencyOfUse;
 
     @NotNull
-    private boolean requisitosControlesInternos;
+    private boolean interalControlsRequirements;
 }

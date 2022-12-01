@@ -39,7 +39,7 @@ public class AtaController {
     public  ResponseEntity<Object> save(@RequestParam(value = "ata") @Valid String ataJson, @RequestParam(value = "anexo") MultipartFile anexo){
         AtaUtil util = new AtaUtil();
         Ata ata = util.convertJsonToModel(ataJson);
-        ata.setAnexo(anexo);
+        ata.setAttachment(anexo);
         return ResponseEntity.status(HttpStatus.CREATED).body(ataService.save(ata));
     }
 

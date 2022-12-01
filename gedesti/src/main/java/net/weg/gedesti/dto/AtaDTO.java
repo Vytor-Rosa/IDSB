@@ -12,14 +12,14 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Data
 public class AtaDTO {
-    private Integer codigoAta;
+    private Integer minuteCode;
 
     @NotBlank
-    private String nomeAta;
+    private String minuteName;
 
     @NotBlank
-    private String problemaAta;
+    private String minuteProblem;
 
     @NotNull
-    private Pauta pauta;
+    private Pauta agenda;
 }

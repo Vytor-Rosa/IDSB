@@ -33,12 +33,12 @@ public class FuncionarioService {
         funcionarioRepository.deleteById(integer);
     }
 
-    public Optional<Funcionario> findByEmailCorporativo(String emailCorporativo) {
-        return funcionarioRepository.findByEmailCorporativo(emailCorporativo);
+    public Optional<Funcionario> findByCorporateEmail(String corporateEmail) {
+        return funcionarioRepository.findByCorporateEmail(corporateEmail);
     }
 
-    public Funcionario findBySenhaFuncionario(String senhaFuncionario){
-        return funcionarioRepository.findBySenhaFuncionario(senhaFuncionario);
+    public Funcionario findByWorkerPassword(String workerPassword){
+        return funcionarioRepository.findByWorkerPassword(workerPassword);
     }
 
 }

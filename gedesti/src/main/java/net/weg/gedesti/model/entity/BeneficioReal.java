@@ -16,14 +16,14 @@ public class BeneficioReal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBeneficioReal;
+    private Integer realBenefitCode;
 
     @Column(nullable = false)
-    private Double valorMensalReal;
+    private Double realMonthlyValue;
 
     @Column(nullable = false)
-    private String descricaoBeneficioReal;
+    private String realBenefitDescription;
 
     @Column(nullable = false)
-    private String moedaReal;
+    private String realCurrency;
 }

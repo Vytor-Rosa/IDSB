@@ -22,19 +22,19 @@ public class Funcionario {
 
     @Id
     @Column(nullable = false, unique = true)
-    private Integer codigoFuncionario;
+    private Integer workerCode;
 
     @Column(nullable = false)
-    private String nomeFuncionario;
+    private String workerName;
 
     @Column(nullable = false, unique = true)
-    private String emailCorporativo;
+    private String corporateEmail;
 
     @Column(nullable = false)
-    private String senhaFuncionario;
+    private String workerPassword;
 
     @Column(nullable = false)
-    private String cargoFuncionario;
+    private String workerOffice;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

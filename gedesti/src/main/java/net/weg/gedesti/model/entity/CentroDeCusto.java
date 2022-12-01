@@ -18,8 +18,8 @@ public class CentroDeCusto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoCentroDeCusto;
+    private Integer costCenterCode;
 
     @Column(nullable = false)
-    private String centroDeCusto;
+    private String costCenter;
 }

@@ -8,21 +8,21 @@ import javax.validation.constraints.Positive;
 
 @Data
 public class DespesaDTO {
-    private Integer codigoDespesa;
+    private Integer expenseCode;
     @NotBlank
-    private String tipoDespesa;
+    private String expenseType;
     @NotBlank
-    private String perfilDespesa;
+    private String expenseProfile;
     @NotNull @Positive
-    private Integer periodoExecucao;
+    private Integer runTime;
     @NotBlank
-    private String quantidadeHoras;
+    private String amountOfHours;
     @NotNull
-    private Double valorHora;
+    private Double hourValue;
     @NotNull
-    private Double valorTotal;
+    private Double totalValue;
     @NotNull
-    private CentroDeCusto centroDeCusto;
+    private CentroDeCusto costCenter;
 //    @NotNull
 //    private Proposta proposta;
 }
