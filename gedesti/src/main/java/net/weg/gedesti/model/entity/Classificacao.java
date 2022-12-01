@@ -39,9 +39,9 @@ public class Classificacao {
     private Bu requesterBu;
 
     @ManyToMany
-    @JoinTable(name = "busBeneficiadas",
-            joinColumns = @JoinColumn(name = "codigoBu"),
-            inverseJoinColumns = @JoinColumn(name = "codigoClassificacao"))
+    @JoinTable(name = "beneficiariesBus",
+            joinColumns = @JoinColumn(name = "buCode"),
+            inverseJoinColumns = @JoinColumn(name = "classificationCode"))
     private List<Bu> beneficiaryBu;
 
     @ManyToOne

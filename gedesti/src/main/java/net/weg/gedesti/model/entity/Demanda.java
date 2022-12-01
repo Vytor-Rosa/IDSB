@@ -67,16 +67,16 @@ public class Demanda {
     }
 
     @ManyToMany
-    @JoinTable(name = "centroDemanda",
-            joinColumns = @JoinColumn(name = "codigoCentroDeCusto"),
-            inverseJoinColumns = @JoinColumn(name = "codigoDemanda"))
-    List<CentroDeCusto> centroDeCusto;
+    @JoinTable(name = "demandCenter",
+            joinColumns = @JoinColumn(name = "costCenterCode"),
+            inverseJoinColumns = @JoinColumn(name = "demandCode"))
+    List<CentroDeCusto> costCenter;
 
     @JoinColumn(nullable = true)
     @OneToOne
-    private Classificacao classificacao;
+    private Classificacao classification;
 
     @JoinColumn(nullable = true)
     @OneToOne
-    private Proposta proposta;
+    private Proposta proposal;
 }

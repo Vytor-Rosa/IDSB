@@ -8,43 +8,42 @@ import java.util.List;
 
 @Data
 public class DemandaDTO {
-    private Integer codigoDemanda;
+    private Integer demandCode;
 
     @NotBlank
-    private String tituloDemanda;
+    private String demandTitle;
 
     @NotBlank
-    private String problemaAtual;
+    private String currentProblem;
 
     @NotBlank
-    private String objetivoDemanda;
+    private String demandObjective;
 
     @NotBlank
-    private String statusDemanda;
+    private String demandStatus;
 
     @NotNull
     private Double score;
 
     @NotBlank
-    private String periodoDeExecucao;
+    private String executionPeriod;
 
     @NotNull
-    private Funcionario matriculaSolicitante;
+    private Funcionario requesterRegistration;
 
     @NotNull
-    private BeneficioReal beneficioReal;
+    private BeneficioReal realBenefit;
 
     @NotNull
-    private BeneficioQualitativo beneficioQualitativo;
+    private BeneficioQualitativo qualitativeBenefit;
 
     @NotNull
-    private BeneficioPotencial beneficioPotencial;
+    private BeneficioPotencial potentialBenefit;
 
     @NotNull
-    List<CentroDeCusto> centroDeCusto;
+    List<CentroDeCusto> costCenter;
 
+    private Classificacao classification;
 
-    private Classificacao classificacao;
-
-    private Proposta proposta;
+    private Proposta proposal;
 }
