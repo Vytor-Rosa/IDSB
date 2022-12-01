@@ -21,7 +21,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/proposal")
-public class PropostaController {
+public class ProposalController {
 
     private ProposalService propostaService;
 

@@ -21,7 +21,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/minutes")
-public class AtaController {
+public class MinuteController {
 
     private MinuteService ataService;
 
