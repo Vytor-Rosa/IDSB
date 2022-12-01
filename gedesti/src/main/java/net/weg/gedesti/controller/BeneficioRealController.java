@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/beneficioreal")
+@RequestMapping("/api/realbenefit")
 public class BeneficioRealController {
     private BeneficioRealService beneficioRealService;
 

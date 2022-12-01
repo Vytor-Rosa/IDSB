@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/centrodecusto")
+@RequestMapping("/api/costcenter")
 public class CentroDeCustoController {
     private CentroDeCustoService centroDeCustoService;
 

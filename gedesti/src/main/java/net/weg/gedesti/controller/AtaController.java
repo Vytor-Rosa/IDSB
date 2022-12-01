@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/ata")
+@RequestMapping("/api/minutes")
 public class AtaController {
 
     private AtaService ataService;
