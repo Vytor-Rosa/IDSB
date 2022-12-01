@@ -44,8 +44,8 @@ public class Proposta {
     private Pauta agendaCode;
 
     @ManyToMany
-    @JoinTable(name = "responsaveis_pelo_negocio",
-            joinColumns = @JoinColumn(name = "codigoFuncionario"),
-            inverseJoinColumns = @JoinColumn(name = "codigoProposta"))
-    List<Funcionario> Funcionarios;
+    @JoinTable(name = "responsible_for_business",
+            joinColumns = @JoinColumn(name = "workerCode"),
+            inverseJoinColumns = @JoinColumn(name = "proposalCode"))
+    List<Funcionario> workers;
 }

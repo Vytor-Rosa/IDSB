@@ -18,5 +18,5 @@ public class PautaDTO {
     @NotNull
     private Integer yearAgenda;
     @NotNull
-    List<Funcionario> comissao;
+    List<Funcionario> commission;
 }

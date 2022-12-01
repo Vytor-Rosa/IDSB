@@ -25,10 +25,10 @@ public class Pauta {
     private Integer yearAgenda;
 
     @ManyToMany
-    @JoinTable(name = "comissao",
-            joinColumns = @JoinColumn(name = "codigoFuncionario"),
-            inverseJoinColumns = @JoinColumn(name = "codigoPauta"))
-    List<Funcionario> comissao;
+    @JoinTable(name = "commission",
+            joinColumns = @JoinColumn(name = "workerCode"),
+            inverseJoinColumns = @JoinColumn(name = "agendaCode"))
+    List<Funcionario> commission;
 
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;

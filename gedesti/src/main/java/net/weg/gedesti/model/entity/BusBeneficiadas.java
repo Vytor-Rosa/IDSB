@@ -13,6 +13,6 @@ public class BusBeneficiadas {
     private Pauta buCode;
 
     @ManyToOne
-    @JoinColumn(name = "codigoClassficacao")
-    private Funcionario codigoClassficacao;
+    @JoinColumn(name = "classificationCode")
+    private Funcionario classificationCode;
 }

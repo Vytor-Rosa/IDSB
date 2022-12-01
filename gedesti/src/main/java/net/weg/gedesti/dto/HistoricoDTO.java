@@ -13,5 +13,5 @@ public class HistoricoDTO {
     private Demanda demand;
 
     @NotNull
-    private Anexo historicalAttached;
+    private Anexo historicalAttachment;
 }

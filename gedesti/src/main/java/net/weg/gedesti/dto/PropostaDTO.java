@@ -39,5 +39,5 @@ public class PropostaDTO {
     @NotNull
     private Pauta agendaCode;
 
-    List<Funcionario> Funcionarios;
+    List<Funcionario> workers;
 }

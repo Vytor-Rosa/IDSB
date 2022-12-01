@@ -27,15 +27,15 @@ public class Historico {
     private Demanda demand;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Anexo historicalAttached;
+    private Anexo historicalAttachment;
 
     @Bean
-    public void setAnexo(MultipartFile anexoHistorico){
+    public void setAnexo(MultipartFile historicalAttachment){
         try{
-            this.historicalAttached = new Anexo(
-                    anexoHistorico.getOriginalFilename(),
-                    anexoHistorico.getContentType(),
-                    anexoHistorico.getBytes()
+            this.historicalAttachment = new Anexo(
+                    historicalAttachment.getOriginalFilename(),
+                    historicalAttachment.getContentType(),
+                    historicalAttachment.getBytes()
             );
         }catch (Exception exception){
             throw new RuntimeException(exception);

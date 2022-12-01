@@ -15,7 +15,7 @@ public class AnexoDemanda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer attachedCodeDemand;
+    private Integer attachmentCodeDemand;
 
     @NonNull
     private String name;
