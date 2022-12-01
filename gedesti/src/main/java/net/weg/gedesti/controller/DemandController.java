@@ -1,7 +1,7 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.util.DemandaUtil;
 import org.springframework.data.domain.Page;
@@ -27,26 +27,26 @@ public class DemandController {
     private DemandService demandaService;
 
     @GetMapping
-    public ResponseEntity<List<Demanda>> findAll() {
+    public ResponseEntity<List<Demand>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll());
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Demanda>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll(pageable));
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "demanda") @Valid String demandaJson, @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda) {
         DemandaUtil demandaUtil = new DemandaUtil();
-        Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
+        Demand demanda = demandaUtil.convertJsonToModel(demandaJson);
         demanda.setDemandAttachment(anexoDemanda);
         return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Demanda> demandaOptional = demandaService.findById(codigo);
+        Optional<Demand> demandaOptional = demandaService.findById(codigo);
         if(demandaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
         }
@@ -56,7 +56,7 @@ public class DemandController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Demanda> demandaOptional = demandaService.findById(codigo);
+        Optional<Demand> demandaOptional = demandaService.findById(codigo);
         if(demandaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
         }
@@ -75,7 +75,7 @@ public class DemandController {
         }
 
         DemandaUtil demandaUtil = new DemandaUtil();
-        Demanda demanda = demandaUtil.convertJsonToModel(demandaJson);
+        Demand demanda = demandaUtil.convertJsonToModel(demandaJson);
         demanda.setDemandAttachment(anexoDemanda);
         demanda.setDemandCode(codigo);
 

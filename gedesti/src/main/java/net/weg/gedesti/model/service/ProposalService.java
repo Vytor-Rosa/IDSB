@@ -1,12 +1,10 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Proposta;
+import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.repository.PropostaRepository;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,19 +16,19 @@ public class ProposalService {
 
     private PropostaRepository propostaRepository;
 
-    public List<Proposta> findAll() {
+    public List<Proposal> findAll() {
         return propostaRepository.findAll();
     }
 
-    public Page<Proposta> findAll(Pageable pageable) {
+    public Page<Proposal> findAll(Pageable pageable) {
         return propostaRepository.findAll(pageable);
     }
 
-    public <S extends Proposta> S save(S entity) {
+    public <S extends Proposal> S save(S entity) {
         return propostaRepository.save(entity);
     }
 
-    public Optional<Proposta> findById(Integer integer) {
+    public Optional<Proposal> findById(Integer integer) {
         return propostaRepository.findById(integer);
     }
 

@@ -51,12 +51,12 @@ public class Demand {
     private PotentialBenefit potentialBenefit;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private AnexoDemanda demandAttachment;
+    private DemandAttachment demandAttachment;
 
     @Bean
     public void setDemandAttachment(MultipartFile demandAttachment) {
         try {
-            this.demandAttachment = new AnexoDemanda(
+            this.demandAttachment = new DemandAttachment(
                     demandAttachment.getOriginalFilename(),
                     demandAttachment.getContentType(),
                     demandAttachment.getBytes()

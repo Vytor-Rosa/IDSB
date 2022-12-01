@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Historico;
+import net.weg.gedesti.model.entity.Historical;
 import net.weg.gedesti.repository.HistoricoRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,15 @@ public class HistoricalService {
 
     private HistoricoRepository historicoRepository;
 
-    public List<Historico> findAll() {
+    public List<Historical> findAll() {
         return historicoRepository.findAll();
     }
 
-    public <S extends Historico> S save(S entity) {
+    public <S extends Historical> S save(S entity) {
         return historicoRepository.save(entity);
     }
 
-    public Optional<Historico> findById(Integer integer) {
+    public Optional<Historical> findById(Integer integer) {
         return historicoRepository.findById(integer);
     }
 

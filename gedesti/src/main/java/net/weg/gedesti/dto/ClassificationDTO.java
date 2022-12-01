@@ -3,7 +3,7 @@ package net.weg.gedesti.dto;
 import lombok.Data;
 import lombok.ToString;
 import net.weg.gedesti.model.entity.Bu;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Worker;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -33,5 +33,5 @@ public class ClassificationDTO {
     List<Bu> beneficiaryBu;
 
     @NotNull
-    private Funcionario analistRegistry;
+    private Worker analistRegistry;
 }

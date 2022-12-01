@@ -2,12 +2,12 @@ package net.weg.gedesti.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weg.gedesti.dto.DemandDTO;
-import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Demand;
 
 public class DemandaUtil {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Demanda convertJsonToModel(String demandaJson) {
+    public Demand convertJsonToModel(String demandaJson) {
         DemandDTO demandaDTO = convetJsonToDTO(demandaJson);
         return convertDtoToModel(demandaDTO);
     }
@@ -20,7 +20,7 @@ public class DemandaUtil {
         }
     }
 
-    private Demanda convertDtoToModel(DemandDTO demandaDTO) {
-        return this.objectMapper.convertValue(demandaDTO, Demanda.class);
+    private Demand convertDtoToModel(DemandDTO demandaDTO) {
+        return this.objectMapper.convertValue(demandaDTO, Demand.class);
     }
 }

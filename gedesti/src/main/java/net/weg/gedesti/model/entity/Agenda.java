@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "pauta")
+@Table(name = "agenda")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

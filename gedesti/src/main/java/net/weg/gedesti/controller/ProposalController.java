@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ProposalDTO;
-import net.weg.gedesti.model.entity.Proposta;
+import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.ProposalService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -26,25 +26,25 @@ public class ProposalController {
     private ProposalService propostaService;
 
     @GetMapping
-    public ResponseEntity<List<Proposta>> findAll() {
+    public ResponseEntity<List<Proposal>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll());
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Proposta>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll(pageable));
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO propostaDTO) {
-        Proposta proposta = new Proposta();
+        Proposal proposta = new Proposal();
         BeanUtils.copyProperties(propostaDTO, proposta);
         return ResponseEntity.status(HttpStatus.CREATED).body(propostaService.save(proposta));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Proposta> propostaOptional = propostaService.findById(codigo);
+        Optional<Proposal> propostaOptional = propostaService.findById(codigo);
         if(propostaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma proposta com o código: " + codigo);
         }
@@ -53,7 +53,7 @@ public class ProposalController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Proposta> propostaOptional = propostaService.findById(codigo);
+        Optional<Proposal> propostaOptional = propostaService.findById(codigo);
         if(propostaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma proposta com o código: " + codigo);
         }

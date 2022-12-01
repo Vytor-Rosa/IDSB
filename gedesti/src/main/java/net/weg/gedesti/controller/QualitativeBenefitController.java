@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.QualitativeBenefitDTO;
-import net.weg.gedesti.model.entity.BeneficioQualitativo;
+import net.weg.gedesti.model.entity.QualitativeBenefit;
 import net.weg.gedesti.model.service.QualitativeBenefitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -22,20 +22,20 @@ public class QualitativeBenefitController {
     private QualitativeBenefitService beneficioQualitativoService;
 
     @GetMapping
-    public ResponseEntity<List<BeneficioQualitativo>> findAll() {
+    public ResponseEntity<List<QualitativeBenefit>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(beneficioQualitativoService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid QualitativeBenefitDTO beneficioQualitativoDTO) {
-        BeneficioQualitativo beneficioQualitativo = new BeneficioQualitativo();
+        QualitativeBenefit beneficioQualitativo = new QualitativeBenefit();
         BeanUtils.copyProperties(beneficioQualitativoDTO, beneficioQualitativo);
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficioQualitativoService.save(beneficioQualitativo));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<BeneficioQualitativo> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
+        Optional<QualitativeBenefit> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
         if(beneficioQualitativoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio qualitativo com o codigo:" + codigo);
         }
@@ -44,7 +44,7 @@ public class QualitativeBenefitController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<BeneficioQualitativo> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
+        Optional<QualitativeBenefit> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
         if(beneficioQualitativoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio qualitativo com o codigo: " + codigo);
         }

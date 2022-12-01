@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
-import net.weg.gedesti.model.entity.Pauta;
+import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.service.AgendaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -26,39 +26,39 @@ public class AgendaController {
     private AgendaService pautaService;
 
     @GetMapping
-    public ResponseEntity<List<Pauta>> findAll() {
+    public ResponseEntity<List<Agenda>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll());
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Pauta>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Agenda>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid AgendaDTO pautaDTO) {
-        Pauta pauta = new Pauta();
-        BeanUtils.copyProperties(pautaDTO, pauta);
+    public ResponseEntity<Object> save(@RequestBody @Valid AgendaDTO agendaDTO) {
+        Agenda agenda = new Agenda();
+        BeanUtils.copyProperties(agendaDTO, agenda);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.save(pauta));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.save(agenda));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Pauta> pautaOptional = pautaService.findById(codigo);
+        Optional<Agenda> optionalAgenda = pautaService.findById(codigo);
 
-        if (pautaOptional.isEmpty()) {
+        if (optionalAgenda.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
         }
 
-        List<Pauta> pautaLista = new ArrayList<>();
-        pautaLista.add(pautaOptional.get());
-        return ResponseEntity.status(HttpStatus.FOUND).body(pautaLista);
+        List<Agenda> listAgenda = new ArrayList<>();
+        listAgenda.add(optionalAgenda.get());
+        return ResponseEntity.status(HttpStatus.FOUND).body(listAgenda);
     }
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Pauta> pautaOptional = pautaService.findById(codigo);
+        Optional<Agenda> pautaOptional = pautaService.findById(codigo);
         if (pautaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
         }

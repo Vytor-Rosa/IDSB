@@ -2,14 +2,14 @@ package net.weg.gedesti.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weg.gedesti.dto.HistoricalDTO;
-import net.weg.gedesti.model.entity.Historico;
+import net.weg.gedesti.model.entity.Historical;
 import org.springframework.beans.BeanUtils;
 
 public class HistoricoUtil {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Historico convertJsonToModel(String historicoJson) {
+    public Historical convertJsonToModel(String historicoJson) {
         HistoricalDTO historicoDTO = convetJsonToDTO(historicoJson);
         return convertDtoToModel(historicoDTO);
     }
@@ -22,8 +22,8 @@ public class HistoricoUtil {
         }
     }
 
-    private Historico convertDtoToModel(HistoricalDTO historicoDTO) {
-        Historico historico = new Historico();
+    private Historical convertDtoToModel(HistoricalDTO historicoDTO) {
+        Historical historico = new Historical();
         BeanUtils.copyProperties(historicoDTO, historico);
         return historico;
     }

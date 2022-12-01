@@ -2,7 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import net.weg.gedesti.model.entity.Chat;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Worker;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,5 +19,5 @@ public class MessageDTO {
     @NotNull
     private Chat chat;
     @NotNull
-    private Funcionario worker;
+    private Worker worker;
 }

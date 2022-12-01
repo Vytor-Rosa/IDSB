@@ -1,7 +1,7 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Historico;
+import net.weg.gedesti.model.entity.Historical;
 import net.weg.gedesti.model.service.HistoricalService;
 import net.weg.gedesti.util.HistoricoUtil;
 import org.springframework.http.HttpStatus;
@@ -23,21 +23,21 @@ public class HistoricalController {
     private HistoricalService historicoService;
 
     @GetMapping
-    public ResponseEntity<List<Historico>> findAll() {
+    public ResponseEntity<List<Historical>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(historicoService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "historico") @Valid String historicoJson, @RequestParam(value = "anexoHistorico") MultipartFile anexoHistorico) {
         HistoricoUtil historicoUtil = new HistoricoUtil();
-        Historico historico = historicoUtil.convertJsonToModel(historicoJson);
+        Historical historico = historicoUtil.convertJsonToModel(historicoJson);
         historico.setAnexo(anexoHistorico);
         return ResponseEntity.status(HttpStatus.CREATED).body(historicoService.save(historico));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Historico> historicoOptional = historicoService.findById(codigo);
+        Optional<Historical> historicoOptional = historicoService.findById(codigo);
         if(historicoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum histórico com o codigo: " + codigo);
         }
@@ -46,7 +46,7 @@ public class HistoricalController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Historico> historicoOptional = historicoService.findById(codigo);
+        Optional<Historical> historicoOptional = historicoService.findById(codigo);
         if(historicoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum histórico com o codigo: " + codigo);
         }

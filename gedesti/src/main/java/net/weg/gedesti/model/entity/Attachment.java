@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "anexo")
+@Table(name = "attachment")
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor

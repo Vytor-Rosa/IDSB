@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ExpenseDTO;
-import net.weg.gedesti.model.entity.Despesa;
+import net.weg.gedesti.model.entity.Expense;
 import net.weg.gedesti.model.service.ExpenseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -22,20 +22,20 @@ public class ExpenseController {
     private ExpenseService despesaService;
 
     @GetMapping
-    public ResponseEntity<List<Despesa>> findAll() {
+    public ResponseEntity<List<Expense>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(despesaService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid ExpenseDTO despesaDTO) {
-        Despesa despesa = new Despesa();
+        Expense despesa = new Expense();
         BeanUtils.copyProperties(despesaDTO, despesa);
         return ResponseEntity.status(HttpStatus.FOUND).body(despesaService.save(despesa));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Despesa> despesaOptional = despesaService.findById(codigo);
+        Optional<Expense> despesaOptional = despesaService.findById(codigo);
         if (despesaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
         }
@@ -44,7 +44,7 @@ public class ExpenseController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Despesa> despesaOptional = despesaService.findById(codigo);
+        Optional<Expense> despesaOptional = despesaService.findById(codigo);
         if (despesaOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
         }

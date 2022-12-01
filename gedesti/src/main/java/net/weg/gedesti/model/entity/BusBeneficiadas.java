@@ -10,9 +10,9 @@ public class BusBeneficiadas {
 
     @ManyToOne
     @JoinColumn(name = "buCode")
-    private Pauta buCode;
+    private Agenda buCode;
 
     @ManyToOne
     @JoinColumn(name = "classificationCode")
-    private Funcionario classificationCode;
+    private Worker classificationCode;
 }

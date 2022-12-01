@@ -1,7 +1,7 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
-import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Demand;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class ChatDTO {
     private Integer chatCode;
     @NotNull
-    private Demanda demand;
+    private Demand demand;
 
 
 }

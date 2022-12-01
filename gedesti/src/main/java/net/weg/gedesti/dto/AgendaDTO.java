@@ -2,7 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import lombok.ToString;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Worker;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -18,5 +18,5 @@ public class AgendaDTO {
     @NotNull
     private Integer yearAgenda;
     @NotNull
-    List<Funcionario> commission;
+    List<Worker> commission;
 }

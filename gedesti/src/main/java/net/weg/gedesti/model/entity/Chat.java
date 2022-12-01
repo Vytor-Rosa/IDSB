@@ -20,7 +20,7 @@ public class Chat {
 
     @OneToOne
     @JoinColumn(nullable = false)
-    private Demanda demand;
+    private Demand demand;
 
 
 }

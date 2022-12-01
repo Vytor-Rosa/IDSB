@@ -1,7 +1,7 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Ata;
+import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.model.service.MinuteService;
 import net.weg.gedesti.util.AtaUtil;
 import org.springframework.data.domain.Page;
@@ -26,26 +26,26 @@ public class MinuteController {
     private MinuteService ataService;
 
     @GetMapping
-    public ResponseEntity<List<Ata>> findAll(){
+    public ResponseEntity<List<Minute>> findAll(){
         return ResponseEntity.status(HttpStatus.FOUND).body(ataService.findAll());
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Ata>> findAll(@PageableDefault(page = 9, size = 1, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Minute>> findAll(@PageableDefault(page = 9, size = 1, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.FOUND).body(ataService.findAll(pageable));
     }
 
     @PostMapping
     public  ResponseEntity<Object> save(@RequestParam(value = "ata") @Valid String ataJson, @RequestParam(value = "anexo") MultipartFile anexo){
         AtaUtil util = new AtaUtil();
-        Ata ata = util.convertJsonToModel(ataJson);
+        Minute ata = util.convertJsonToModel(ataJson);
         ata.setAttachment(anexo);
         return ResponseEntity.status(HttpStatus.CREATED).body(ataService.save(ata));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Ata> ataOptional = ataService.findById(codigo);
+        Optional<Minute> ataOptional = ataService.findById(codigo);
         if (ataOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
         }
@@ -55,7 +55,7 @@ public class MinuteController {
 
     @DeleteMapping("/{codigo}")
     public  ResponseEntity<Object> deleteById(@PathVariable(value = "codigo")Integer codigo){
-        Optional<Ata> ataOptional = ataService.findById(codigo);
+        Optional<Minute> ataOptional = ataService.findById(codigo);
         if(ataOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma ata com o codigo: "+ codigo);
         }

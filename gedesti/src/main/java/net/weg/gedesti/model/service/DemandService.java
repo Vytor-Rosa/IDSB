@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.repository.DemandaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,19 +16,19 @@ public class DemandService {
 
     private DemandaRepository demandaRepository;
 
-    public List<Demanda> findAll() {
+    public List<Demand> findAll() {
         return demandaRepository.findAll();
     }
 
-    public Page<Demanda> findAll(Pageable pageable) {
+    public Page<Demand> findAll(Pageable pageable) {
         return demandaRepository.findAll(pageable);
     }
 
-    public <S extends Demanda> S save(S entity) {
+    public <S extends Demand> S save(S entity) {
         return demandaRepository.save(entity);
     }
 
-    public Optional<Demanda> findById(Integer integer) {
+    public Optional<Demand> findById(Integer integer) {
         return demandaRepository.findById(integer);
     }
 
