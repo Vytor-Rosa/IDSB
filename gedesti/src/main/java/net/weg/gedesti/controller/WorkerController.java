@@ -20,67 +20,67 @@ import java.util.Optional;
 @RequestMapping("/api/worker")
 @AllArgsConstructor
 public class WorkerController {
-    private WorkerService funcionarioSerivce;
+    private WorkerService workerSerivce;
 
     @GetMapping
     public ResponseEntity<List<Worker>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(funcionarioSerivce.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(workerSerivce.findAll());
     }
 
-    @PostMapping("/{cargoFuncionario}")
-    public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO funcionarioDTO, @PathVariable(value = "cargoFuncionario") Integer cargoFuncionario) {
-        funcionarioDTO.setWorkerOffice(cargoFuncionario);
-        Worker funcionario = new Worker();
-        BeanUtils.copyProperties(funcionarioDTO, funcionario);
+    @PostMapping("/{workerOffice}")
+    public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO workerDTO, @PathVariable(value = "workerOffice") Integer workerOffice) {
+        workerDTO.setWorkerOffice(workerOffice);
+        Worker worker = new Worker();
+        BeanUtils.copyProperties(workerDTO, worker);
 
-        if(cargoFuncionario == 1){
-            funcionario.setWorkerOffice("Solicitante");
-        }else if(cargoFuncionario == 2){
-            funcionario.setWorkerOffice("Analista de TI");
-        }else if(cargoFuncionario == 3){
-            funcionario.setWorkerOffice("Gestor de TI");
-        }else if(cargoFuncionario == 4){
-            funcionario.setWorkerOffice("Gerente de Negócio");
+        if(workerOffice == 1){
+            worker.setWorkerOffice("Solicitante");
+        }else if(workerOffice == 2){
+            worker.setWorkerOffice("Analista de TI");
+        }else if(workerOffice == 3){
+            worker.setWorkerOffice("Gestor de TI");
+        }else if(workerOffice == 4){
+            worker.setWorkerOffice("Gerente de Negócio");
         }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        funcionario.setSenhaFuncionario(encoder.encode(funcionario.getSenhaFuncionario()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioSerivce.save(funcionario));
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerSerivce.save(worker));
     }
 
-    @GetMapping("/{codigoFuncionario}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigoFuncionario") Integer codigoFuncionario) {
-        Optional<Worker> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
-        if(optionalFuncionario.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Código de funcionario inválido");
+    @GetMapping("/{workerCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "workerCode") Integer workerCode) {
+        Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
+        if(optionalWorker.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid worker code!");
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(optionalFuncionario);
+        return ResponseEntity.status(HttpStatus.FOUND).body(optionalWorker);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody WorkerDTO funcionarioDTO) {
-        Optional<Worker> funcionario = funcionarioSerivce.findByCorporateEmail(funcionarioDTO.getCorporateEmail());
-        Worker funcionarios = funcionario.get();
-        if (funcionario.isPresent()) {
-            if (funcionarios.getWorkerPassword().equals(funcionarioDTO.getWorkerPassword())) {
-                    return ResponseEntity.status(HttpStatus.OK).body(funcionario);
+    public ResponseEntity<Object> login(@RequestBody WorkerDTO workerDTO) {
+        Optional<Worker> worker = workerSerivce.findByCorporateEmail(workerDTO.getCorporateEmail());
+        Worker workers = worker.get();
+        if (worker.isPresent()) {
+            if (workers.getWorkerPassword().equals(workerDTO.getWorkerPassword())) {
+                    return ResponseEntity.status(HttpStatus.OK).body(worker);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Senha incorreta");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Incorrect password!");
             }
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO! Email não existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email does not exist!");
         }
     }
 
 
-    @DeleteMapping("/{codigoFuncionario}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigoFuncionario") Integer codigoFuncionario) {
-        Optional<Worker> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
-        if(optionalFuncionario.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Código de funcionario inválido");
+    @DeleteMapping("/{workerCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "workerCode") Integer workerCode) {
+        Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
+        if(optionalWorker.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid worker code!");
         }
-        funcionarioSerivce.deleteById(codigoFuncionario);
-        return ResponseEntity.status(HttpStatus.OK).body("Funcionario " + codigoFuncionario + " Deletado!");
+        workerSerivce.deleteById(workerCode);
+        return ResponseEntity.status(HttpStatus.OK).body("Worker " + workerCode + " deleted!");
     }
 }
