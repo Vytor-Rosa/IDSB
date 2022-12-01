@@ -22,22 +22,22 @@ public class Mensagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoMensagem;
+    private Integer messageCode;
 
     @Column(nullable = false)
-    private String mensagem;
+    private String message;
 
     @Column(nullable = false)
-    private Date dataMensagem;
+    private Date dateMessage;
 
     @Column(nullable = false)
-    private String horaMensagem;
+    private String messageTime;
 
     @ManyToOne
     private Chat chat;
 
     @OneToOne
-    private Funcionario funcionario;
+    private Funcionario worker;
 
 
 }

@@ -16,11 +16,11 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoChat;
+    private Integer chatCode;
 
     @OneToOne
     @JoinColumn(nullable = false)
-    private Demanda demanda;
+    private Demanda demand;
 
 
 }

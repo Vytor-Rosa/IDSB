@@ -21,18 +21,18 @@ public class Historico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoHistorico;
+    private Integer historicalCode;
 
     @OneToOne
-    private Demanda demanda;
+    private Demanda demand;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Anexo anexoHistorico;
+    private Anexo historicalAttached;
 
     @Bean
     public void setAnexo(MultipartFile anexoHistorico){
         try{
-            this.anexoHistorico = new Anexo(
+            this.historicalAttached = new Anexo(
                     anexoHistorico.getOriginalFilename(),
                     anexoHistorico.getContentType(),
                     anexoHistorico.getBytes()

@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class ChatDTO {
-    private Integer codigoChat;
+    private Integer chatCode;
     @NotNull
-    private Demanda demanda;
+    private Demanda demand;
 
 
 }

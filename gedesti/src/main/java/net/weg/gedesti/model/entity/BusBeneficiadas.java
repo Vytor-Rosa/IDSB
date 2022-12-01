@@ -6,11 +6,11 @@ public class BusBeneficiadas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBusBeneficiadas;
+    private Integer beneficiariesBusCode;
 
     @ManyToOne
     @JoinColumn(name = "codigoBu")
-    private Pauta codigoBu;
+    private Pauta buCode;
 
     @ManyToOne
     @JoinColumn(name = "codigoClassficacao")

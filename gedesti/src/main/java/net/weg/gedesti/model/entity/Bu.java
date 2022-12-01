@@ -15,7 +15,7 @@ public class Bu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoBu;
+    private Integer buCode;
 
     @Column(nullable = false)
     private String bu;

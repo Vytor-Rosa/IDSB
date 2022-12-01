@@ -15,15 +15,15 @@ public class Anexo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoAnexo;
+    private Integer attachedCode;
 
     @NonNull
-    private String nome;
+    private String name;
 
     @NonNull
-    private String tipo;
+    private String type;
 
     @Lob
     @NonNull
-    private byte[] dados;
+    private byte[] dice;
 }

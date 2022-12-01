@@ -18,11 +18,11 @@ public class Pauta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoPauta;
+    private Integer agendaCode;
     @Column(nullable = false, unique = true)
-    private Integer numeroSequencial;
+    private Integer sequentialNumber;
     @Column(nullable = false)
-    private Integer anoPauta;
+    private Integer yearAgenda;
 
     @ManyToMany
     @JoinTable(name = "comissao",

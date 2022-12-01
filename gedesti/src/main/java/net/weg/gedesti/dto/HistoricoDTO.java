@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class HistoricoDTO {
-    private Integer codigoHistorico;
+    private Integer historicalCode;
 
     @NotNull
-    private Demanda demanda;
+    private Demanda demand;
 
     @NotNull
-    private Anexo anexoHistorico;
+    private Anexo historicalAttached;
 }

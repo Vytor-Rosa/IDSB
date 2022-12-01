@@ -12,32 +12,32 @@ import java.util.List;
 
 @Data
 public class PropostaDTO {
-    private Integer codigoProposta;
+    private Integer proposalCode;
 
     @NotBlank
-    private String nomeProposta;
+    private String proposalName;
 
     @NotBlank
-    private String statusProposta;
+    private String proposalStatus;
 
     @NotNull
     @Positive
     private Double payback;
 
     @NotNull
-    private Date periodoExecucaoInicial;
+    private Date initialRunPeriod;
 
     @NotNull
-    private Date periodoExecucaoFinal;
+    private Date finalExecutionPeriod;
 
     @NotBlank
-    private String descritivoProposta;
+    private String descriptiveProposal;
 
     @NotNull
-    private Funcionario analistaResponsavel;
+    private Funcionario responsibleAnalyst;
 
     @NotNull
-    private Pauta codigoPauta;
+    private Pauta agendaCode;
 
     List<Funcionario> Funcionarios;
 }

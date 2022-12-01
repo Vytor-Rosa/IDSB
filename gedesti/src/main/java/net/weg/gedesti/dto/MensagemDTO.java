@@ -9,15 +9,15 @@ import java.util.Date;
 
 @Data
 public class MensagemDTO {
-    private Integer codigoMensagem;
+    private Integer messageCode;
     @NotBlank
-    private String mensagem;
+    private String message;
     @NotNull
-    private Date dataMensagem;
+    private Date dateMessage;
     @NotBlank
-    private String horaMensagem;
+    private String messageTime;
     @NotNull
     private Chat chat;
     @NotNull
-    private Funcionario funcionario;
+    private Funcionario worker;
 }

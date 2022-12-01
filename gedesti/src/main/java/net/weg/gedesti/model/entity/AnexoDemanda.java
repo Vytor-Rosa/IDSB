@@ -15,16 +15,16 @@ public class AnexoDemanda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoAnexoDemanda;
+    private Integer attachedCodeDemand;
 
     @NonNull
-    private String nome;
+    private String name;
 
     @NonNull
-    private String tipo;
+    private String type;
 
     @Lob
     @NonNull
-    private byte[] dados;
+    private byte[] dice;
 
 }

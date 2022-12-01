@@ -16,32 +16,32 @@ public class Proposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer codigoProposta;
+    private Integer proposalCode;
 
     @Column(nullable = false)
-    private String nomeProposta;
+    private String proposalName;
 
     @Column(nullable = false)
-    private String statusProposta;
+    private String proposalStatus;
 
     @Column(nullable = false)
     private Double payback;
 
     @Column(nullable = false)
-    private Date periodoExecucaoInicial;
+    private Date initialRunPeriod;
 
     @Column(nullable = false)
-    private Date periodoExecucaoFinal;
+    private Date finalExecutionPeriod;
 
     @Column
-    private String descritivoProposta;
+    private String descriptiveProposal;
 
     @OneToOne
     @JoinColumn
-    private Funcionario analistaResponsavel;
+    private Funcionario responsibleAnalyst;
 
     @ManyToOne
-    private Pauta codigoPauta;
+    private Pauta agendaCode;
 
     @ManyToMany
     @JoinTable(name = "responsaveis_pelo_negocio",

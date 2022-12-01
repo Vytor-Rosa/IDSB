@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class BuDTO {
-    private Integer codigoBu;
+    private Integer buCode;
 
     @NotBlank
     private String bu;

@@ -12,11 +12,11 @@ import java.util.List;
 @Data
 @ToString
 public class PautaDTO {
-    private Integer codigoPauta;
+    private Integer agendaCode;
     @NotNull @Positive
-    private Integer numeroSequencial;
+    private Integer sequentialNumber;
     @NotNull
-    private Integer anoPauta;
+    private Integer yearAgenda;
     @NotNull
     List<Funcionario> comissao;
 }
