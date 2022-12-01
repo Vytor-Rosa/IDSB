@@ -1,11 +1,10 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.PropostaDTO;
+import net.weg.gedesti.dto.ProposalDTO;
 import net.weg.gedesti.model.entity.Proposta;
-import net.weg.gedesti.model.service.PropostaService;
+import net.weg.gedesti.model.service.ProposalService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +23,7 @@ import java.util.Optional;
 @RequestMapping("/api/proposal")
 public class PropostaController {
 
-    private PropostaService propostaService;
+    private ProposalService propostaService;
 
     @GetMapping
     public ResponseEntity<List<Proposta>> findAll() {
@@ -38,7 +36,7 @@ public class PropostaController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid PropostaDTO propostaDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO propostaDTO) {
         Proposta proposta = new Proposta();
         BeanUtils.copyProperties(propostaDTO, proposta);
         return ResponseEntity.status(HttpStatus.CREATED).body(propostaService.save(proposta));

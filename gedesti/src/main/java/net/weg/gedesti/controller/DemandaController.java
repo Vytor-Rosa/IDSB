@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demanda;
-import net.weg.gedesti.model.service.DemandaService;
+import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.util.DemandaUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/demand")
 public class DemandaController {
-    private DemandaService demandaService;
+    private DemandService demandaService;
 
     @GetMapping
     public ResponseEntity<List<Demanda>> findAll() {

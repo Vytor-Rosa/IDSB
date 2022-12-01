@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.FuncionarioDTO;
+import net.weg.gedesti.dto.WorkerDTO;
 import net.weg.gedesti.model.entity.Funcionario;
-import net.weg.gedesti.model.service.FuncionarioService;
+import net.weg.gedesti.model.service.WorkerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/worker")
 @AllArgsConstructor
 public class FuncionarioController {
-    private FuncionarioService funcionarioSerivce;
+    private WorkerService funcionarioSerivce;
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> findAll() {
@@ -28,7 +28,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/{cargoFuncionario}")
-    public ResponseEntity<Object> save(@RequestBody @Valid FuncionarioDTO funcionarioDTO, @PathVariable(value = "cargoFuncionario") Integer cargoFuncionario) {
+    public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO funcionarioDTO, @PathVariable(value = "cargoFuncionario") Integer cargoFuncionario) {
         funcionarioDTO.setWorkerOffice(cargoFuncionario);
         Funcionario funcionario = new Funcionario();
         BeanUtils.copyProperties(funcionarioDTO, funcionario);
@@ -59,7 +59,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody FuncionarioDTO funcionarioDTO) {
+    public ResponseEntity<Object> login(@RequestBody WorkerDTO funcionarioDTO) {
         Optional<Funcionario> funcionario = funcionarioSerivce.findByCorporateEmail(funcionarioDTO.getCorporateEmail());
         Funcionario funcionarios = funcionario.get();
         if (funcionario.isPresent()) {

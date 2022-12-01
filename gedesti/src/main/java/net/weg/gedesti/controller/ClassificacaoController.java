@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.ClassificacaoDTO;
+import net.weg.gedesti.dto.ClassificationDTO;
 import net.weg.gedesti.model.entity.Classificacao;
-import net.weg.gedesti.model.service.ClassificacaoService;
+import net.weg.gedesti.model.service.ClassificationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/classification")
 public class ClassificacaoController {
 
-    ClassificacaoService classificacaoService;
+    ClassificationService classificacaoService;
 
 
     @GetMapping
@@ -29,7 +29,7 @@ public class ClassificacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid ClassificacaoDTO classificacaoDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificacaoDTO) {
         Classificacao classificacao  = new Classificacao();
         BeanUtils.copyProperties(classificacaoDTO, classificacao);
         return ResponseEntity.status(HttpStatus.CREATED).body(classificacaoService.save(classificacao));

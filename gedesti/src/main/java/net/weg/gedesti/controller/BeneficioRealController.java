@@ -1,9 +1,9 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.BeneficioRealDTO;
+import net.weg.gedesti.dto.RealBenefitDTO;
 import net.weg.gedesti.model.entity.BeneficioReal;
-import net.weg.gedesti.model.service.BeneficioRealService;
+import net.weg.gedesti.model.service.RealBenefitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/realbenefit")
 public class BeneficioRealController {
-    private BeneficioRealService beneficioRealService;
+    private RealBenefitService beneficioRealService;
 
     @GetMapping
     public ResponseEntity<List<BeneficioReal>> findAll() {
@@ -26,7 +26,7 @@ public class BeneficioRealController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid BeneficioRealDTO beneficioRealDTO) {
+    public ResponseEntity<Object> save(@RequestBody @Valid RealBenefitDTO beneficioRealDTO) {
         BeneficioReal beneficioReal = new BeneficioReal();
         BeanUtils.copyProperties(beneficioRealDTO, beneficioReal);
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficioRealService.save(beneficioReal));
