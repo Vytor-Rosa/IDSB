@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/funcionarios")
+@RequestMapping("/api/worker")
 @AllArgsConstructor
 public class FuncionarioController {
     private FuncionarioService funcionarioSerivce;
