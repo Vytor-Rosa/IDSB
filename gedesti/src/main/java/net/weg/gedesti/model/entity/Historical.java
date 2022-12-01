@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Historico {
+public class Historical {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +24,15 @@ public class Historico {
     private Integer historicalCode;
 
     @OneToOne
-    private Demanda demand;
+    private Demand demand;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Anexo historicalAttachment;
+    private Attachment historicalAttachment;
 
     @Bean
     public void setAnexo(MultipartFile historicalAttachment){
         try{
-            this.historicalAttachment = new Anexo(
+            this.historicalAttachment = new Attachment(
                     historicalAttachment.getOriginalFilename(),
                     historicalAttachment.getContentType(),
                     historicalAttachment.getBytes()

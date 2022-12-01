@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Despesa {
+public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -39,7 +39,7 @@ public class Despesa {
 
     @ManyToOne
     @JoinColumn(name = "cost_center_code")
-    private CentroDeCusto costCenter;
+    private CostCenter costCenter;
 
 //    @ManyToOne
 //    @JoinColumn(name = "codigo_proposta")

@@ -1,14 +1,10 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import net.weg.gedesti.model.entity.Pauta;
+import net.weg.gedesti.model.entity.Agenda;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 @Data
 public class MinuteDTO {
@@ -21,5 +17,5 @@ public class MinuteDTO {
     private String minuteProblem;
 
     @NotNull
-    private Pauta agenda;
+    private Agenda agenda;
 }

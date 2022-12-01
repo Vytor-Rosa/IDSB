@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Demanda {
+public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -39,16 +39,16 @@ public class Demanda {
     private String executionPeriod;
 
     @ManyToOne
-    private Funcionario requesterRegistration;
+    private Worker requesterRegistration;
 
     @OneToOne
-    private BeneficioReal realBenefit;
+    private RealBenefit realBenefit;
 
     @OneToOne
-    private BeneficioQualitativo qualitativeBenefit;
+    private QualitativeBenefit qualitativeBenefit;
 
     @OneToOne
-    private BeneficioPotencial potentialBenefit;
+    private PotentialBenefit potentialBenefit;
 
     @OneToOne(cascade = CascadeType.ALL)
     private AnexoDemanda demandAttachment;
@@ -70,13 +70,13 @@ public class Demanda {
     @JoinTable(name = "demandCenter",
             joinColumns = @JoinColumn(name = "costCenterCode"),
             inverseJoinColumns = @JoinColumn(name = "demandCode"))
-    List<CentroDeCusto> costCenter;
+    List<CostCenter> costCenter;
 
     @JoinColumn(nullable = true)
     @OneToOne
-    private Classificacao classification;
+    private Classification classification;
 
     @JoinColumn(nullable = true)
     @OneToOne
-    private Proposta proposal;
+    private Proposal proposal;
 }

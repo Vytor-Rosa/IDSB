@@ -15,7 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Ata {
+public class Minute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,15 +29,15 @@ public class Ata {
     private String minuteProblem;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Anexo attachment;
+    private Attachment attachment;
 
     @OneToOne
-    private Pauta agenda;
+    private Agenda agenda;
 
     @Bean
     public void setAttachment(MultipartFile attachment){
         try{
-            this.attachment = new Anexo(
+            this.attachment = new Attachment(
                     attachment.getOriginalFilename(),
                     attachment.getContentType(),
                     attachment.getBytes()

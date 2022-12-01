@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.CentroDeCusto;
+import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.repository.CentroDeCustoRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.Optional;
 public class CostCenterService {
     private CentroDeCustoRepository centroDeCustoRepository;
 
-    public List<CentroDeCusto> findAll() {
+    public List<CostCenter> findAll() {
         return centroDeCustoRepository.findAll();
     }
 
-    public <S extends CentroDeCusto> S save(S entity) {
+    public <S extends CostCenter> S save(S entity) {
         return centroDeCustoRepository.save(entity);
     }
 
-    public Optional<CentroDeCusto> findById(Integer integer) {
+    public Optional<CostCenter> findById(Integer integer) {
         return centroDeCustoRepository.findById(integer);
     }
 

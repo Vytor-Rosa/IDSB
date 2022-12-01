@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.BeneficioPotencial;
+import net.weg.gedesti.model.entity.PotentialBenefit;
 import net.weg.gedesti.repository.BeneficioPotencialRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,15 @@ public class PotentialBenefitService {
 
     private BeneficioPotencialRepository beneficioPotencialRepository;
 
-    public List<BeneficioPotencial> findAll() {
+    public List<PotentialBenefit> findAll() {
         return beneficioPotencialRepository.findAll();
     }
 
-    public <S extends BeneficioPotencial> S save(S entity) {
+    public <S extends PotentialBenefit> S save(S entity) {
         return beneficioPotencialRepository.save(entity);
     }
 
-    public Optional<BeneficioPotencial> findById(Integer integer) {
+    public Optional<PotentialBenefit> findById(Integer integer) {
         return beneficioPotencialRepository.findById(integer);
     }
 

@@ -29,21 +29,21 @@ public class DemandDTO {
     private String executionPeriod;
 
     @NotNull
-    private Funcionario requesterRegistration;
+    private Worker requesterRegistration;
 
     @NotNull
-    private BeneficioReal realBenefit;
+    private RealBenefit realBenefit;
 
     @NotNull
-    private BeneficioQualitativo qualitativeBenefit;
+    private QualitativeBenefit qualitativeBenefit;
 
     @NotNull
-    private BeneficioPotencial potentialBenefit;
+    private PotentialBenefit potentialBenefit;
 
     @NotNull
-    List<CentroDeCusto> costCenter;
+    List<CostCenter> costCenter;
 
-    private Classificacao classification;
+    private Classification classification;
 
-    private Proposta proposal;
+    private Proposal proposal;
 }

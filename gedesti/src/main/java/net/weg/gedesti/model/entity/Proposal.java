@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Proposta {
+public class Proposal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -38,14 +38,14 @@ public class Proposta {
 
     @OneToOne
     @JoinColumn
-    private Funcionario responsibleAnalyst;
+    private Worker responsibleAnalyst;
 
     @ManyToOne
-    private Pauta agendaCode;
+    private Agenda agendaCode;
 
     @ManyToMany
     @JoinTable(name = "responsible_for_business",
             joinColumns = @JoinColumn(name = "workerCode"),
             inverseJoinColumns = @JoinColumn(name = "proposalCode"))
-    List<Funcionario> workers;
+    List<Worker> workers;
 }

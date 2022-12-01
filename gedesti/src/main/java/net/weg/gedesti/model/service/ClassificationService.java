@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Classificacao;
+import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.repository.ClassificacaoRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,15 @@ public class ClassificationService {
 
     ClassificacaoRepository classificacaoRepository;
 
-    public List<Classificacao> findAll() {
+    public List<Classification> findAll() {
         return classificacaoRepository.findAll();
     }
 
-    public <S extends Classificacao> S save(S entity) {
+    public <S extends Classification> S save(S entity) {
         return classificacaoRepository.save(entity);
     }
 
-    public Optional<Classificacao> findById(Integer integer) {
+    public Optional<Classification> findById(Integer integer) {
         return classificacaoRepository.findById(integer);
     }
 

@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.Optional;
 public class WorkerService {
     private FuncionarioRepository funcionarioRepository;
 
-    public List<Funcionario> findAll() {
+    public List<Worker> findAll() {
         return funcionarioRepository.findAll();
     }
 
-    public <S extends Funcionario> S save(S entity) {
+    public <S extends Worker> S save(S entity) {
         return funcionarioRepository.save(entity);
     }
 
-    public Optional<Funcionario> findById(Integer integer) {
+    public Optional<Worker> findById(Integer integer) {
         return funcionarioRepository.findById(integer);
     }
 
@@ -33,11 +33,11 @@ public class WorkerService {
         funcionarioRepository.deleteById(integer);
     }
 
-    public Optional<Funcionario> findByCorporateEmail(String corporateEmail) {
+    public Optional<Worker> findByCorporateEmail(String corporateEmail) {
         return funcionarioRepository.findByCorporateEmail(corporateEmail);
     }
 
-    public Funcionario findByWorkerPassword(String workerPassword){
+    public Worker findByWorkerPassword(String workerPassword){
         return funcionarioRepository.findByWorkerPassword(workerPassword);
     }
 

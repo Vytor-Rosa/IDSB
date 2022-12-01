@@ -1,8 +1,8 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
-import net.weg.gedesti.model.entity.Anexo;
-import net.weg.gedesti.model.entity.Demanda;
+import net.weg.gedesti.model.entity.Attachment;
+import net.weg.gedesti.model.entity.Demand;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -10,8 +10,8 @@ public class HistoricalDTO {
     private Integer historicalCode;
 
     @NotNull
-    private Demanda demand;
+    private Demand demand;
 
     @NotNull
-    private Anexo historicalAttachment;
+    private Attachment historicalAttachment;
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "funcionario")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
-public class Funcionario {
+public class Worker {
 //    implements UserDetails
 
 

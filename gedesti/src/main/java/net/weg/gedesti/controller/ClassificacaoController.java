@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ClassificationDTO;
-import net.weg.gedesti.model.entity.Classificacao;
+import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.service.ClassificationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -24,20 +24,20 @@ public class ClassificacaoController {
 
 
     @GetMapping
-    public ResponseEntity<List<Classificacao>> findAll() {
+    public ResponseEntity<List<Classification>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(classificacaoService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificacaoDTO) {
-        Classificacao classificacao  = new Classificacao();
+        Classification classificacao  = new Classification();
         BeanUtils.copyProperties(classificacaoDTO, classificacao);
         return ResponseEntity.status(HttpStatus.CREATED).body(classificacaoService.save(classificacao));
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Classificacao> classificacaoOptional = classificacaoService.findById(codigo);
+        Optional<Classification> classificacaoOptional = classificacaoService.findById(codigo);
         if(classificacaoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma classificação com o codigo: " + codigo);
         }
@@ -47,7 +47,7 @@ public class ClassificacaoController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Classificacao> classificacaoOptional = classificacaoService.findById(codigo);
+        Optional<Classification> classificacaoOptional = classificacaoService.findById(codigo);
         if(classificacaoOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma classificação com o codigo: " + codigo);
         }

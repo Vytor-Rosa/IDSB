@@ -8,20 +8,22 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "beneficioQualitativo")
+@Table(name = "beneficioReal")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
-public class BeneficioQualitativo {
+public class RealBenefit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Integer qualitativeBenefitCode;
+    private Integer realBenefitCode;
 
     @Column(nullable = false)
-    private String frequencyOfUse;
+    private Double realMonthlyValue;
 
     @Column(nullable = false)
-    private boolean interalControlsRequirements;
+    private String realBenefitDescription;
 
+    @Column(nullable = false)
+    private String realCurrency;
 }

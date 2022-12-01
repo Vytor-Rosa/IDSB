@@ -1,8 +1,8 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
-import net.weg.gedesti.model.entity.Funcionario;
-import net.weg.gedesti.model.entity.Pauta;
+import net.weg.gedesti.model.entity.Worker;
+import net.weg.gedesti.model.entity.Agenda;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -34,10 +34,10 @@ public class ProposalDTO {
     private String descriptiveProposal;
 
     @NotNull
-    private Funcionario responsibleAnalyst;
+    private Worker responsibleAnalyst;
 
     @NotNull
-    private Pauta agendaCode;
+    private Agenda agendaCode;
 
-    List<Funcionario> workers;
+    List<Worker> workers;
 }

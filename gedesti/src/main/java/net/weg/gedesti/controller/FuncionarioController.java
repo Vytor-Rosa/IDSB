@@ -2,7 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.WorkerDTO;
-import net.weg.gedesti.model.entity.Funcionario;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.WorkerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,14 @@ public class FuncionarioController {
     private WorkerService funcionarioSerivce;
 
     @GetMapping
-    public ResponseEntity<List<Funcionario>> findAll() {
+    public ResponseEntity<List<Worker>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(funcionarioSerivce.findAll());
     }
 
     @PostMapping("/{cargoFuncionario}")
     public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO funcionarioDTO, @PathVariable(value = "cargoFuncionario") Integer cargoFuncionario) {
         funcionarioDTO.setWorkerOffice(cargoFuncionario);
-        Funcionario funcionario = new Funcionario();
+        Worker funcionario = new Worker();
         BeanUtils.copyProperties(funcionarioDTO, funcionario);
 
         if(cargoFuncionario == 1){
@@ -51,7 +51,7 @@ public class FuncionarioController {
 
     @GetMapping("/{codigoFuncionario}")
     public ResponseEntity<Object> findById(@PathVariable(value = "codigoFuncionario") Integer codigoFuncionario) {
-        Optional<Funcionario> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
+        Optional<Worker> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
         if(optionalFuncionario.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Código de funcionario inválido");
         }
@@ -60,8 +60,8 @@ public class FuncionarioController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody WorkerDTO funcionarioDTO) {
-        Optional<Funcionario> funcionario = funcionarioSerivce.findByCorporateEmail(funcionarioDTO.getCorporateEmail());
-        Funcionario funcionarios = funcionario.get();
+        Optional<Worker> funcionario = funcionarioSerivce.findByCorporateEmail(funcionarioDTO.getCorporateEmail());
+        Worker funcionarios = funcionario.get();
         if (funcionario.isPresent()) {
             if (funcionarios.getWorkerPassword().equals(funcionarioDTO.getWorkerPassword())) {
                     return ResponseEntity.status(HttpStatus.OK).body(funcionario);
@@ -76,7 +76,7 @@ public class FuncionarioController {
 
     @DeleteMapping("/{codigoFuncionario}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "codigoFuncionario") Integer codigoFuncionario) {
-        Optional<Funcionario> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
+        Optional<Worker> optionalFuncionario = funcionarioSerivce.findById(codigoFuncionario);
         if(optionalFuncionario.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Código de funcionario inválido");
         }

@@ -3,7 +3,6 @@ package net.weg.gedesti.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Year;
 import java.util.List;
 
 @Entity
@@ -13,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Pauta {
+public class Agenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class Pauta {
     @JoinTable(name = "commission",
             joinColumns = @JoinColumn(name = "workerCode"),
             inverseJoinColumns = @JoinColumn(name = "agendaCode"))
-    List<Funcionario> commission;
+    List<Worker> commission;
 
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;

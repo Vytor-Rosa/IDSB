@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Entity
@@ -16,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Classificacao {
+public class Classification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +44,5 @@ public class Classificacao {
     private List<Bu> beneficiaryBu;
 
     @ManyToOne
-    private Funcionario analistRegistry;
+    private Worker analistRegistry;
 }
