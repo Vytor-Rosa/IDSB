@@ -22,7 +22,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/agenda")
-public class PautaController {
+public class AgendaController {
     private AgendaService pautaService;
 
     @GetMapping

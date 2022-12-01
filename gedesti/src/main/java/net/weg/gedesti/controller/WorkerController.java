@@ -19,7 +19,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/worker")
 @AllArgsConstructor
-public class FuncionarioController {
+public class WorkerController {
     private WorkerService funcionarioSerivce;
 
     @GetMapping

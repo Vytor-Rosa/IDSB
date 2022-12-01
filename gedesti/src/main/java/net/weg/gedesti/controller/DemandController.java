@@ -23,7 +23,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/demand")
-public class DemandaController {
+public class DemandController {
     private DemandService demandaService;
 
     @GetMapping

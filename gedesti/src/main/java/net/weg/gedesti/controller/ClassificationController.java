@@ -18,7 +18,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/classification")
-public class ClassificacaoController {
+public class ClassificationController {
 
     ClassificationService classificacaoService;
 

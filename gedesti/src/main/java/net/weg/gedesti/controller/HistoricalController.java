@@ -18,7 +18,7 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/api/historical")
-public class HistoricoController {
+public class HistoricalController {
 
     private HistoricalService historicoService;
 
