@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/proposta")
+@RequestMapping("/api/proposal")
 public class PropostaController {
 
     private PropostaService propostaService;

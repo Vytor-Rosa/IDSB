@@ -9,7 +9,7 @@ public class BusBeneficiadas {
     private Integer beneficiariesBusCode;
 
     @ManyToOne
-    @JoinColumn(name = "codigoBu")
+    @JoinColumn(name = "buCode")
     private Pauta buCode;
 
     @ManyToOne

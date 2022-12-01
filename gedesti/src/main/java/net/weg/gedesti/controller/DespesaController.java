@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/despesa")
+@RequestMapping("/api/expense")
 public class DespesaController {
 
     private DespesaService despesaService;

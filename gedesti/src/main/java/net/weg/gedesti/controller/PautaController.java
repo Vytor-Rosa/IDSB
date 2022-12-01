@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/api/pauta")
+@RequestMapping("/api/agenda")
 public class PautaController {
     private PautaService pautaService;
 

@@ -38,7 +38,7 @@ public class Despesa {
     private Double totalValue;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_centro_de_custo")
+    @JoinColumn(name = "cost_center_code")
     private CentroDeCusto costCenter;
 
 //    @ManyToOne
