@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "beneficioQualitativo")
+@Table(name = "qualitativebenefit")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 public class QualitativeBenefit {

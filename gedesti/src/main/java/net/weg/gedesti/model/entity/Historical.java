@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Historico")
+@Table(name = "historical")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

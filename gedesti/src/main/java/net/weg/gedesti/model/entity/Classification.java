@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "classificacao")
+@Table(name = "classification")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

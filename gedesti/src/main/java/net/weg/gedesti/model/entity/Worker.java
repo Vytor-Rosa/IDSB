@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "funcionario")
+@Table(name = "worker")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 public class Worker {
