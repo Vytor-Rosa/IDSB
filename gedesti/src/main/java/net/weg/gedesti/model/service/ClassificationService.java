@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Classification;
-import net.weg.gedesti.repository.ClassificacaoRepository;
+import net.weg.gedesti.repository.ClassificationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClassificationService {
 
-    ClassificacaoRepository classificacaoRepository;
+    ClassificationRepository classificacaoRepository;
 
     public List<Classification> findAll() {
         return classificacaoRepository.findAll();

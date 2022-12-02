@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.RealBenefit;
-import net.weg.gedesti.repository.BeneficioRealRepository;
+import net.weg.gedesti.repository.RealBenefitRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class RealBenefitService {
-    private BeneficioRealRepository beneficioRealRepository;
+    private RealBenefitRepository beneficioRealRepository;
 
     public List<RealBenefit> findAll() {
         return beneficioRealRepository.findAll();

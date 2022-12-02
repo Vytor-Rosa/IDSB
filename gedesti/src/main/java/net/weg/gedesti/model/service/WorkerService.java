@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Worker;
-import net.weg.gedesti.repository.FuncionarioRepository;
+import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class WorkerService {
-    private FuncionarioRepository funcionarioRepository;
+    private WorkerRepository funcionarioRepository;
 
     public List<Worker> findAll() {
         return funcionarioRepository.findAll();
