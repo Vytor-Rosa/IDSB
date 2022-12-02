@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Agenda;
-import net.weg.gedesti.repository.PautaRepository;
+import net.weg.gedesti.repository.AgendaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AgendaService {
-    private PautaRepository pautaRepository;
+    private AgendaRepository pautaRepository;
 
     public List<Agenda> findAll() {
         return pautaRepository.findAll();

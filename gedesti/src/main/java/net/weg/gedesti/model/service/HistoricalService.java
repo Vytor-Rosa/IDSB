@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Historical;
-import net.weg.gedesti.repository.HistoricoRepository;
+import net.weg.gedesti.repository.HistoricalRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HistoricalService {
 
-    private HistoricoRepository historicoRepository;
+    private HistoricalRepository historicoRepository;
 
     public List<Historical> findAll() {
         return historicoRepository.findAll();

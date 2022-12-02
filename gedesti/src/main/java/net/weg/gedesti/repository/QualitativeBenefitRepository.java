@@ -1,9 +1,10 @@
 package net.weg.gedesti.repository;
 
-import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.QualitativeBenefit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DemandaRepository extends JpaRepository<Demand, Integer> {
+public interface QualitativeBenefitRepository extends JpaRepository<QualitativeBenefit, Integer> {
+
 }

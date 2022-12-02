@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.CostCenter;
-import net.weg.gedesti.repository.CentroDeCustoRepository;
+import net.weg.gedesti.repository.CostCenterRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CostCenterService {
-    private CentroDeCustoRepository centroDeCustoRepository;
+    private CostCenterRepository centroDeCustoRepository;
 
     public List<CostCenter> findAll() {
         return centroDeCustoRepository.findAll();

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FuncionarioRepository extends JpaRepository<Worker, Integer> {
+public interface WorkerRepository extends JpaRepository<Worker, Integer> {
     Worker findByWorkerPassword(String workerPassword);
 
     Optional<Worker> findByCorporateEmail(String corporateEmail);

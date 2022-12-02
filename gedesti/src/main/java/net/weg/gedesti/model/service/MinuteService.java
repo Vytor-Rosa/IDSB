@@ -2,7 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Minute;
-import net.weg.gedesti.repository.AtaRepository;
+import net.weg.gedesti.repository.MinuteRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class MinuteService {
-    private AtaRepository ataRepository;
+    private MinuteRepository ataRepository;
 
     public List<Minute> findAll() {
         return ataRepository.findAll();

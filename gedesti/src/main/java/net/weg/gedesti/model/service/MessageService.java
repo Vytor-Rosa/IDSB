@@ -3,7 +3,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Message;
-import net.weg.gedesti.repository.MensagemRepository;
+import net.weg.gedesti.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class MessageService {
-    private MensagemRepository mensagemRepository;
+    private MessageRepository mensagemRepository;
 
     public List<Message> findAll() {
         return mensagemRepository.findAll();

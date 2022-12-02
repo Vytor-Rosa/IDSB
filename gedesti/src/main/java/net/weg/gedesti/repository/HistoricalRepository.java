@@ -1,9 +1,10 @@
 package net.weg.gedesti.repository;
 
-import net.weg.gedesti.model.entity.Classification;
+import net.weg.gedesti.model.entity.Historical;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClassificacaoRepository extends JpaRepository<Classification, Integer> {
+public interface HistoricalRepository extends JpaRepository<Historical, Integer> {
+
 }
