@@ -18,27 +18,27 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/message")
 public class MessageController {
-    private MessageService mensagemService;
+    private MessageService messageService;
 
     @GetMapping
     public ResponseEntity<List<Message>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(mensagemService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(messageService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid MessageDTO mensagemDTO) {
-        Message mensagem = new Message();
-        BeanUtils.copyProperties(mensagemDTO, mensagem);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mensagemService.save(mensagem));
+    public ResponseEntity<Object> save(@RequestBody @Valid MessageDTO messageDTO) {
+        Message message = new Message();
+        BeanUtils.copyProperties(messageDTO, message);
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.save(message));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Message> mensagemOptional = mensagemService.findById(codigo);
-        if(mensagemOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma mensagem com o código: " + codigo);
+    @GetMapping("/{messageCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "messageCode") Integer messageCode) {
+        Optional<Message> messageOptional = messageService.findById(messageCode);
+        if(messageOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No message with code: " + messageCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(mensagemOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(messageOptional);
     }
 
 

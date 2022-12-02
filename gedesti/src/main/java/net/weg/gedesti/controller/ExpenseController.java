@@ -19,36 +19,36 @@ import java.util.Optional;
 @RequestMapping("/api/expense")
 public class ExpenseController {
 
-    private ExpenseService despesaService;
+    private ExpenseService expenseService;
 
     @GetMapping
     public ResponseEntity<List<Expense>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(despesaService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(expenseService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid ExpenseDTO despesaDTO) {
-        Expense despesa = new Expense();
-        BeanUtils.copyProperties(despesaDTO, despesa);
-        return ResponseEntity.status(HttpStatus.FOUND).body(despesaService.save(despesa));
+    public ResponseEntity<Object> save(@RequestBody @Valid ExpenseDTO expenseDTO) {
+        Expense expense = new Expense();
+        BeanUtils.copyProperties(expenseDTO, expense);
+        return ResponseEntity.status(HttpStatus.FOUND).body(expenseService.save(expense));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Expense> despesaOptional = despesaService.findById(codigo);
-        if (despesaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
+    @GetMapping("/{expenseCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "expenseCode") Integer expenseCode) {
+        Optional<Expense> expenseOptional = expenseService.findById(expenseCode);
+        if (expenseOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no expense with code: " + expenseCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(despesaOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(expenseOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Expense> despesaOptional = despesaService.findById(codigo);
-        if (despesaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
+    @DeleteMapping("/{expenseCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "expenseCode") Integer expenseCode) {
+        Optional<Expense> expenseOptional = expenseService.findById(expenseCode);
+        if (expenseOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no expense with code:" + expenseCode);
         }
-        despesaService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Despesa " + codigo + " deletada com sucesso!");
+        expenseService.deleteById(expenseCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Expense " + expenseCode + " successfully deleted!");
     }
 }

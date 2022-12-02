@@ -53,7 +53,7 @@ public class WorkerController {
     public ResponseEntity<Object> findById(@PathVariable(value = "workerCode") Integer workerCode) {
         Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
         if(optionalWorker.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid worker code!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No worker with code: " + workerCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(optionalWorker);
     }
@@ -69,7 +69,7 @@ public class WorkerController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Incorrect password!");
             }
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email does not exist!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email doesn't exist!");
         }
     }
 
@@ -78,9 +78,9 @@ public class WorkerController {
     public ResponseEntity<Object> deleteById(@PathVariable(value = "workerCode") Integer workerCode) {
         Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
         if(optionalWorker.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid worker code!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No worker with code:" + workerCode);
         }
         workerSerivce.deleteById(workerCode);
-        return ResponseEntity.status(HttpStatus.OK).body("Worker " + workerCode + " deleted!");
+        return ResponseEntity.status(HttpStatus.OK).body("Worker " + workerCode + " successfully deleted!");
     }
 }

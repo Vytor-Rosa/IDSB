@@ -18,36 +18,36 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/costcenter")
 public class CostCenterController {
-    private CostCenterService centroDeCustoService;
+    private CostCenterService costCenterService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid CostCenterDTO centroDeCustoDTO) {
-        CostCenter centroDeCusto = new CostCenter();
-        BeanUtils.copyProperties(centroDeCustoDTO, centroDeCusto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(centroDeCustoService.save(centroDeCusto));
+    public ResponseEntity<Object> save(@RequestBody @Valid CostCenterDTO costCenterDTO) {
+        CostCenter costCenter = new CostCenter();
+        BeanUtils.copyProperties(costCenterDTO, costCenter);
+        return ResponseEntity.status(HttpStatus.CREATED).body(costCenterService.save(costCenter));
     }
 
     @GetMapping
     public ResponseEntity<List<CostCenter>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(centroDeCustoService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(costCenterService.findAll());
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<CostCenter> centroDeCustoOptional = centroDeCustoService.findById(codigo);
-        if(centroDeCustoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum centro de custo com codigo: " + codigo);
+    @GetMapping("/{CostCenterCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "CostCenterCode") Integer CostCenterCode) {
+        Optional<CostCenter> costCenterOptional = costCenterService.findById(CostCenterCode);
+        if(costCenterOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No cost center with code: " + CostCenterCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(centroDeCustoOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(costCenterOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<CostCenter> centroDeCustoOptional = centroDeCustoService.findById(codigo);
-        if(centroDeCustoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum centro de custo com codigo: " + codigo);
+    @DeleteMapping("/{CostCenterCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "CostCenterCode") Integer CostCenterCode) {
+        Optional<CostCenter> costCenterOptional = costCenterService.findById(CostCenterCode);
+        if(costCenterOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No cost center with code: " + CostCenterCode);
         }
-        centroDeCustoService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Centro de custo " + codigo + " deletado com sucesso");
+        costCenterService.deleteById(CostCenterCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Cost Center " + CostCenterCode + " successfully deleted!");
     }
 }

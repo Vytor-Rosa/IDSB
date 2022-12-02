@@ -3,7 +3,7 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.DemandService;
-import net.weg.gedesti.util.DemandaUtil;
+import net.weg.gedesti.util.DemandUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,62 +24,62 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/demand")
 public class DemandController {
-    private DemandService demandaService;
+    private DemandService demandService;
 
     @GetMapping
     public ResponseEntity<List<Demand>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll());
     }
 
     @GetMapping("/page")
     public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandaService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "demanda") @Valid String demandaJson, @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda) {
-        DemandaUtil demandaUtil = new DemandaUtil();
-        Demand demanda = demandaUtil.convertJsonToModel(demandaJson);
-        demanda.setDemandAttachment(anexoDemanda);
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
+    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment") MultipartFile demandAttachment) {
+        DemandUtil demandUtil = new DemandUtil();
+        Demand demand = demandUtil.convertJsonToModel(demandJson);
+        demand.setDemandAttachment(demandAttachment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Demand> demandaOptional = demandaService.findById(codigo);
-        if(demandaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
+    @GetMapping("/{demandCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "demandCode") Integer demandCode) {
+        Optional<Demand> demandOptional = demandService.findById(demandCode);
+        if(demandOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
         }
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandaOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Demand> demandaOptional = demandaService.findById(codigo);
-        if(demandaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma demanda com o codigo: " + codigo);
+    @DeleteMapping("/{demandCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "demandCode") Integer demandCode) {
+        Optional<Demand> demandOptional = demandService.findById(demandCode);
+        if(demandOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
         }
-        demandaService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Demanda " + codigo + " deletada com sucesso!");
+        demandService.deleteById(demandCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Demand " + demandCode + " successfully deleted!");
     }
 
     @Modifying
     @Transactional
-    @PutMapping("/{codigo}")
-    public ResponseEntity<Object> update(@RequestParam(value = "demanda") @Valid String demandaJson,
-                                         @RequestParam(value = "anexoDemanda") MultipartFile anexoDemanda,
-                                         @PathVariable(value = "codigo") Integer codigo) {
-        if(!demandaService.existsById(codigo)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe");
+    @PutMapping("/{demandCode}")
+    public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
+                                         @RequestParam(value = "demandAttachment") MultipartFile demandAttachment,
+                                         @PathVariable(value = "demandCode") Integer demandCode) {
+        if(!demandService.existsById(demandCode)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
-        DemandaUtil demandaUtil = new DemandaUtil();
-        Demand demanda = demandaUtil.convertJsonToModel(demandaJson);
-        demanda.setDemandAttachment(anexoDemanda);
-        demanda.setDemandCode(codigo);
+        DemandUtil demandUtil = new DemandUtil();
+        Demand demand = demandUtil.convertJsonToModel(demandJson);
+        demand.setDemandAttachment(demandAttachment);
+        demand.setDemandCode(demandCode);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandaService.save(demanda));
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
 
 }

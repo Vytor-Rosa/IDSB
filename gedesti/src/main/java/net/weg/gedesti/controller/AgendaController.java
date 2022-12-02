@@ -23,16 +23,16 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/api/agenda")
 public class AgendaController {
-    private AgendaService pautaService;
+    private AgendaService agendaService;
 
     @GetMapping
     public ResponseEntity<List<Agenda>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(agendaService.findAll());
     }
 
     @GetMapping("/page")
     public ResponseEntity<Page<Agenda>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(pautaService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(agendaService.findAll(pageable));
     }
 
     @PostMapping
@@ -40,15 +40,15 @@ public class AgendaController {
         Agenda agenda = new Agenda();
         BeanUtils.copyProperties(agendaDTO, agenda);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.save(agenda));
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendaService.save(agenda));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Agenda> optionalAgenda = pautaService.findById(codigo);
+    @GetMapping("/{agendaCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "agendaCode") Integer agendaCode) {
+        Optional<Agenda> optionalAgenda = agendaService.findById(agendaCode);
 
         if (optionalAgenda.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No agenda with code: " + agendaCode);
         }
 
         List<Agenda> listAgenda = new ArrayList<>();
@@ -56,13 +56,13 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.FOUND).body(listAgenda);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Agenda> pautaOptional = pautaService.findById(codigo);
-        if (pautaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro nenhuma pauta com o codigo: " + codigo);
+    @DeleteMapping("/{agendaCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "agendaCode") Integer agendaCode) {
+        Optional<Agenda> agendaOptional = agendaService.findById(agendaCode);
+        if (agendaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No agenda with code: " + agendaCode);
         }
-        pautaService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Pauta " + codigo + " deletada com sucesso!");
+        agendaService.deleteById(agendaCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Agenda " + agendaCode + " successfully deleted!");
     }
 }

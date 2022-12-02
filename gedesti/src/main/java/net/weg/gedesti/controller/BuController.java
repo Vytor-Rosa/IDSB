@@ -37,22 +37,22 @@ public class BuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(buService.save(bu));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Bu> buOptional = buService.findById(codigo);
+    @GetMapping("/{buCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "buCode") Integer buCode) {
+        Optional<Bu> buOptional = buService.findById(buCode);
         if(buOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhuma bu com o codigo: " + codigo);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No bu with code: " + buCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(buOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Bu> buOptional = buService.findById(codigo);
+    @DeleteMapping("/{buCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "buCode") Integer buCode) {
+        Optional<Bu> buOptional = buService.findById(buCode);
         if(buOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhuma bu com o codigo: " + codigo);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No bu with code: " + buCode);
         }
-        buService.deleteById(codigo);
+//        buService.deleteById(buCode);
         return ResponseEntity.status(HttpStatus.FOUND).body(buOptional);
     }
 }

@@ -5,7 +5,7 @@ import net.weg.gedesti.dto.HistoricalDTO;
 import net.weg.gedesti.model.entity.Historical;
 import org.springframework.beans.BeanUtils;
 
-public class HistoricoUtil {
+public class HistoricalUtil {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

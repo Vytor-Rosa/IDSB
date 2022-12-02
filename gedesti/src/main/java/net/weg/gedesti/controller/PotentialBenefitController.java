@@ -19,36 +19,36 @@ import java.util.Optional;
 @RequestMapping("/api/potencialbenefit")
 public class PotentialBenefitController {
 
-    private PotentialBenefitService beneficioPotencialService;
+    private PotentialBenefitService potentialBenefitService;
 
     @GetMapping
     public ResponseEntity<List<PotentialBenefit>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioPotencialService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(potentialBenefitService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid PotentialBenefitDTO beneficioPotencialDTO) {
-        PotentialBenefit beneficioPotencial = new PotentialBenefit();
-        BeanUtils.copyProperties(beneficioPotencialDTO, beneficioPotencial);
-        return ResponseEntity.status(HttpStatus.CREATED).body(beneficioPotencialService.save(beneficioPotencial));
+    public ResponseEntity<Object> save(@RequestBody @Valid PotentialBenefitDTO potentialBenefitDTO) {
+        PotentialBenefit potentialBenefit = new PotentialBenefit();
+        BeanUtils.copyProperties(potentialBenefitDTO, potentialBenefit);
+        return ResponseEntity.status(HttpStatus.CREATED).body(potentialBenefitService.save(potentialBenefit));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<PotentialBenefit> beneficioPotencialOptional = beneficioPotencialService.findById(codigo);
-        if(beneficioPotencialOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio potencial com o codigo: " + codigo);
+    @GetMapping("/{potentialBenefitCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "potentialBenefitCode") Integer potentialBenefitCode) {
+        Optional<PotentialBenefit> potentialBenefitOptional = potentialBenefitService.findById(potentialBenefitCode);
+        if(potentialBenefitOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No potential benefitC with code:" + potentialBenefitCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioPotencialOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(potentialBenefitOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<PotentialBenefit> beneficioPotencialOptional = beneficioPotencialService.findById(codigo);
-        if(beneficioPotencialOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio potencial com o codigo: " + codigo);
+    @DeleteMapping("/{potentialBenefitCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "potentialBenefitCode") Integer potentialBenefitCode) {
+        Optional<PotentialBenefit> potentialBenefitOptional = potentialBenefitService.findById(potentialBenefitCode);
+        if(potentialBenefitOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No potential benefit with code:" + potentialBenefitCode);
         }
-        beneficioPotencialService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Beneficio potencial " + codigo + " deletado com sucesso!");
+        potentialBenefitService.deleteById(potentialBenefitCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Potential Benefit " + potentialBenefitCode + " successfully deleted!");
     }
 }

@@ -20,38 +20,38 @@ import java.util.Optional;
 @RequestMapping("/api/classification")
 public class ClassificationController {
 
-    ClassificationService classificacaoService;
+    ClassificationService classificationService;
 
 
     @GetMapping
     public ResponseEntity<List<Classification>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(classificacaoService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(classificationService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificacaoDTO) {
-        Classification classificacao  = new Classification();
-        BeanUtils.copyProperties(classificacaoDTO, classificacao);
-        return ResponseEntity.status(HttpStatus.CREATED).body(classificacaoService.save(classificacao));
+    public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificationDTO) {
+        Classification classification  = new Classification();
+        BeanUtils.copyProperties(classificationDTO, classification);
+        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.save(classification));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Classification> classificacaoOptional = classificacaoService.findById(codigo);
-        if(classificacaoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma classificação com o codigo: " + codigo);
+    @GetMapping("/{classificationCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "classificationCode") Integer classificationCode) {
+        Optional<Classification> classificationOptional = classificationService.findById(classificationCode);
+        if(classificationOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
         }
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(classificacaoOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(classificationOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Classification> classificacaoOptional = classificacaoService.findById(codigo);
-        if(classificacaoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma classificação com o codigo: " + codigo);
+    @DeleteMapping("/{classificationCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "classificationCode") Integer classificationCode) {
+        Optional<Classification> classificationOptional = classificationService.findById(classificationCode);
+        if(classificationOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
         }
-        classificacaoService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Classificação " + codigo + " deletada com sucesso!");
+        classificationService.deleteById(classificationCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Classification " + classificationCode + " successfully deleted!");
     }
 }

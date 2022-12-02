@@ -23,41 +23,41 @@ import java.util.Optional;
 @RequestMapping("/api/proposal")
 public class ProposalController {
 
-    private ProposalService propostaService;
+    private ProposalService proposalService;
 
     @GetMapping
     public ResponseEntity<List<Proposal>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll());
     }
 
     @GetMapping("/page")
     public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(propostaService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO propostaDTO) {
-        Proposal proposta = new Proposal();
-        BeanUtils.copyProperties(propostaDTO, proposta);
-        return ResponseEntity.status(HttpStatus.CREATED).body(propostaService.save(proposta));
+    public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO proposalDTO) {
+        Proposal proposal = new Proposal();
+        BeanUtils.copyProperties(proposalDTO, proposal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(proposalService.save(proposal));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Proposal> propostaOptional = propostaService.findById(codigo);
-        if(propostaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma proposta com o código: " + codigo);
+    @GetMapping("/{proposalCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "proposalCode") Integer proposalCode) {
+        Optional<Proposal> proposalOptional =proposalService.findById(proposalCode);
+        if(proposalOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No proposal with code: " + proposalCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(propostaOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Proposal> propostaOptional = propostaService.findById(codigo);
-        if(propostaOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma proposta com o código: " + codigo);
+    @DeleteMapping("/{proposalCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "proposalCode") Integer proposalCode) {
+        Optional<Proposal> proposalOptional = proposalService.findById(proposalCode);
+        if(proposalOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No proposal with code: " + proposalCode);
         }
-        propostaService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Proposta " + codigo + " deletada com sucesso!");
+        proposalService.deleteById(proposalCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body("Proposal " + proposalCode + " successfully deleted!");
     }
 }

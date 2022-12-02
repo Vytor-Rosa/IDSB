@@ -34,11 +34,11 @@ public class ChatController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatService.save(chat));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Chat> chatOptional = chatService.findById(codigo);
+    @GetMapping("/{chatCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "chatCode") Integer chatCode) {
+        Optional<Chat> chatOptional = chatService.findById(chatCode);
         if(chatOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum produto com o codigo: " + codigo);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid chat code: " + chatCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(chatOptional);
     }

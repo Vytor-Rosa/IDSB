@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weg.gedesti.dto.MinuteDTO;
 import net.weg.gedesti.model.entity.Minute;
 
-public class AtaUtil {
+public class MinuteUtil {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public Minute convertJsonToModel(String ataJson){

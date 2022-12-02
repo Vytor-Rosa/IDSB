@@ -3,7 +3,7 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.model.service.MinuteService;
-import net.weg.gedesti.util.AtaUtil;
+import net.weg.gedesti.util.MinuteUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,43 +23,43 @@ import java.util.Optional;
 @RequestMapping("/api/minutes")
 public class MinuteController {
 
-    private MinuteService ataService;
+    private MinuteService minuteService;
 
     @GetMapping
     public ResponseEntity<List<Minute>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(ataService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(minuteService.findAll());
     }
 
     @GetMapping("/page")
     public ResponseEntity<Page<Minute>> findAll(@PageableDefault(page = 9, size = 1, direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(ataService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(minuteService.findAll(pageable));
     }
 
     @PostMapping
-    public  ResponseEntity<Object> save(@RequestParam(value = "ata") @Valid String ataJson, @RequestParam(value = "anexo") MultipartFile anexo){
-        AtaUtil util = new AtaUtil();
-        Minute ata = util.convertJsonToModel(ataJson);
-        ata.setAttachment(anexo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ataService.save(ata));
+    public  ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson, @RequestParam(value = "minuteAttachment") MultipartFile minuteAttachment){
+        MinuteUtil util = new MinuteUtil();
+        Minute minute = util.convertJsonToModel(minuteJson);
+        minute.setAttachment(minuteAttachment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(minuteService.save(minute));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<Minute> ataOptional = ataService.findById(codigo);
-        if (ataOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma despesa com o codigo: " + codigo);
+    @GetMapping("/{minuteCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "minuteCode") Integer minuteCode) {
+        Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
+        if (minuteOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code:" + minuteCode);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(ataOptional);
+        return ResponseEntity.status(HttpStatus.FOUND).body(minuteOptional);
     }
 
 
-    @DeleteMapping("/{codigo}")
-    public  ResponseEntity<Object> deleteById(@PathVariable(value = "codigo")Integer codigo){
-        Optional<Minute> ataOptional = ataService.findById(codigo);
-        if(ataOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! nenhuma ata com o codigo: "+ codigo);
+    @DeleteMapping("/{minuteCode}")
+    public  ResponseEntity<Object> deleteById(@PathVariable(value = "minuteCode")Integer minuteCode){
+        Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
+        if(minuteOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code: "+ minuteCode);
         }
-        ataService.deleteById(codigo);
-        return  ResponseEntity.status(HttpStatus.FOUND).body("Ata " +codigo+ " deletada com sucesso!");
+        minuteService.deleteById(minuteCode);
+        return  ResponseEntity.status(HttpStatus.FOUND).body("Minute " +minuteCode+ " successfully deleted!");
     }
 }

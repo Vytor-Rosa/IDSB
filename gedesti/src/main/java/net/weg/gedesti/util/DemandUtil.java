@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Demand;
 
-public class DemandaUtil {
+public class DemandUtil {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public Demand convertJsonToModel(String demandaJson) {

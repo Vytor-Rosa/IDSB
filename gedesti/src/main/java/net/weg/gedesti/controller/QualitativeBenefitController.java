@@ -19,36 +19,36 @@ import java.util.Optional;
 @RequestMapping("/api/qualitativebenefit")
 public class QualitativeBenefitController {
 
-    private QualitativeBenefitService beneficioQualitativoService;
+    private QualitativeBenefitService qualitativeBenefitService;
 
     @GetMapping
     public ResponseEntity<List<QualitativeBenefit>> findAll() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(beneficioQualitativoService.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(qualitativeBenefitService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid QualitativeBenefitDTO beneficioQualitativoDTO) {
-        QualitativeBenefit beneficioQualitativo = new QualitativeBenefit();
-        BeanUtils.copyProperties(beneficioQualitativoDTO, beneficioQualitativo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(beneficioQualitativoService.save(beneficioQualitativo));
+    public ResponseEntity<Object> save(@RequestBody @Valid QualitativeBenefitDTO qualitativeBenefitDTO) {
+        QualitativeBenefit qualitativeBenefit = new QualitativeBenefit();
+        BeanUtils.copyProperties(qualitativeBenefitDTO, qualitativeBenefit);
+        return ResponseEntity.status(HttpStatus.CREATED).body(qualitativeBenefitService.save(qualitativeBenefit));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<QualitativeBenefit> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
-        if(beneficioQualitativoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio qualitativo com o codigo:" + codigo);
+    @GetMapping("/{qualitativeBenefitCode}")
+    public ResponseEntity<Object> findById(@PathVariable(value = "qualitativeBenefitCode") Integer qualitativeBenefitCode) {
+        Optional<QualitativeBenefit> qualitativeBenefitOptional = qualitativeBenefitService.findById(qualitativeBenefitCode);
+        if(qualitativeBenefitOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No qualitative Benefit with code:" + qualitativeBenefitCode);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(beneficioQualitativoOptional);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(qualitativeBenefitOptional);
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "codigo") Integer codigo) {
-        Optional<QualitativeBenefit> beneficioQualitativoOptional = beneficioQualitativoService.findById(codigo);
-        if(beneficioQualitativoOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro! Nenhum beneficio qualitativo com o codigo: " + codigo);
+    @DeleteMapping("/{qualitativeBenefitCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "qualitativeBenefitCode") Integer qualitativeBenefitCode) {
+        Optional<QualitativeBenefit> qualitativeBenefitOptional = qualitativeBenefitService.findById(qualitativeBenefitCode);
+        if(qualitativeBenefitOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No qualitative Benefit with code: " + qualitativeBenefitCode);
         }
-        beneficioQualitativoService.deleteById(codigo);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beneficio Qualitativo " + codigo + " deletado!");
+        qualitativeBenefitService.deleteById(qualitativeBenefitCode);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Qualitative BenefitCode " + qualitativeBenefitCode + " successfully deleted!");
     }
 }
