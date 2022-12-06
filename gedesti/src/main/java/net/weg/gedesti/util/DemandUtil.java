@@ -7,20 +7,20 @@ import net.weg.gedesti.model.entity.Demand;
 public class DemandUtil {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Demand convertJsonToModel(String demandaJson) {
-        DemandDTO demandaDTO = convetJsonToDTO(demandaJson);
-        return convertDtoToModel(demandaDTO);
+    public Demand convertJsonToModel(String demandJson) {
+        DemandDTO demandDTO = convetJsonToDTO(demandJson);
+        return convertDtoToModel(demandDTO);
     }
 
-    private DemandDTO convetJsonToDTO(String demandaJson) {
+    private DemandDTO convetJsonToDTO(String demandJson) {
         try {
-            return objectMapper.readValue(demandaJson, DemandDTO.class);
+            return objectMapper.readValue(demandJson, DemandDTO.class);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    private Demand convertDtoToModel(DemandDTO demandaDTO) {
-        return this.objectMapper.convertValue(demandaDTO, Demand.class);
+    private Demand convertDtoToModel(DemandDTO demandDTO) {
+        return this.objectMapper.convertValue(demandDTO, Demand.class);
     }
 }

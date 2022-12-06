@@ -7,22 +7,20 @@ import net.weg.gedesti.model.entity.Minute;
 public class MinuteUtil {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Minute convertJsonToModel(String ataJson) {
-        MinuteDTO ataDTO = convetJsonToDTO(ataJson);
-        return convertDtoToModel(ataDTO);
+    public Minute convertJsonToModel(String minuteJson) {
+        MinuteDTO minuteDTO = convetJsonToDTO(minuteJson);
+        return convertDtoToModel(minuteDTO);
     }
 
-    private MinuteDTO convetJsonToDTO(String ataJson) {
+    private MinuteDTO convetJsonToDTO(String minuteJson) {
         try {
-            return objectMapper.readValue(ataJson, MinuteDTO.class);
+            return objectMapper.readValue(minuteJson, MinuteDTO.class);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    private Minute convertDtoToModel(MinuteDTO ataDTO) {
-        return this.objectMapper.convertValue(ataDTO, Minute.class);
+    private Minute convertDtoToModel(MinuteDTO minuteDTO) {
+        return this.objectMapper.convertValue(minuteDTO, Minute.class);
     }
-
-
 }

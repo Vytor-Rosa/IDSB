@@ -9,22 +9,22 @@ public class HistoricalUtil {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public Historical convertJsonToModel(String historicoJson) {
-        HistoricalDTO historicoDTO = convetJsonToDTO(historicoJson);
-        return convertDtoToModel(historicoDTO);
+    public Historical convertJsonToModel(String historicalJson) {
+        HistoricalDTO historicalDTO = convetJsonToDTO(historicalJson);
+        return convertDtoToModel(historicalDTO);
     }
 
-    private HistoricalDTO convetJsonToDTO(String historicoJson) {
+    private HistoricalDTO convetJsonToDTO(String historicalJson) {
         try {
-            return objectMapper.readValue(historicoJson, HistoricalDTO.class);
+            return objectMapper.readValue(historicalJson, HistoricalDTO.class);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    private Historical convertDtoToModel(HistoricalDTO historicoDTO) {
-        Historical historico = new Historical();
-        BeanUtils.copyProperties(historicoDTO, historico);
-        return historico;
+    private Historical convertDtoToModel(HistoricalDTO historicalDTO) {
+        Historical historical = new Historical();
+        BeanUtils.copyProperties(historicalDTO, historical);
+        return historical;
     }
 }
