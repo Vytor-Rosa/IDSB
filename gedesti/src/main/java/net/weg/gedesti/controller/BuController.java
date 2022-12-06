@@ -40,7 +40,7 @@ public class BuController {
     @GetMapping("/{buCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "buCode") Integer buCode) {
         Optional<Bu> buOptional = buService.findById(buCode);
-        if(buOptional.isEmpty()){
+        if (buOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No bu with code: " + buCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(buOptional);
@@ -49,7 +49,7 @@ public class BuController {
     @DeleteMapping("/{buCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "buCode") Integer buCode) {
         Optional<Bu> buOptional = buService.findById(buCode);
-        if(buOptional.isEmpty()){
+        if (buOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No bu with code: " + buCode);
         }
 //        buService.deleteById(buCode);

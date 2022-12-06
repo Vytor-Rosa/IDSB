@@ -35,7 +35,7 @@ public class RealBenefitController {
     @GetMapping("/{realBenefitCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "realBenefitCode") Integer realBenefitCode) {
         Optional<RealBenefit> realBenefitOptional = realBenefitService.findById(realBenefitCode);
-        if(realBenefitOptional.isEmpty()){
+        if (realBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No real benefit with code:  " + realBenefitCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(realBenefitOptional);
@@ -44,7 +44,7 @@ public class RealBenefitController {
     @DeleteMapping("/{realBenefitCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "realBenefitCode") Integer realBenefitCode) {
         Optional<RealBenefit> realBenefitOptional = realBenefitService.findById(realBenefitCode);
-        if(realBenefitOptional.isEmpty()){
+        if (realBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No real benefit with code:  " + realBenefitCode);
         }
         realBenefitService.deleteById(realBenefitCode);

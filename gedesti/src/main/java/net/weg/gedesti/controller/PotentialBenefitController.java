@@ -36,7 +36,7 @@ public class PotentialBenefitController {
     @GetMapping("/{potentialBenefitCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "potentialBenefitCode") Integer potentialBenefitCode) {
         Optional<PotentialBenefit> potentialBenefitOptional = potentialBenefitService.findById(potentialBenefitCode);
-        if(potentialBenefitOptional.isEmpty()){
+        if (potentialBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No potential benefitC with code:" + potentialBenefitCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(potentialBenefitOptional);
@@ -45,7 +45,7 @@ public class PotentialBenefitController {
     @DeleteMapping("/{potentialBenefitCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "potentialBenefitCode") Integer potentialBenefitCode) {
         Optional<PotentialBenefit> potentialBenefitOptional = potentialBenefitService.findById(potentialBenefitCode);
-        if(potentialBenefitOptional.isEmpty()){
+        if (potentialBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No potential benefit with code:" + potentialBenefitCode);
         }
         potentialBenefitService.deleteById(potentialBenefitCode);

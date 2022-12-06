@@ -44,8 +44,8 @@ public class ProposalController {
 
     @GetMapping("/{proposalCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "proposalCode") Integer proposalCode) {
-        Optional<Proposal> proposalOptional =proposalService.findById(proposalCode);
-        if(proposalOptional.isEmpty()){
+        Optional<Proposal> proposalOptional = proposalService.findById(proposalCode);
+        if (proposalOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No proposal with code: " + proposalCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
@@ -54,7 +54,7 @@ public class ProposalController {
     @DeleteMapping("/{proposalCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "proposalCode") Integer proposalCode) {
         Optional<Proposal> proposalOptional = proposalService.findById(proposalCode);
-        if(proposalOptional.isEmpty()){
+        if (proposalOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No proposal with code: " + proposalCode);
         }
         proposalService.deleteById(proposalCode);

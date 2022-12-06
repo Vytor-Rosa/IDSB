@@ -9,8 +9,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "BU")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Bu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

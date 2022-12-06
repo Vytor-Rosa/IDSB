@@ -13,7 +13,8 @@ import java.util.List;
 @ToString
 public class AgendaDTO {
     private Integer agendaCode;
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private Integer sequentialNumber;
     @NotNull
     private Integer yearAgenda;

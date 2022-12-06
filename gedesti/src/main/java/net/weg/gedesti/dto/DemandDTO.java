@@ -2,6 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import net.weg.gedesti.model.entity.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;

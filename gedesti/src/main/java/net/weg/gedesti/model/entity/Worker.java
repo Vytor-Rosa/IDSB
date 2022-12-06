@@ -14,8 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "worker")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Worker {
 //    implements UserDetails
 

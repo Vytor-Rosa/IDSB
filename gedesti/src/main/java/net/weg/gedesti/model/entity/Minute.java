@@ -35,14 +35,14 @@ public class Minute {
     private Agenda agenda;
 
     @Bean
-    public void setAttachment(MultipartFile attachment){
-        try{
+    public void setAttachment(MultipartFile attachment) {
+        try {
             this.attachment = new Attachment(
                     attachment.getOriginalFilename(),
                     attachment.getContentType(),
                     attachment.getBytes()
             );
-        }catch (Exception exception){
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }

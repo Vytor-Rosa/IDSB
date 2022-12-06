@@ -37,7 +37,7 @@ public class WorkerService {
         return funcionarioRepository.findByCorporateEmail(corporateEmail);
     }
 
-    public Worker findByWorkerPassword(String workerPassword){
+    public Worker findByWorkerPassword(String workerPassword) {
         return funcionarioRepository.findByWorkerPassword(workerPassword);
     }
 

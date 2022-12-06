@@ -40,6 +40,5 @@ public class ProposalService {
         propostaRepository.deleteById(integer);
     }
 
-    
 
 }

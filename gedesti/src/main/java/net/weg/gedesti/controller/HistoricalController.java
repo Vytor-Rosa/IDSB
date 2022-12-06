@@ -38,7 +38,7 @@ public class HistoricalController {
     @GetMapping("/{historicalCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "historicalCode") Integer historicalCode) {
         Optional<Historical> historicalOptional = historicalService.findById(historicalCode);
-        if(historicalOptional.isEmpty()){
+        if (historicalOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no historical with code: " + historicalCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(historicalOptional);
@@ -47,7 +47,7 @@ public class HistoricalController {
     @DeleteMapping("/{historicalCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "historicalCode") Integer historicalCode) {
         Optional<Historical> historicalOptional = historicalService.findById(historicalCode);
-        if(historicalOptional.isEmpty()){
+        if (historicalOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no historical with code: " + historicalCode);
         }
         historicalService.deleteById(historicalCode);

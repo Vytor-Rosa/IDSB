@@ -26,7 +26,7 @@ public class MinuteController {
     private MinuteService minuteService;
 
     @GetMapping
-    public ResponseEntity<List<Minute>> findAll(){
+    public ResponseEntity<List<Minute>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(minuteService.findAll());
     }
 
@@ -36,7 +36,7 @@ public class MinuteController {
     }
 
     @PostMapping
-    public  ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson, @RequestParam(value = "minuteAttachment") MultipartFile minuteAttachment){
+    public ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson, @RequestParam(value = "minuteAttachment") MultipartFile minuteAttachment) {
         MinuteUtil util = new MinuteUtil();
         Minute minute = util.convertJsonToModel(minuteJson);
         minute.setAttachment(minuteAttachment);
@@ -46,7 +46,7 @@ public class MinuteController {
     @GetMapping("/{minuteCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "minuteCode") Integer minuteCode) {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
-        if (minuteOptional.isEmpty()){
+        if (minuteOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code:" + minuteCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(minuteOptional);
@@ -54,12 +54,12 @@ public class MinuteController {
 
 
     @DeleteMapping("/{minuteCode}")
-    public  ResponseEntity<Object> deleteById(@PathVariable(value = "minuteCode")Integer minuteCode){
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "minuteCode") Integer minuteCode) {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
-        if(minuteOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code: "+ minuteCode);
+        if (minuteOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code: " + minuteCode);
         }
         minuteService.deleteById(minuteCode);
-        return  ResponseEntity.status(HttpStatus.FOUND).body("Minute " +minuteCode+ " successfully deleted!");
+        return ResponseEntity.status(HttpStatus.FOUND).body("Minute " + minuteCode + " successfully deleted!");
     }
 }

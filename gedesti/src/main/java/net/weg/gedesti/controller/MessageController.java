@@ -35,7 +35,7 @@ public class MessageController {
     @GetMapping("/{messageCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "messageCode") Integer messageCode) {
         Optional<Message> messageOptional = messageService.findById(messageCode);
-        if(messageOptional.isEmpty()){
+        if (messageOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No message with code: " + messageCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(messageOptional);

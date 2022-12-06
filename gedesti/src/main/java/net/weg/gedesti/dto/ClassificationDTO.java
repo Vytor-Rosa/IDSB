@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 import net.weg.gedesti.model.entity.Bu;
 import net.weg.gedesti.model.entity.Worker;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -20,7 +21,8 @@ public class ClassificationDTO {
     @NotBlank
     private String ITSection;
 
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private Integer PPMCode;
 
     @NotBlank

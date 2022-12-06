@@ -9,8 +9,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "realbenefit")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class RealBenefit {
 
     @Id
