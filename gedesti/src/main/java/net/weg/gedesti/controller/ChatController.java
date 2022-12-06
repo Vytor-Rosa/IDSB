@@ -37,7 +37,7 @@ public class ChatController {
     @GetMapping("/{chatCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "chatCode") Integer chatCode) {
         Optional<Chat> chatOptional = chatService.findById(chatCode);
-        if(chatOptional.isEmpty()){
+        if (chatOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Invalid chat code: " + chatCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(chatOptional);

@@ -33,13 +33,13 @@ public class WorkerController {
         Worker worker = new Worker();
         BeanUtils.copyProperties(workerDTO, worker);
 
-        if(workerOffice == 1){
+        if (workerOffice == 1) {
             worker.setWorkerOffice("Solicitante");
-        }else if(workerOffice == 2){
+        } else if (workerOffice == 2) {
             worker.setWorkerOffice("Analista de TI");
-        }else if(workerOffice == 3){
+        } else if (workerOffice == 3) {
             worker.setWorkerOffice("Gestor de TI");
-        }else if(workerOffice == 4){
+        } else if (workerOffice == 4) {
             worker.setWorkerOffice("Gerente de Negócio");
         }
 
@@ -52,7 +52,7 @@ public class WorkerController {
     @GetMapping("/{workerCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "workerCode") Integer workerCode) {
         Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
-        if(optionalWorker.isEmpty()){
+        if (optionalWorker.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No worker with code: " + workerCode);
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(optionalWorker);
@@ -64,11 +64,11 @@ public class WorkerController {
         Worker workers = worker.get();
         if (worker.isPresent()) {
             if (workers.getWorkerPassword().equals(workerDTO.getWorkerPassword())) {
-                    return ResponseEntity.status(HttpStatus.OK).body(worker);
+                return ResponseEntity.status(HttpStatus.OK).body(worker);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Incorrect password!");
             }
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email doesn't exist!");
         }
     }
@@ -77,7 +77,7 @@ public class WorkerController {
     @DeleteMapping("/{workerCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "workerCode") Integer workerCode) {
         Optional<Worker> optionalWorker = workerSerivce.findById(workerCode);
-        if(optionalWorker.isEmpty()){
+        if (optionalWorker.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No worker with code:" + workerCode);
         }
         workerSerivce.deleteById(workerCode);

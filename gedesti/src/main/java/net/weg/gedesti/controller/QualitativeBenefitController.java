@@ -36,7 +36,7 @@ public class QualitativeBenefitController {
     @GetMapping("/{qualitativeBenefitCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "qualitativeBenefitCode") Integer qualitativeBenefitCode) {
         Optional<QualitativeBenefit> qualitativeBenefitOptional = qualitativeBenefitService.findById(qualitativeBenefitCode);
-        if(qualitativeBenefitOptional.isEmpty()){
+        if (qualitativeBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No qualitative Benefit with code:" + qualitativeBenefitCode);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(qualitativeBenefitOptional);
@@ -45,7 +45,7 @@ public class QualitativeBenefitController {
     @DeleteMapping("/{qualitativeBenefitCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "qualitativeBenefitCode") Integer qualitativeBenefitCode) {
         Optional<QualitativeBenefit> qualitativeBenefitOptional = qualitativeBenefitService.findById(qualitativeBenefitCode);
-        if(qualitativeBenefitOptional.isEmpty()){
+        if (qualitativeBenefitOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No qualitative Benefit with code: " + qualitativeBenefitCode);
         }
         qualitativeBenefitService.deleteById(qualitativeBenefitCode);
