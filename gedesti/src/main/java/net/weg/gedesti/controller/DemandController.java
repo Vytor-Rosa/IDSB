@@ -2,7 +2,9 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.DemandService;
+import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.util.DemandUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @RequestMapping("/api/demand")
 public class DemandController {
     private DemandService demandService;
+    private WorkerService workerService;
 
     @GetMapping
     public ResponseEntity<List<Demand>> findAll() {
@@ -47,7 +50,7 @@ public class DemandController {
     @GetMapping("/{demandCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "demandCode") Integer demandCode) {
         Optional<Demand> demandOptional = demandService.findById(demandCode);
-        if(demandOptional.isEmpty()){
+        if (demandOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
         }
 
@@ -57,7 +60,7 @@ public class DemandController {
     @DeleteMapping("/{demandCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "demandCode") Integer demandCode) {
         Optional<Demand> demandOptional = demandService.findById(demandCode);
-        if(demandOptional.isEmpty()){
+        if (demandOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
         }
         demandService.deleteById(demandCode);
@@ -70,7 +73,7 @@ public class DemandController {
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @RequestParam(value = "demandAttachment") MultipartFile demandAttachment,
                                          @PathVariable(value = "demandCode") Integer demandCode) {
-        if(!demandService.existsById(demandCode)){
+        if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
@@ -81,5 +84,4 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
-
 }

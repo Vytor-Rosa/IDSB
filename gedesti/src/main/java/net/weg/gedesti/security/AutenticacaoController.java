@@ -1,7 +1,6 @@
-//package security;
+//package net.weg.gedesti.security;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.security.authentication.AuthenticationManager;

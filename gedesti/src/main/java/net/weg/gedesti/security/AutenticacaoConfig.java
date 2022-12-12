@@ -1,4 +1,4 @@
-//package security;
+//package net.weg.gedesti.security;
 //
 //
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,9 @@
 //@Configuration
 //@EnableWebSecurity
 //public class AutenticacaoConfig extends WebSecurityConfigurerAdapter {
-//
-//    @Autowired
-//    private Teste autenticacaoService;
+////
+////    @Autowired
+////    private Teste autenticacaoService;
 //
 //    @Override
 //    protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -28,13 +28,13 @@
 ////                .and().addFilterBefore(new AutenticacaoFiltro(autenticacaoService), UsernamePasswordAuthenticationFilter.class);
 //    }
 //
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//
+////    @Override
+////    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+////
+//////        authenticationManagerBuilder.userDetailsService(autenticacaoService)
 ////        authenticationManagerBuilder.userDetailsService(autenticacaoService)
-//        authenticationManagerBuilder.userDetailsService(autenticacaoService)
-//                .passwordEncoder(new BCryptPasswordEncoder());
-//    }
+////                .passwordEncoder(new BCryptPasswordEncoder());
+////    }
 //
 ////    @Bean
 ////    protected UserDetailsService userDetailsService(){

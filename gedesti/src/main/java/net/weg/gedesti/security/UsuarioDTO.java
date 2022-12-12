@@ -1,4 +1,4 @@
-package security;
+package net.weg.gedesti.security;
 
 import lombok.Data;
 import lombok.NonNull;

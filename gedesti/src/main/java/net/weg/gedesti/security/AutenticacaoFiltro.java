@@ -1,7 +1,7 @@
-//package security;
+//package net.weg.gedesti.security;
 //
 //import lombok.AllArgsConstructor;
-//import net.weg.gedesti.model.entity.Funcionario;
+//import net.weg.gedesti.model.entity.Worker;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +27,7 @@
 //        }
 //        Boolean valido = autenticacaoService.validarToken(token);
 //        if(valido){
-//            Funcionario funcionario = autenticacaoService.getFuncionario(token);
+//            Worker funcionario = autenticacaoService.getFuncionario(token);
 //            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
 //                    new UsernamePasswordAuthenticationToken(funcionario.getUsername(), null,funcionario.getAuthorities());
 //            SecurityContextHolder.getContext()

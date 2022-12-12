@@ -2,6 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.repository.DemandRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +40,5 @@ public class DemandService {
     public void deleteById(Integer integer) {
         demandRepository.deleteById(integer);
     }
-
 
 }
