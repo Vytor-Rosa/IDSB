@@ -11,25 +11,25 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class QualitativeBenefitService {
-    private QualitativeBenefitRepository beneficioQualitativoRepository;
+    private QualitativeBenefitRepository qualitativeBenefitRepository;
 
     public List<QualitativeBenefit> findAll() {
-        return beneficioQualitativoRepository.findAll();
+        return qualitativeBenefitRepository.findAll();
     }
 
     public <S extends QualitativeBenefit> S save(S entity) {
-        return beneficioQualitativoRepository.save(entity);
+        return qualitativeBenefitRepository.save(entity);
     }
 
     public Optional<QualitativeBenefit> findById(Integer integer) {
-        return beneficioQualitativoRepository.findById(integer);
+        return qualitativeBenefitRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return beneficioQualitativoRepository.existsById(integer);
+        return qualitativeBenefitRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        beneficioQualitativoRepository.deleteById(integer);
+        qualitativeBenefitRepository.deleteById(integer);
     }
 }

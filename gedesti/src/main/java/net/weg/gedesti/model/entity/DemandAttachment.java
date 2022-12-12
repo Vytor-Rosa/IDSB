@@ -9,8 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Getter
-@Setter
+@Data
 public class DemandAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

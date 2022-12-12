@@ -12,25 +12,25 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PotentialBenefitService {
 
-    private PotentialBenefitRepository beneficioPotencialRepository;
+    private PotentialBenefitRepository potentialBenefitRepository;
 
     public List<PotentialBenefit> findAll() {
-        return beneficioPotencialRepository.findAll();
+        return potentialBenefitRepository.findAll();
     }
 
     public <S extends PotentialBenefit> S save(S entity) {
-        return beneficioPotencialRepository.save(entity);
+        return potentialBenefitRepository.save(entity);
     }
 
     public Optional<PotentialBenefit> findById(Integer integer) {
-        return beneficioPotencialRepository.findById(integer);
+        return potentialBenefitRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return beneficioPotencialRepository.existsById(integer);
+        return potentialBenefitRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        beneficioPotencialRepository.deleteById(integer);
+        potentialBenefitRepository.deleteById(integer);
     }
 }

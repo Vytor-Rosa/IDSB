@@ -11,25 +11,25 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class RealBenefitService {
-    private RealBenefitRepository beneficioRealRepository;
+    private RealBenefitRepository realBenefitRepository;
 
     public List<RealBenefit> findAll() {
-        return beneficioRealRepository.findAll();
+        return realBenefitRepository.findAll();
     }
 
     public <S extends RealBenefit> S save(S entity) {
-        return beneficioRealRepository.save(entity);
+        return realBenefitRepository.save(entity);
     }
 
     public Optional<RealBenefit> findById(Integer integer) {
-        return beneficioRealRepository.findById(integer);
+        return realBenefitRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return beneficioRealRepository.existsById(integer);
+        return realBenefitRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        beneficioRealRepository.deleteById(integer);
+        realBenefitRepository.deleteById(integer);
     }
 }

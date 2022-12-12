@@ -14,30 +14,30 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProposalService {
 
-    private ProposalRepository propostaRepository;
+    private ProposalRepository proposalRepository;
 
     public List<Proposal> findAll() {
-        return propostaRepository.findAll();
+        return proposalRepository.findAll();
     }
 
     public Page<Proposal> findAll(Pageable pageable) {
-        return propostaRepository.findAll(pageable);
+        return proposalRepository.findAll(pageable);
     }
 
     public <S extends Proposal> S save(S entity) {
-        return propostaRepository.save(entity);
+        return proposalRepository.save(entity);
     }
 
     public Optional<Proposal> findById(Integer integer) {
-        return propostaRepository.findById(integer);
+        return proposalRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return propostaRepository.existsById(integer);
+        return proposalRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        propostaRepository.deleteById(integer);
+        proposalRepository.deleteById(integer);
     }
 
 

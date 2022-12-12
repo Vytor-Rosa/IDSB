@@ -1,9 +1,6 @@
 package net.weg.gedesti.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,8 +8,7 @@ import javax.persistence.*;
 @Table(name = "potentialbenefit")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class PotentialBenefit {
 
     @Id

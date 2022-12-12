@@ -1,9 +1,6 @@
 package net.weg.gedesti.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +10,7 @@ import javax.persistence.*;
 @Table(name = "minute")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Minute {
 
     @Id

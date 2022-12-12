@@ -11,34 +11,34 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class WorkerService {
-    private WorkerRepository funcionarioRepository;
+    private WorkerRepository workerRepository;
 
     public List<Worker> findAll() {
-        return funcionarioRepository.findAll();
+        return workerRepository.findAll();
     }
 
     public <S extends Worker> S save(S entity) {
-        return funcionarioRepository.save(entity);
+        return workerRepository.save(entity);
     }
 
     public Optional<Worker> findById(Integer integer) {
-        return funcionarioRepository.findById(integer);
+        return workerRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return funcionarioRepository.existsById(integer);
+        return workerRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        funcionarioRepository.deleteById(integer);
+        workerRepository.deleteById(integer);
     }
 
     public Optional<Worker> findByCorporateEmail(String corporateEmail) {
-        return funcionarioRepository.findByCorporateEmail(corporateEmail);
+        return workerRepository.findByCorporateEmail(corporateEmail);
     }
 
     public Worker findByWorkerPassword(String workerPassword) {
-        return funcionarioRepository.findByWorkerPassword(workerPassword);
+        return workerRepository.findByWorkerPassword(workerPassword);
     }
 
 }

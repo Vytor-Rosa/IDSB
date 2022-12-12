@@ -14,30 +14,30 @@ import java.util.Optional;
 @AllArgsConstructor
 public class DemandService {
 
-    private DemandRepository demandaRepository;
+    private DemandRepository demandRepository;
 
     public List<Demand> findAll() {
-        return demandaRepository.findAll();
+        return demandRepository.findAll();
     }
 
     public Page<Demand> findAll(Pageable pageable) {
-        return demandaRepository.findAll(pageable);
+        return demandRepository.findAll(pageable);
     }
 
     public <S extends Demand> S save(S entity) {
-        return demandaRepository.save(entity);
+        return demandRepository.save(entity);
     }
 
     public Optional<Demand> findById(Integer integer) {
-        return demandaRepository.findById(integer);
+        return demandRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return demandaRepository.existsById(integer);
+        return demandRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        demandaRepository.deleteById(integer);
+        demandRepository.deleteById(integer);
     }
 
 

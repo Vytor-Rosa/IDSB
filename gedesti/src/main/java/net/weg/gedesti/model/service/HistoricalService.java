@@ -12,25 +12,25 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HistoricalService {
 
-    private HistoricalRepository historicoRepository;
+    private HistoricalRepository historicalRepository;
 
     public List<Historical> findAll() {
-        return historicoRepository.findAll();
+        return historicalRepository.findAll();
     }
 
     public <S extends Historical> S save(S entity) {
-        return historicoRepository.save(entity);
+        return historicalRepository.save(entity);
     }
 
     public Optional<Historical> findById(Integer integer) {
-        return historicoRepository.findById(integer);
+        return historicalRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return historicoRepository.existsById(integer);
+        return historicalRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        historicoRepository.deleteById(integer);
+        historicalRepository.deleteById(integer);
     }
 }

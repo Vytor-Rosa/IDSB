@@ -13,29 +13,29 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class MinuteService {
-    private MinuteRepository ataRepository;
+    private MinuteRepository minuteRepository;
 
     public List<Minute> findAll() {
-        return ataRepository.findAll();
+        return minuteRepository.findAll();
     }
 
     public Page<Minute> findAll(Pageable pageable) {
-        return ataRepository.findAll(pageable);
+        return minuteRepository.findAll(pageable);
     }
 
     public <S extends Minute> S save(S entity) {
-        return ataRepository.save(entity);
+        return minuteRepository.save(entity);
     }
 
     public boolean existsById(Integer integer) {
-        return ataRepository.existsById(integer);
+        return minuteRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        ataRepository.deleteById(integer);
+        minuteRepository.deleteById(integer);
     }
 
     public Optional<Minute> findById(Integer integer) {
-        return ataRepository.findById(integer);
+        return minuteRepository.findById(integer);
     }
 }

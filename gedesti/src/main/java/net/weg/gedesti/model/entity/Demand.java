@@ -11,9 +11,7 @@ import java.util.List;
 @Table(name = "demand")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,9 +1,6 @@
 package net.weg.gedesti.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,8 +9,7 @@ import java.util.List;
 @Table(name = "costcenter")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class CostCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

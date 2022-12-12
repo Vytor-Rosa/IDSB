@@ -11,21 +11,21 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CostCenterService {
-    private CostCenterRepository centroDeCustoRepository;
+    private CostCenterRepository costCenterRepository;
 
     public List<CostCenter> findAll() {
-        return centroDeCustoRepository.findAll();
+        return costCenterRepository.findAll();
     }
 
     public <S extends CostCenter> S save(S entity) {
-        return centroDeCustoRepository.save(entity);
+        return costCenterRepository.save(entity);
     }
 
     public Optional<CostCenter> findById(Integer integer) {
-        return centroDeCustoRepository.findById(integer);
+        return costCenterRepository.findById(integer);
     }
 
     public void deleteById(Integer integer) {
-        centroDeCustoRepository.deleteById(integer);
+        costCenterRepository.deleteById(integer);
     }
 }

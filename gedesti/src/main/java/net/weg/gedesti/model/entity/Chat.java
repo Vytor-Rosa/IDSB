@@ -8,9 +8,7 @@ import javax.persistence.*;
 @Table(name = "chat")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class Chat {
 
     @Id

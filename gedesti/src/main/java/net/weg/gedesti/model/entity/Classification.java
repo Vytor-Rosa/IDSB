@@ -1,10 +1,7 @@
 package net.weg.gedesti.model.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,8 +10,7 @@ import java.util.List;
 @Table(name = "classification")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Classification {
 
     @Id

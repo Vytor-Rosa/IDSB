@@ -9,9 +9,7 @@ import java.util.List;
 @Table(name = "agenda")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class Agenda {
 
     @Id

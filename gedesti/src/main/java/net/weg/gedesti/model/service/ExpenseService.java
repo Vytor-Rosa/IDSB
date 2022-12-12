@@ -10,26 +10,26 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ExpenseService {
-    private ExpenseRepository despesaRepository;
+public class  ExpenseService {
+    private ExpenseRepository expenseRepository;
 
     public List<Expense> findAll() {
-        return despesaRepository.findAll();
+        return expenseRepository.findAll();
     }
 
     public <S extends Expense> S save(S entity) {
-        return despesaRepository.save(entity);
+        return expenseRepository.save(entity);
     }
 
     public Optional<Expense> findById(Integer integer) {
-        return despesaRepository.findById(integer);
+        return expenseRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return despesaRepository.existsById(integer);
+        return expenseRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        despesaRepository.deleteById(integer);
+        expenseRepository.deleteById(integer);
     }
 }

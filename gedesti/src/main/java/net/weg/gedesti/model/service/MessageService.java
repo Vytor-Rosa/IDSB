@@ -12,21 +12,21 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class MessageService {
-    private MessageRepository mensagemRepository;
+    private MessageRepository messageRepository;
 
     public List<Message> findAll() {
-        return mensagemRepository.findAll();
+        return messageRepository.findAll();
     }
 
     public <S extends Message> S save(S entity) {
-        return mensagemRepository.save(entity);
+        return messageRepository.save(entity);
     }
 
     public Optional<Message> findById(Integer integer) {
-        return mensagemRepository.findById(integer);
+        return messageRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return mensagemRepository.existsById(integer);
+        return messageRepository.existsById(integer);
     }
 }

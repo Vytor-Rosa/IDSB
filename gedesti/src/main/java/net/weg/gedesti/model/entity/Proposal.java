@@ -10,8 +10,7 @@ import java.util.List;
 @Table(name = "proposal")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Proposal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

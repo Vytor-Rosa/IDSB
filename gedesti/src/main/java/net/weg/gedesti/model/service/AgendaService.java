@@ -13,29 +13,29 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AgendaService {
-    private AgendaRepository pautaRepository;
+    private AgendaRepository agendaRepository;
 
     public List<Agenda> findAll() {
-        return pautaRepository.findAll();
+        return agendaRepository.findAll();
     }
 
     public Page<Agenda> findAll(Pageable pageable) {
-        return pautaRepository.findAll(pageable);
+        return agendaRepository.findAll(pageable);
     }
 
     public <S extends Agenda> S save(S entity) {
-        return pautaRepository.save(entity);
+        return agendaRepository.save(entity);
     }
 
     public Optional<Agenda> findById(Integer integer) {
-        return pautaRepository.findById(integer);
+        return agendaRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return pautaRepository.existsById(integer);
+        return agendaRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        pautaRepository.deleteById(integer);
+        agendaRepository.deleteById(integer);
     }
 }

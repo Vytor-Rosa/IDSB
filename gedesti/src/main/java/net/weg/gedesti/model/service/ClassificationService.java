@@ -12,25 +12,25 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClassificationService {
 
-    ClassificationRepository classificacaoRepository;
+    ClassificationRepository classificationRepository;
 
     public List<Classification> findAll() {
-        return classificacaoRepository.findAll();
+        return classificationRepository.findAll();
     }
 
     public <S extends Classification> S save(S entity) {
-        return classificacaoRepository.save(entity);
+        return classificationRepository.save(entity);
     }
 
     public Optional<Classification> findById(Integer integer) {
-        return classificacaoRepository.findById(integer);
+        return classificationRepository.findById(integer);
     }
 
     public boolean existsById(Integer integer) {
-        return classificacaoRepository.existsById(integer);
+        return classificationRepository.existsById(integer);
     }
 
     public void deleteById(Integer integer) {
-        classificacaoRepository.deleteById(integer);
+        classificationRepository.deleteById(integer);
     }
 }

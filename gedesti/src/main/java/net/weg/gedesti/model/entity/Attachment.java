@@ -9,8 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Getter
-@Setter
+@Data
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
