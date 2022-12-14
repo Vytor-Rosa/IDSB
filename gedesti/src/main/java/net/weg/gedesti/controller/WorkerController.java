@@ -34,13 +34,13 @@ public class WorkerController {
         BeanUtils.copyProperties(workerDTO, worker);
 
         if (workerOffice == 1) {
-            worker.setWorkerOffice("Solicitante");
+            worker.setWorkerOffice("Requester");
         } else if (workerOffice == 2) {
-            worker.setWorkerOffice("Analista de TI");
+            worker.setWorkerOffice("IT analyst");
         } else if (workerOffice == 3) {
-            worker.setWorkerOffice("Gestor de TI");
+            worker.setWorkerOffice("TI manager");
         } else if (workerOffice == 4) {
-            worker.setWorkerOffice("Gerente de Negócio");
+            worker.setWorkerOffice("Business manger");
         }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
