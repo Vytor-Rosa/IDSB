@@ -15,24 +15,26 @@
 //@AllArgsConstructor
 //public class AutenticacaoFiltro extends OncePerRequestFilter {
 //
-//    private JpaService autenticacaoService;
+//    private JpaService jpaService;
 //
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 //        String token = request.getHeader("Authorization");
-//        if (token.startsWith("Bearer ")){
+//        if (token != null && token.startsWith("Bearer ")) {
 //            token = token.substring(7);
-//        }else{
+//        } else {
 //            token = null;
 //        }
-//        Boolean valido = autenticacaoService.validarToken(token);
-//        if(valido){
-//            Worker funcionario = autenticacaoService.getFuncionario(token);
+//        Boolean valido = jpaService.validarToken(token);
+//        if (valido) {
+//            UserJpa usuario = jpaService.getUsuario(token);
 //            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//                    new UsernamePasswordAuthenticationToken(funcionario.getUsername(), null,funcionario.getAuthorities());
-//            SecurityContextHolder.getContext()
-//                    .setAuthentication(usernamePasswordAuthenticationToken);
-//        }else{
+//                    new UsernamePasswordAuthenticationToken(usuario.getUsername(),
+//                            null, usuario.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(
+//                    usernamePasswordAuthenticationToken
+//            );
+//        }else if(!request.getRequestURI().equals("/editora-livros-api/login") || !request.getRequestURI().equals("/editora-livros-api/usuarios")){
 //            response.setStatus(401);
 //        }
 //        filterChain.doFilter(request, response);
