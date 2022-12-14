@@ -20,20 +20,20 @@ public class Worker {
 
 
     @Id
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private Integer workerCode;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String workerName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String corporateEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String workerPassword;
 
-    @Column(nullable = false)
-    private String workerOffice;
+//    @Column(nullable = false)
+//    private String workerOffice;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

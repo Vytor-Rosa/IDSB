@@ -15,9 +15,7 @@
 //import java.util.Optional;
 //
 //@Service
-//public class AutenticacaoService
-//        implements UserDetailsService
-//{
+//public class JpaService implements UserDetailsService {
 //
 //    @Autowired
 //    private WorkerRepository workerRepository;
@@ -25,17 +23,20 @@
 //    private final String senhaForte = "c127a7b6adb013a5ff879ae71afa62afa4b4ceb72afaa54711dbcde67b6dc325";
 //
 //    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        Optional<Worker> funcionarioOptional = workerRepository.findByCorporateEmail(email);
-//        if(funcionarioOptional.isPresent()){
-//            return funcionarioOptional.get();
+//    public UserDetails loadUserByUsername(
+//            String username) throws UsernameNotFoundException {
+//        Optional<Worker> workerOptional =
+//                workerRepository.findByCorporateEmail(username);
+//        if (workerOptional.isPresent()) {
+//            return new UserJpa(workerOptional.get());
 //        }
-//        throw new UsernameNotFoundException("Erro! Usuario não encontrado");
+//        throw new UsernameNotFoundException("Usuário não encontrado!");
 //    }
 //
 //    public String gerarToken(Authentication authentication) {
 //        Worker worker = (Worker) authentication.getPrincipal();
-//        return Jwts.builder().setIssuer("Gedesti")
+//        return Jwts.builder()
+//                .setIssuer("Editora de Livros")
 //                .setSubject(worker.getWorkerCode().toString())
 //                .setIssuedAt(new Date())
 //                .setExpiration(new Date(new Date().getTime() + 1800000))
@@ -43,31 +44,21 @@
 //                .compact();
 //    }
 //
-//    public Boolean validarToken(String token){
-//        try{
+//    public Boolean validarToken(String token) {
+//        try {
 //            Jwts.parser().setSigningKey(senhaForte).parseClaimsJws(token);
 //            return true;
-//        }catch (Exception e){
+//        } catch (Exception e) {
 //            return false;
 //        }
+//
 //    }
 //
-////    @Bean
-////    protected UserDetailsService userDetailsService(){
-////        UserDetails user = User.withDefaultPasswordEncoder()
-////                .username("admin")
-////                .password("admin")
-////                .roles("ADM")
-////                .build();
-////        return new InMemoryUserDetailsManager(user);
-////    }
-//
-//    public Worker getFuncionario(String token){
-//        Integer matricula = Integer.parseInt(Jwts.parser()
+//    public UserJpa getUsuario(String token) {
+//        Integer workerCode = Integer.parseInt(Jwts.parser()
 //                .setSigningKey(senhaForte)
 //                .parseClaimsJws(token)
 //                .getBody().getSubject());
-//        return workerRepository.findById(matricula).get();
+//        return new UserJpa(workerRepository.findById(workerCode).get());
 //    }
-//
 //}

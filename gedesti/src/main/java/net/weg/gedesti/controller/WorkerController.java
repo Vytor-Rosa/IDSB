@@ -29,19 +29,19 @@ public class WorkerController {
 
     @PostMapping("/{workerOffice}")
     public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO workerDTO, @PathVariable(value = "workerOffice") Integer workerOffice) {
-        workerDTO.setWorkerOffice(workerOffice);
+//        workerDTO.setWorkerOffice(workerOffice);
         Worker worker = new Worker();
         BeanUtils.copyProperties(workerDTO, worker);
 
-        if (workerOffice == 1) {
-            worker.setWorkerOffice("Solicitante");
-        } else if (workerOffice == 2) {
-            worker.setWorkerOffice("Analista de TI");
-        } else if (workerOffice == 3) {
-            worker.setWorkerOffice("Gestor de TI");
-        } else if (workerOffice == 4) {
-            worker.setWorkerOffice("Gerente de Negócio");
-        }
+//        if (workerOffice == 1) {
+//            worker.setWorkerOffice("Solicitante");
+//        } else if (workerOffice == 2) {
+//            worker.setWorkerOffice("Analista de TI");
+//        } else if (workerOffice == 3) {
+//            worker.setWorkerOffice("Gestor de TI");
+//        } else if (workerOffice == 4) {
+//            worker.setWorkerOffice("Gerente de Negócio");
+//        }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        funcionario.setSenhaFuncionario(encoder.encode(funcionario.getSenhaFuncionario()));
@@ -59,7 +59,7 @@ public class WorkerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody WorkerDTO workerDTO) {
+    public ResponseEntity<Object> login(@RequestBody @Valid WorkerDTO workerDTO) {
         Optional<Worker> worker = workerSerivce.findByCorporateEmail(workerDTO.getCorporateEmail());
         Worker workers = worker.get();
         if (worker.isPresent()) {

@@ -21,7 +21,7 @@
 //    private AuthenticationManager authenticationManager;
 //
 //    @Autowired
-//    private AutenticacaoService autenticacaoService;
+//    private JpaService autenticacaoService;
 //
 //    @PostMapping
 //    public ResponseEntity<Object> autenticacao(@RequestBody @Valid UsuarioDTO usuarioDTO){

@@ -15,7 +15,7 @@
 //@AllArgsConstructor
 //public class AutenticacaoFiltro extends OncePerRequestFilter {
 //
-//    private AutenticacaoService autenticacaoService;
+//    private JpaService autenticacaoService;
 //
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
