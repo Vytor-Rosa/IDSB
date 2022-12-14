@@ -32,8 +32,8 @@ public class Worker {
     @Column(nullable = true)
     private String workerPassword;
 
-//    @Column(nullable = false)
-//    private String workerOffice;
+    @Column(nullable = false)
+    private String workerOffice;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

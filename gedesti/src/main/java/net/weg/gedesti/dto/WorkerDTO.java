@@ -9,12 +9,11 @@ public class WorkerDTO {
 
     @Positive
     private Integer workerCode;
-    
+
     private String workerName;
     @Email
     private String corporateEmail;
     @NotBlank
     private String workerPassword;
-//    @PositiveOrZero
-//    private Integer workerOffice;
+    private String workerOffice;
 }

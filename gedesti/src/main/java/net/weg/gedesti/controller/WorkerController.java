@@ -33,15 +33,15 @@ public class WorkerController {
         Worker worker = new Worker();
         BeanUtils.copyProperties(workerDTO, worker);
 
-//        if (workerOffice == 1) {
-//            worker.setWorkerOffice("Solicitante");
-//        } else if (workerOffice == 2) {
-//            worker.setWorkerOffice("Analista de TI");
-//        } else if (workerOffice == 3) {
-//            worker.setWorkerOffice("Gestor de TI");
-//        } else if (workerOffice == 4) {
-//            worker.setWorkerOffice("Gerente de Negócio");
-//        }
+        if (workerOffice == 1) {
+            worker.setWorkerOffice("Solicitante");
+        } else if (workerOffice == 2) {
+            worker.setWorkerOffice("Analista de TI");
+        } else if (workerOffice == 3) {
+            worker.setWorkerOffice("Gestor de TI");
+        } else if (workerOffice == 4) {
+            worker.setWorkerOffice("Gerente de Negócio");
+        }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        funcionario.setSenhaFuncionario(encoder.encode(funcionario.getSenhaFuncionario()));
