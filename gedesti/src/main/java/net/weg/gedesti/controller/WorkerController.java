@@ -68,9 +68,8 @@ public class WorkerController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Incorrect password!");
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email doesn't exist!");
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! Email doesn't exist!");
     }
 
 
