@@ -36,7 +36,7 @@
 //    public String gerarToken(Authentication authentication) {
 //        Worker worker = (Worker) authentication.getPrincipal();
 //        return Jwts.builder()
-//                .setIssuer("Editora de Livros")
+//                .setIssuer("Gedesti")
 //                .setSubject(worker.getWorkerCode().toString())
 //                .setIssuedAt(new Date())
 //                .setExpiration(new Date(new Date().getTime() + 1800000))

@@ -38,17 +38,17 @@
 //
 //        httpSecurity.authorizeRequests()
 //                // Libera o acesso sem autenticação para /login
-//                .antMatchers("/gedesti/login").permitAll()
+//                .antMatchers("/api/worker/logins", "api/worker").permitAll()
 //                // Determina que todas as demais requisições terão de ser autenticadas
 //                .anyRequest().authenticated()
 //                .and().csrf().disable()
 //                .formLogin().permitAll()
-//                .loginPage("/gedesti/login")
+//                .loginPage("/api/worker/logins")
 //                .defaultSuccessUrl("/gedesti/home")
 //                .and()
 //                .logout().permitAll()
-//                .logoutUrl("/editora-livros-api/logout")
-//                .logoutSuccessUrl("/editora-livros-api/login").permitAll();
+//                .logoutUrl("/api/worker/logout")
+//                .logoutSuccessUrl("/api/worker/logins").permitAll();
 ////                .and()
 ////
 ////                .sessionManagement().sessionCreationPolicy(

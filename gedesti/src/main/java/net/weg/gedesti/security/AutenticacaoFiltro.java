@@ -34,7 +34,7 @@
 //            SecurityContextHolder.getContext().setAuthentication(
 //                    usernamePasswordAuthenticationToken
 //            );
-//        }else if(!request.getRequestURI().equals("/editora-livros-api/login") || !request.getRequestURI().equals("/editora-livros-api/usuarios")){
+//        }else if(!request.getRequestURI().equals("/api/worker/logins") || !request.getRequestURI().equals("/api/worker")){
 //            response.setStatus(401);
 //        }
 //        filterChain.doFilter(request, response);

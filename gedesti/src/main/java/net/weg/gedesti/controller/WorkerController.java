@@ -36,11 +36,11 @@ public class WorkerController {
         if (workerOffice == 1) {
             worker.setWorkerOffice("Requester");
         } else if (workerOffice == 2) {
-            worker.setWorkerOffice("IT analyst");
+            worker.setWorkerOffice("analyst");
         } else if (workerOffice == 3) {
-            worker.setWorkerOffice("TI manager");
+            worker.setWorkerOffice("ti");
         } else if (workerOffice == 4) {
-            worker.setWorkerOffice("Business manger");
+            worker.setWorkerOffice("business");
         }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
