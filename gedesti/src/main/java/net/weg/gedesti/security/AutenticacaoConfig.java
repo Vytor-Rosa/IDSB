@@ -1,6 +1,7 @@
 //package net.weg.gedesti.security;
 //
 //
+//import org.hibernate.annotations.common.reflection.XMethod;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,7 @@
 //                .and().csrf().disable()
 //                .formLogin().permitAll()
 //                .loginPage("/gedesti/login")
-//                .defaultSuccessUrl("/api/worker").permitAll()
+////                .defaultSuccessUrl().permitAll()
 //                .and()
 //                .logout().permitAll()
 //                .logoutUrl("/gedesti/logout")
