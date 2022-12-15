@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCrypt;
 //import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,7 @@ public class WorkerController {
         }
 
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        funcionario.setSenhaFuncionario(encoder.encode(funcionario.getSenhaFuncionario()));
+//        worker.setWorkerPassword(encoder.encode(worker.getWorkerPassword()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(workerSerivce.save(worker));
     }

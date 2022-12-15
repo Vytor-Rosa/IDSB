@@ -1,11 +1,13 @@
 //package net.weg.gedesti.security;
 //
+//import lombok.Getter;
 //import net.weg.gedesti.model.entity.Worker;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 //
 //import java.util.Collection;
 //
+//@Getter
 //public class UserJpa implements UserDetails {
 //    private Worker worker;
 //
@@ -33,25 +35,5 @@
 //    @Override
 //    public String getUsername() {
 //        return worker.getCorporateEmail();
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return false;
 //    }
 //}

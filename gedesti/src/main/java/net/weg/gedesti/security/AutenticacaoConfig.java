@@ -8,11 +8,11 @@
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.oauth2.core.user.OAuth2User;
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 //
@@ -27,8 +27,6 @@
 //    @Autowired
 //    private JpaService jpaService;
 //
-//    // Configura as autorizações de acesso
-//
 //    @Bean
 //    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 //        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -37,37 +35,16 @@
 //        httpSecurity.authenticationProvider(provider);
 //
 //        httpSecurity.authorizeRequests()
-//                // Libera o acesso sem autenticação para /login
-//                .antMatchers("/api/worker/logins", "api/worker").permitAll()
-//                // Determina que todas as demais requisições terão de ser autenticadas
+//                .antMatchers("/gedesti/login", "/api/worker/{workerOffice}").permitAll()
 //                .anyRequest().authenticated()
 //                .and().csrf().disable()
 //                .formLogin().permitAll()
-//                .loginPage("/api/worker/logins")
-//                .defaultSuccessUrl("/gedesti/home")
+//                .loginPage("/gedesti/login")
+//                .defaultSuccessUrl("/api/worker").permitAll()
 //                .and()
 //                .logout().permitAll()
-//                .logoutUrl("/api/worker/logout")
-//                .logoutSuccessUrl("/api/worker/logins").permitAll();
-////                .and()
-////
-////                .sessionManagement().sessionCreationPolicy(
-////                SessionCreationPolicy.STATELESS)
-////                .and().addFilterBefore(
-////                new AutenticacaoFiltro(jpaService),
-////                UsernamePasswordAuthenticationFilter.class);
+//                .logoutUrl("/gedesti/logout")
+//                .logoutSuccessUrl("/gedesti/login").permitAll();
 //        return httpSecurity.build();
 //    }
-//
-//
-//    // Configura a autenticação para os acessos
-//
-//    protected void configure(
-//            AuthenticationManagerBuilder authenticationManagerBuilder)
-//            throws Exception {
-//        authenticationManagerBuilder
-//                .userDetailsService(jpaService)
-//                .passwordEncoder(new BCryptPasswordEncoder());
-//    }
-//
 //}
