@@ -22,7 +22,6 @@ public class ClassificationController {
 
     ClassificationService classificationService;
 
-
     @GetMapping
     public ResponseEntity<List<Classification>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(classificationService.findAll());
