@@ -40,10 +40,12 @@ public class DemandController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment") MultipartFile demandAttachment) {
+    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-        demand.setDemandAttachment(demandAttachment);
+        if(demandAttachment != null) {
+            demand.setDemandAttachment(demandAttachment);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
 
