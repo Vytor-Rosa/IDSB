@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,10 @@ public class Demand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Integer demandCode;
+
+    @Column(nullable = false)
+    private String demandDate;
+
 
     @Column(nullable = false)
     private String demandTitle;
