@@ -18,27 +18,12 @@ public class Demand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Integer demandCode;
-
-    @Column(nullable = false)
     private String demandDate;
-
-
-    @Column(nullable = false)
     private String demandTitle;
-
-    @Column(nullable = false)
     private String currentProblem;
-
-    @Column(nullable = false)
     private String demandObjective;
-
-    @Column(nullable = false)
     private String demandStatus;
-
-    @Column(nullable = false)
     private Double score;
-
-    @Column(nullable = false)
     private String executionPeriod;
 
     @ManyToOne

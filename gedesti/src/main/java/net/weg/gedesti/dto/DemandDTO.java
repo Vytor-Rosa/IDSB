@@ -12,40 +12,28 @@ import java.util.List;
 public class DemandDTO {
     private Integer demandCode;
 
-    @NotBlank
     private String demandTitle;
 
-    @NotBlank
     private String currentProblem;
 
-    @NotNull
     private String demandDate;
 
-    @NotBlank
     private String demandObjective;
 
-    @NotBlank
     private String demandStatus;
 
-    @NotNull
     private Double score;
 
-    @NotBlank
     private String executionPeriod;
 
-    @NotNull
     private Worker requesterRegistration;
 
-    @NotNull
     private RealBenefit realBenefit;
 
-    @NotNull
     private QualitativeBenefit qualitativeBenefit;
 
-    @NotNull
     private PotentialBenefit potentialBenefit;
 
-    @NotNull
     List<CostCenter> costCenter;
 
     private Classification classification;
