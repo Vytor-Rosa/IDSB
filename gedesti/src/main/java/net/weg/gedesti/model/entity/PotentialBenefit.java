@@ -23,6 +23,9 @@ public class PotentialBenefit {
     private Boolean legalObrigation;
 
     @Column(nullable = false)
+    private String potentialBenefitDescription;
+
+    @Column(nullable = false)
     private String potentialCurrency;
 
 }

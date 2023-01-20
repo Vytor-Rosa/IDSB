@@ -15,6 +15,9 @@ public class QualitativeBenefitDTO {
     @NotBlank
     private String frequencyOfUse;
 
+    @NotBlank
+    private String qualitativeBenefitDescription;
+
     @NotNull
     private boolean interalControlsRequirements;
 }

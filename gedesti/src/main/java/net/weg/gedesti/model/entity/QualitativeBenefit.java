@@ -20,6 +20,9 @@ public class QualitativeBenefit {
     private String frequencyOfUse;
 
     @Column(nullable = false)
+    private String qualitativeBenefitDescription;
+
+    @Column(nullable = false)
     private boolean interalControlsRequirements;
 
 }

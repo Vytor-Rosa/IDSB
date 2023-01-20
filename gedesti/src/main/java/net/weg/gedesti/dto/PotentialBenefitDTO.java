@@ -20,5 +20,8 @@ public class PotentialBenefitDTO {
     private Boolean legalObrigation;
 
     @NotBlank
+    private String potentialBenefitDescription;
+
+    @NotBlank
     private String potentialCurrency;
 }
