@@ -26,6 +26,8 @@ public class ClassificationService {
         return classificationRepository.findById(integer);
     }
 
+
+
     public boolean existsById(Integer integer) {
         return classificationRepository.existsById(integer);
     }

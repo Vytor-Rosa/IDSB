@@ -5,11 +5,13 @@ import net.weg.gedesti.dto.ClassificationDTO;
 import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.service.ClassificationService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -52,5 +54,19 @@ public class ClassificationController {
         }
         classificationService.deleteById(classificationCode);
         return ResponseEntity.status(HttpStatus.FOUND).body("Classification " + classificationCode + " successfully deleted!");
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/{classificationCode}")
+    public ResponseEntity<Object> update(@PathVariable(value = "classificationCode") Integer classificationCode, @RequestBody @Valid ClassificationDTO classificationDTO) {
+        if (classificationService.existsById(classificationCode)) {
+            Optional<Classification> classificationOptional = classificationService.findById(classificationCode);
+            Classification classification = classificationOptional.get();
+            BeanUtils.copyProperties(classificationDTO, classification);
+            classificationService.save(classification);
+            return ResponseEntity.status(HttpStatus.OK).body("Classification " + classificationCode + " successfully updated!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
     }
 }

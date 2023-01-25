@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @ToString
 public class ClassificationDTO {
-    private Integer classificationCode;
+//    private Integer classificationCode;
 
     @NotNull
     private Integer classificationSize;
