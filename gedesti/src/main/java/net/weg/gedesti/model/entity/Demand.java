@@ -54,7 +54,7 @@ public class Demand {
         }
     }
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(name = "demandCenter",
             joinColumns = @JoinColumn(name = "costCenterCode"),
             inverseJoinColumns = @JoinColumn(name = "demandCode"))
