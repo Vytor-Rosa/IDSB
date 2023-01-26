@@ -35,7 +35,7 @@ public class WorkerController {
         BeanUtils.copyProperties(workerDTO, worker);
 
         if (workerOffice == 1) {
-            worker.setWorkerOffice("Requester");
+            worker.setWorkerOffice("requester");
         } else if (workerOffice == 2) {
             worker.setWorkerOffice("analyst");
         } else if (workerOffice == 3) {
