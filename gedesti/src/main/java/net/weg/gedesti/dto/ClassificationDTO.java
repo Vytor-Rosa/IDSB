@@ -19,7 +19,7 @@ public class ClassificationDTO {
     private String classificationSize;
 
 //    @NotBlank
-    private String ITSection;
+    private String itSection;
 
 //    @NotNull
 //    @Positive

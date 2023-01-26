@@ -22,7 +22,7 @@ public class Classification {
     private String classificationSize;
 
     @Column(nullable = true)
-    private String ITSection;
+    private String itSection;
 
     @Column(nullable = true)
     private Integer PPMCode;
