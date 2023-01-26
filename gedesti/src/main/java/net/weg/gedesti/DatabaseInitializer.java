@@ -5,15 +5,15 @@ import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import net.weg.gedesti.repository.BuRespository;
+import net.weg.gedesti.repository.BuRepository;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
     private final WorkerRepository workerRepository;
-    private final BuRespository buRepository;
+    private final BuRepository buRepository;
 
 
-    public DatabaseInitializer(WorkerRepository workerRepository, BuRespository buRepository) {
+    public DatabaseInitializer(WorkerRepository workerRepository, BuRepository buRepository) {
         this.workerRepository = workerRepository;
         this.buRepository = buRepository;
     }

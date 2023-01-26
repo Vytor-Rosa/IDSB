@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Entity;
 
 @Repository
-public interface BuRespository extends JpaRepository<Bu, Integer> {
+public interface BuRepository extends JpaRepository<Bu, Integer> {
 }
