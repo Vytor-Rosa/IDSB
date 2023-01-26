@@ -16,7 +16,7 @@ public class ClassificationDTO {
 //    private Integer classificationCode;
 
 //    @NotNull
-    private Integer classificationSize;
+    private String classificationSize;
 
 //    @NotBlank
     private String ITSection;

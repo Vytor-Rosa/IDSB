@@ -19,7 +19,7 @@ public class Classification {
     private Integer classificationCode;
 
     @Column(nullable = true)
-    private Integer classificationSize;
+    private String classificationSize;
 
     @Column(nullable = true)
     private String ITSection;
