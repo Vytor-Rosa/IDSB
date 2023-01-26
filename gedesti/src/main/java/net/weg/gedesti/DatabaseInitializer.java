@@ -20,10 +20,10 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Worker requester = new Worker(1, "leonardo@weg.net", "Leonardo Heitor Poglia", "requester", "123");
-        Worker analyst = new Worker(2, "vytor@weg.net", "Vytor Augusto Rosa", "analyst", "123");
-        Worker ti = new Worker(3, "ester@weg.net", "Ester Gireli", "ti", "123");
-        Worker business = new Worker(4, "eduarda@weg.net", "Eduarda Campos", "business", "123");
+        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester");
+        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst");
+        Worker ti = new Worker(3, "Ester Gireli", "ester@weg.net", "123", "ti");
+        Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business");
 
         Bu bu1 = new Bu(1, "WEG Motores");
         Bu bu2 = new Bu(2, "WEG Tintas");
