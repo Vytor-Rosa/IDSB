@@ -15,19 +15,19 @@ public class Classification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private Integer classificationCode;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer classificationSize;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String ITSection;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer PPMCode;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String EpicJiraLink;
 
     @OneToOne

@@ -15,25 +15,25 @@ import java.util.List;
 public class ClassificationDTO {
 //    private Integer classificationCode;
 
-    @NotNull
+//    @NotNull
     private Integer classificationSize;
 
-    @NotBlank
+//    @NotBlank
     private String ITSection;
 
-    @NotNull
-    @Positive
+//    @NotNull
+//    @Positive
     private Integer PPMCode;
 
-    @NotBlank
+//    @NotBlank
     private String EpicJiraLink;
 
-    @NotNull
+//    @NotNull
     private Bu requesterBu;
 
-    @NotNull
+//    @NotNull
     List<Bu> beneficiaryBu;
 
-    @NotNull
+//    @NotNull
     private Worker analistRegistry;
 }
