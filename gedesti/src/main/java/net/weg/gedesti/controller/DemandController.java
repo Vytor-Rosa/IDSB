@@ -1,11 +1,15 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.dto.DemandDTO;
+import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
+import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.util.DemandUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,6 +32,7 @@ import java.util.Optional;
 public class DemandController {
     private DemandService demandService;
     private WorkerService workerService;
+    private ClassificationService classificationService;
 
     @GetMapping
     public ResponseEntity<List<Demand>> findAll() {
@@ -89,16 +94,18 @@ public class DemandController {
 
     @Modifying
     @Transactional
-    @PutMapping("/updateClassification/{demandCode}")
-    public ResponseEntity<Object> updateClassification(@RequestParam(value = "demand") @Valid String demandJson,
-                                         @PathVariable(value = "demandCode") Integer demandCode) {
+    @PutMapping("/updateclassification/{demandCode}")
+    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer demandCode, DemandDTO demandDTO) {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
-        DemandUtil demandUtil = new DemandUtil();
-        Demand demand = demandUtil.convertJsonToModel(demandJson);
-        demand.setDemandCode(demandCode);
+        Optional<Demand> demandOptional = demandService.findById(demandCode);
+        Demand demand = demandOptional.get();
+        BeanUtils.copyProperties(demandDTO, demand, "demandCode");
+//        Optional<Classification> classificationOptional = classificationService.findById(classificationCode);
+//        Classification classification = classificationOptional.get();
+//        demand.setDemandClassification(classification);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
