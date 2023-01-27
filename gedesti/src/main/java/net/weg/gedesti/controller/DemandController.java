@@ -8,6 +8,7 @@ import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
+import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class DemandController {
     private DemandService demandService;
     private WorkerService workerService;
     private ClassificationService classificationService;
+    private DemandRepository demandRepository;
 
     @GetMapping
     public ResponseEntity<List<Demand>> findAll() {
@@ -95,18 +97,15 @@ public class DemandController {
     @Modifying
     @Transactional
     @PutMapping("/updateclassification/{demandCode}")
-    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer demandCode, DemandDTO demandDTO) {
+    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
-        Optional<Demand> demandOptional = demandService.findById(demandCode);
-        Demand demand = demandOptional.get();
-        BeanUtils.copyProperties(demandDTO, demand, "demandCode");
-//        Optional<Classification> classificationOptional = classificationService.findById(classificationCode);
-//        Classification classification = classificationOptional.get();
-//        demand.setDemandClassification(classification);
+        Demand demand = demandRepository.findById(demandCode).get();
+        demand.setClassification(demandDTO.getClassification());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
     }
 }
