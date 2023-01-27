@@ -86,4 +86,20 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/updateClassification/{demandCode}")
+    public ResponseEntity<Object> updateClassification(@RequestParam(value = "demand") @Valid String demandJson,
+                                         @PathVariable(value = "demandCode") Integer demandCode) {
+        if (!demandService.existsById(demandCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        DemandUtil demandUtil = new DemandUtil();
+        Demand demand = demandUtil.convertJsonToModel(demandJson);
+        demand.setDemandCode(demandCode);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
+    }
 }
