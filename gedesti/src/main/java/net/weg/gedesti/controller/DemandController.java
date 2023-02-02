@@ -108,4 +108,19 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/updatestatus/{demandCode}")
+    public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
+        if (!demandService.existsById(demandCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Demand demand = demandRepository.findById(demandCode).get();
+        demand.setDemandStatus(demandDTO.getDemandStatus());
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+    }
 }
