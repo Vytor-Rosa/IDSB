@@ -54,6 +54,9 @@ public class Demand {
         }
     }
 
+    @OneToOne
+    private Reproach reproach;
+
     @ManyToMany
     @JoinTable(name = "demandCenter",
             joinColumns = @JoinColumn(name = "costCenterCode"),
