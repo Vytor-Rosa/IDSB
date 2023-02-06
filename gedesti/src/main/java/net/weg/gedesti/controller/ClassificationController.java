@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ClassificationDTO;
 import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.service.ClassificationService;
+import net.weg.gedesti.repository.ClassificationRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class ClassificationController {
 
     ClassificationService classificationService;
+    private ClassificationRepository classificationRepository;
 
     @GetMapping
     public ResponseEntity<List<Classification>> findAll() {
@@ -69,4 +72,23 @@ public class ClassificationController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/update/{classificationCode}")
+    public ResponseEntity<Object> updatepart(@PathVariable(value = "classificationCode") Integer classificationCode, @RequestBody @Valid ClassificationDTO classificationDTO) {
+        if (!classificationService.existsById(classificationCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
+        }
+
+        Classification classification = classificationRepository.findById(classificationCode).get();
+        classification.setPPMCode(classificationDTO.getPPMCode());
+        classification.setDeadline(classificationDTO.getDeadline());
+        classification.setEpicJiraLink(classificationDTO.getEpicJiraLink());
+
+        classificationRepository.saveAndFlush(classification);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Classification " + classificationCode + " successfully updated!");
+    }
+
 }
