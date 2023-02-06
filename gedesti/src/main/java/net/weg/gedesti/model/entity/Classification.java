@@ -25,7 +25,7 @@ public class Classification {
     private String itSection;
 
     @Column(nullable = true)
-    private Integer PPMCode;
+    private String PPMCode;
 
     @Column(nullable = true)
     private String EpicJiraLink;

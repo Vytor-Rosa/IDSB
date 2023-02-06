@@ -23,7 +23,7 @@ public class ClassificationDTO {
 
 //    @NotNull
 //    @Positive
-    private Integer PPMCode;
+    private String PPMCode;
 
 //    @NotBlank
     private String EpicJiraLink;
