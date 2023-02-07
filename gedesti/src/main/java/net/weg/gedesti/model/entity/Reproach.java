@@ -19,4 +19,7 @@ public class Reproach {
 
     @NotNull
     private String reproachDescription;
+
+    @OneToOne
+    private Demand demand;
 }
