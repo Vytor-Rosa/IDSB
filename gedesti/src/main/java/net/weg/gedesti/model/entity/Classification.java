@@ -25,10 +25,10 @@ public class Classification {
     private String itSection;
 
     @Column(nullable = true)
-    private String PPMCode;
+    private String ppmCode;
 
     @Column(nullable = true)
-    private String EpicJiraLink;
+    private String epicJiraLink;
 
     @Column(nullable = true)
     private String deadline;

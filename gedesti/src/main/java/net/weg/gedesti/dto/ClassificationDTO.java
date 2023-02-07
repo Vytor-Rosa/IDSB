@@ -23,10 +23,10 @@ public class ClassificationDTO {
 
 //    @NotNull
 //    @Positive
-    private String PPMCode;
+    private String ppmCode;
 
 //    @NotBlank
-    private String EpicJiraLink;
+    private String epicJiraLink;
 
 //    @NotNull
     private Bu requesterBu;
