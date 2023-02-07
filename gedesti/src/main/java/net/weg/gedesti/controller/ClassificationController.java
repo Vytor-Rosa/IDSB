@@ -81,10 +81,6 @@ public class ClassificationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + classificationCode);
         }
 
-        System.out.println("DeadLine ->" + classificationDTO.getDeadline());
-        System.out.println("PPM Code ->" + classificationDTO.getPpmCode());
-        System.out.println("Epic Jira Link ->" + classificationDTO.getEpicJiraLink());
-
 
         Classification classification = classificationRepository.findById(classificationCode).get();
         classification.setPpmCode(classificationDTO.getPpmCode());
