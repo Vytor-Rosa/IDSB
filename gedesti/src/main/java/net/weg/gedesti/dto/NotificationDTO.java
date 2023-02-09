@@ -12,7 +12,7 @@ public class NotificationDTO {
 
     private String description;
 
-    private Date date;
+    private String date;
 
     private String icon;
 

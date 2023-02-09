@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.jdbc.Work;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -24,7 +25,7 @@ public class Notification {
     private String description;
 
     @Column(nullable = false)
-    private Date date;
+    private String date;
 
     @Column(nullable = false)
     private String icon;
