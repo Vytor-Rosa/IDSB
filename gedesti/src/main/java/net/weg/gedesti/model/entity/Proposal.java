@@ -42,6 +42,10 @@ public class Proposal {
     @ManyToOne
     private Agenda agendaCode;
 
+    @JoinColumn(nullable = false)
+    @OneToOne
+    private Demand demand;
+
     @ManyToMany
     @JoinTable(name = "responsible_for_business",
             joinColumns = @JoinColumn(name = "workerCode"),

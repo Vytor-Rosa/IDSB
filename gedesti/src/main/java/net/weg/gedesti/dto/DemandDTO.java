@@ -38,5 +38,5 @@ public class DemandDTO {
 
     private Classification classification;
 
-    private Proposal proposal;
+//    private Proposal proposal;
 }

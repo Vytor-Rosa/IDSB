@@ -64,7 +64,7 @@ public class Demand {
     @OneToOne
     private Classification classification;
 
-    @JoinColumn(nullable = true)
-    @OneToOne
-    private Proposal proposal;
+//    @JoinColumn(nullable = true)
+//    @OneToOne
+//    private Proposal proposal;
 }
