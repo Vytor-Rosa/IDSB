@@ -34,5 +34,8 @@ public class Notification {
     @JoinColumn(name = "worker_id")
     private Worker worker;
 
+    @Column(nullable = true)
+    private boolean visualized;
+
 
 }

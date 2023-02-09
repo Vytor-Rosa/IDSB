@@ -18,4 +18,5 @@ public class NotificationDTO {
 
     private Worker worker;
 
+    private boolean visualized;
 }
