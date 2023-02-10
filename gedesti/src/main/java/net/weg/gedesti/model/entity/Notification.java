@@ -37,5 +37,8 @@ public class Notification {
     @Column(nullable = true)
     private boolean visualized;
 
+    @Column(nullable = false)
+    private String type;
+
 
 }
