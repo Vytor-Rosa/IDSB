@@ -2,6 +2,8 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import net.weg.gedesti.model.entity.CostCenter;
+import net.weg.gedesti.model.entity.Proposal;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -24,5 +26,5 @@ public class ExpenseDTO {
     @NotNull
     private CostCenter costCenter;
 //    @NotNull
-//    private Proposta proposta;
+//    private Proposal proposal;
 }

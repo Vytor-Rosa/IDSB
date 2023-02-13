@@ -33,11 +33,6 @@ public class Expense {
     @Column(nullable = false)
     private Double totalValue;
 
-    @ManyToOne
-    @JoinColumn(name = "cost_center_code")
-    private CostCenter costCenter;
-
 //    @ManyToOne
-//    @JoinColumn(name = "codigo_proposta")
-//    private Proposta proposta;
+//    private Proposal proposal;
 }
