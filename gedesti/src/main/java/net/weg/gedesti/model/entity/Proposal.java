@@ -39,9 +39,6 @@ public class Proposal {
     @JoinColumn
     private Worker responsibleAnalyst;
 
-    @ManyToOne
-    private Agenda agendaCode;
-
     @JoinColumn(nullable = false)
     @OneToOne
     private Demand demand;
