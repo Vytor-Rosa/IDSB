@@ -39,12 +39,24 @@ public class Proposal {
     @JoinColumn
     private Worker responsibleAnalyst;
 
-    @ManyToOne
-    private Agenda agendaCode;
+    private String proposalDate;
+
+//    @OneToOne
+//    private Agenda agendaCode;
 
     @JoinColumn(nullable = false)
     @OneToOne
     private Demand demand;
+
+    @JoinColumn(nullable = false)
+    private Double totalCosts;
+
+    @JoinColumn(nullable = false)
+    private Double externalCosts;
+
+    @JoinColumn(nullable = false)
+    private Double internalCosts;
+
 
     @ManyToMany
     @JoinTable(name = "responsible_for_business",
