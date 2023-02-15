@@ -6,7 +6,6 @@ import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.entity.Agenda;
 
-import javax.persistence.JoinColumn;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -27,8 +26,10 @@ public class ProposalDTO {
     @Positive
     private Double payback;
 
+    @NotNull
     private Date initialRunPeriod;
 
+    @NotNull
     private Date finalExecutionPeriod;
 
     @NotBlank
@@ -37,21 +38,11 @@ public class ProposalDTO {
     @NotNull
     private Worker responsibleAnalyst;
 
-    private String proposalDate;
-
-//    private Agenda agendaCode;
+    @NotNull
+    private Agenda agendaCode;
 
     @NotNull
     private Demand demand;
 
     List<Worker> workers;
-
-
-    private Double totalCosts;
-
-
-    private Double externalCosts;
-
-
-    private Double internalCosts;
 }

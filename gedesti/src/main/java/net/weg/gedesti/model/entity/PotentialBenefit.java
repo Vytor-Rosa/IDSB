@@ -3,6 +3,7 @@ package net.weg.gedesti.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "potentialbenefit")
@@ -22,6 +23,7 @@ public class PotentialBenefit {
     @Column(nullable = false)
     private Boolean legalObrigation;
 
+    @Size(max = 5000)
     @Column(nullable = false)
     private String potentialBenefitDescription;
 
