@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class Demand {
     private Integer demandCode;
     private String demandDate;
     private String demandTitle;
+    @Size(max = 5000)
     private String currentProblem;
+    @Size(max = 5000)
     private String demandObjective;
     private String demandStatus;
     private Double score;
