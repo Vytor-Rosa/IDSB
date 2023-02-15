@@ -23,8 +23,8 @@ public class ExpenseDTO {
     private Double hourValue;
     @NotNull
     private Double totalValue;
-    @NotNull
-    private CostCenter costCenter;
 //    @NotNull
-//    private Proposal proposal;
+//    private CostCenter costCenter;
+    @NotNull
+    private Proposal proposal;
 }

@@ -32,6 +32,10 @@ public class ProposalService {
         return proposalRepository.findById(integer);
     }
 
+    public Optional<Proposal> findByDemand(Integer integer) {
+        return proposalRepository.findByDemand(integer);
+    }
+
     public boolean existsById(Integer integer) {
         return proposalRepository.existsById(integer);
     }

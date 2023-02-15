@@ -33,6 +33,6 @@ public class Expense {
     @Column(nullable = false)
     private Double totalValue;
 
-//    @ManyToOne
-//    private Proposal proposal;
+    @ManyToOne
+    private Proposal proposal;
 }
