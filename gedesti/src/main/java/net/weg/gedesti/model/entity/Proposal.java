@@ -43,6 +43,15 @@ public class Proposal {
     @OneToOne
     private Demand demand;
 
+    @Column(nullable = false)
+    private Double totalCosts;
+
+    @Column(nullable = false)
+    private Double externalCosts;
+
+    @Column(nullable = false)
+    private Double internalCosts;
+
     @ManyToMany
     @JoinTable(name = "responsible_for_business",
             joinColumns = @JoinColumn(name = "workerCode"),

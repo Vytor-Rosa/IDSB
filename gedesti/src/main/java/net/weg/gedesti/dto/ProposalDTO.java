@@ -6,6 +6,7 @@ import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.entity.Agenda;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -43,6 +44,15 @@ public class ProposalDTO {
 
     @NotNull
     private Demand demand;
+
+    @NotNull
+    private Double totalCosts;
+
+    @NotNull
+    private Double externalCosts;
+
+    @NotNull
+    private Double internalCosts;
 
     List<Worker> workers;
 }
