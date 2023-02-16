@@ -3,6 +3,7 @@ package net.weg.gedesti.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
@@ -59,4 +60,7 @@ public class Proposal {
             joinColumns = @JoinColumn(name = "workerCode"),
             inverseJoinColumns = @JoinColumn(name = "proposalCode"))
     List<Worker> workers;
+
+    @NotNull
+    private String proposalDate;
 }

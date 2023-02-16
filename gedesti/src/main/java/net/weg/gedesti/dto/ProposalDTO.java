@@ -55,4 +55,7 @@ public class ProposalDTO {
     private Double internalCosts;
 
     List<Worker> workers;
+
+    @NotNull
+    private String proposalDate;
 }
