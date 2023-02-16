@@ -2,6 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ProposalDTO;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.ProposalService;
 import org.springframework.beans.BeanUtils;
@@ -61,13 +62,13 @@ public class ProposalController {
         return ResponseEntity.status(HttpStatus.FOUND).body("Proposal " + proposalCode + " successfully deleted!");
     }
 
-    @GetMapping("/demand/{demandCode}")
-    public ResponseEntity<Object> findByDemand(@PathVariable(value = "demandCode") Integer demandCode) {
-        Optional<Proposal> proposalOptional = proposalService.findByDemand(demandCode);
+    @GetMapping("/demand/{demand}")
+    public ResponseEntity<Object> findByDemand(@PathVariable(value = "demand") Demand demand) {
+        Optional<Proposal> proposalOptional = proposalService.findByDemand(demand);
         if(proposalOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demandCode + " doesn't exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demand + " doesn't exists");
         }else{
-            return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findByDemand(demandCode));
+            return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
         }
     }
 }

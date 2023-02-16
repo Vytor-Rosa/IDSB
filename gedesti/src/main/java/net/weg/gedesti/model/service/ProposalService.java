@@ -1,6 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.repository.ProposalRepository;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,8 @@ public class ProposalService {
         return proposalRepository.findById(integer);
     }
 
-    public Optional<Proposal> findByDemand(Integer integer) {
-        return proposalRepository.findByDemand(integer);
+    public Optional<Proposal> findByDemand(Demand demand) {
+        return proposalRepository.findByDemand(demand);
     }
 
     public boolean existsById(Integer integer) {
