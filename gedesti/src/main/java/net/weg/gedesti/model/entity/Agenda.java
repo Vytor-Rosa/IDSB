@@ -27,6 +27,7 @@ public class Agenda {
             inverseJoinColumns = @JoinColumn(name = "agendaCode"))
     List<Worker> commission;
 
+
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;
 

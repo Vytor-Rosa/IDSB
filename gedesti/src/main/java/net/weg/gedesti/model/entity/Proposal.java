@@ -63,4 +63,8 @@ public class Proposal {
 
     @NotNull
     private String proposalDate;
+
+    @ManyToOne
+    private Agenda agenda;
+
 }
