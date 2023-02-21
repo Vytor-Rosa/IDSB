@@ -16,4 +16,6 @@ public class WorkerDTO {
     @NotBlank
     private String workerPassword;
     private String workerOffice;
+
+    private String language;
 }

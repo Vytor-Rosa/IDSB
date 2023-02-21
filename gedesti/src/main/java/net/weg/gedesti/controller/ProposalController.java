@@ -1,20 +1,25 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.dto.AgendaDTO;
+import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.ProposalDTO;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.ProposalService;
+import net.weg.gedesti.repository.ProposalRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +30,7 @@ import java.util.Optional;
 public class ProposalController {
 
     private ProposalService proposalService;
+    private ProposalRepository proposalRepository;
 
     @GetMapping
     public ResponseEntity<List<Proposal>> findAll() {
@@ -70,5 +76,18 @@ public class ProposalController {
         }else{
             return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
         }
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/agenda/{proposalCode}")
+    public ResponseEntity<Object> updateStatus(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO) {
+        if (!proposalService.existsById(proposalCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Proposal proposal = proposalRepository.findById(proposalCode).get();
+        proposal.setAgenda(proposalDTO.getAgendaCode());
+        return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
 }
