@@ -87,7 +87,7 @@ public class ProposalController {
         }
 
         Proposal proposal = proposalRepository.findById(proposalCode).get();
-        proposal.setAgenda(proposalDTO.getAgendaCode());
+        proposal.setAgenda(proposalDTO.getAgenda());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
 }

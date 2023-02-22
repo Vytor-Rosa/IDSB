@@ -16,7 +16,7 @@ public class Agenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Integer agendaCode;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer sequentialNumber;
     @Column(nullable = false)
     private Integer yearAgenda;
