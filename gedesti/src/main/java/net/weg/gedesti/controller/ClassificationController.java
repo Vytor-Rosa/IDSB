@@ -84,7 +84,6 @@ public class ClassificationController {
 
         Classification classification = classificationRepository.findById(classificationCode).get();
         classification.setPpmCode(classificationDTO.getPpmCode());
-        classification.setDeadline(classificationDTO.getDeadline());
         classification.setEpicJiraLink(classificationDTO.getEpicJiraLink());
 
         classificationRepository.saveAndFlush(classification);
