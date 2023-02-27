@@ -29,10 +29,7 @@ public class Classification {
 
     @Column(nullable = true)
     private String epicJiraLink;
-
-    @Column(nullable = true)
-    private String deadline;
-
+    
     @OneToOne
     private Bu requesterBu;
 

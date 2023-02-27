@@ -34,8 +34,6 @@ public class ClassificationDTO {
 //    @NotNull
     List<Bu> beneficiaryBu;
 
-    private String deadline;
-
 //    @NotNull
     private Worker analistRegistry;
 }
