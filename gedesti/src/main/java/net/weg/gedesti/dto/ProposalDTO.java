@@ -24,8 +24,7 @@ public class ProposalDTO {
     private String proposalStatus;
 
     @NotNull
-    @Positive
-    private String payback;
+    private Integer payback;
 
     @NotNull
     private Date initialRunPeriod;

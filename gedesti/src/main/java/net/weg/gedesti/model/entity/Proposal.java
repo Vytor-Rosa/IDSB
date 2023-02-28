@@ -26,7 +26,7 @@ public class Proposal {
     private String proposalStatus;
 
     @Column(nullable = false)
-    private String payback;
+    private Integer payback;
 
     @Column(nullable = false)
     private Date initialRunPeriod;
