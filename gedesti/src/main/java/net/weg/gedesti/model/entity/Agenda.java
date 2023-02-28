@@ -26,6 +26,8 @@ public class Agenda {
             joinColumns = @JoinColumn(name = "workerCode"),
             inverseJoinColumns = @JoinColumn(name = "agendaCode"))
     List<Worker> commission;
+    @Column(nullable = false)
+    private String agendaDate;
 
 
 //    @ManyToOne(cascade=CascadeType.ALL)

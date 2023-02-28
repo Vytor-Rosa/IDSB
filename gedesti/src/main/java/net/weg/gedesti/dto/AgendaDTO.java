@@ -20,4 +20,6 @@ public class AgendaDTO {
     private Integer yearAgenda;
     @NotNull
     List<Worker> commission;
+    @NotNull
+    private String agendaDate;
 }
