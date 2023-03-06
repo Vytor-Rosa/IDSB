@@ -94,13 +94,14 @@ public class ProposalController {
     @Modifying
     @Transactional
     @PutMapping("/status/{proposalCode}")
-    public  ResponseEntity<Object> updateStatus(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO){
+    public  ResponseEntity<Object> addOpinion(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO){
         if (!proposalService.existsById(proposalCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
         Proposal proposal = proposalRepository.findById(proposalCode).get();
         proposal.setProposalStatus(proposalDTO.getProposalStatus());
+        proposal.setCommissionOpinion(proposalDTO.getCommissionOpinion());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
 }

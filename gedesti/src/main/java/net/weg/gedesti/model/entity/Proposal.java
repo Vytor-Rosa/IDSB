@@ -67,4 +67,7 @@ public class Proposal {
     @ManyToOne
     private Agenda agenda;
 
+    @Column(nullable = true)
+    private String commissionOpinion;
+
 }

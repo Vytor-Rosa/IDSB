@@ -56,4 +56,7 @@ public class ProposalDTO {
 
     @NotNull
     private String proposalDate;
+
+    private String commissionOpinion;
+
 }
