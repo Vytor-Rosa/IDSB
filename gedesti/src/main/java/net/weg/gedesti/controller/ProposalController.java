@@ -81,13 +81,26 @@ public class ProposalController {
     @Modifying
     @Transactional
     @PutMapping("/agenda/{proposalCode}")
-    public ResponseEntity<Object> updateStatus(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO) {
+    public ResponseEntity<Object> updateAgenda(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO) {
         if (!proposalService.existsById(proposalCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
         Proposal proposal = proposalRepository.findById(proposalCode).get();
         proposal.setAgenda(proposalDTO.getAgenda());
+        return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/status/{proposalCode}")
+    public  ResponseEntity<Object> updateStatus(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO){
+        if (!proposalService.existsById(proposalCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Proposal proposal = proposalRepository.findById(proposalCode).get();
+        proposal.setProposalStatus(proposalDTO.getProposalStatus());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
 }
