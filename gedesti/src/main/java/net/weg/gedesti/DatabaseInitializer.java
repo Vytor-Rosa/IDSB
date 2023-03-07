@@ -25,13 +25,16 @@ public class DatabaseInitializer implements CommandLineRunner {
         Worker ti = new Worker(3, "Ester Gireli", "ester@weg.net", "123", "ti", "pt");
         Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt");
 
-        Bu bu1 = new Bu(1, "WEG Motores");
-        Bu bu2 = new Bu(2, "WEG Tintas");
-        Bu bu3 = new Bu(3, "WEG Automação");
-        Bu bu4 = new Bu(4, "WEG Energia");
-        Bu bu5 = new Bu(5, "WEG Digital");
-        Bu bu6 = new Bu(6, "WEG Transmissão & Distribuição");
-        Bu bu7 = new Bu(7, "WEG Serviços");
+        Bu bu1 = new Bu(1, "WMO-I – WEG Motores Industrial");
+        Bu bu2 = new Bu(2, "WMO-C – WEG Motores Comercial");
+        Bu bu3 = new Bu(3, "WEN – WEG Energia");
+        Bu bu4 = new Bu(4, "WAU – WEG Automação");
+        Bu bu5 = new Bu(5, "WDS – WEG Digital e Sistemas");
+        Bu bu6 = new Bu(6, "WDC – WEG Drives e Controls");
+        Bu bu7 = new Bu(7, "WTI – WEG Tintas");
+        Bu bu8 = new Bu(8, "WTD – WEG Transmissão e Distribuição");
+
+
 
         workerRepository.save(requester);
         workerRepository.save(analyst);
@@ -45,5 +48,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         buRepository.save(bu5);
         buRepository.save(bu6);
         buRepository.save(bu7);
+        buRepository.save(bu8);
     }
 }
