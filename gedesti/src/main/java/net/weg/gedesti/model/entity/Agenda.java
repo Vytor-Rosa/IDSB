@@ -30,6 +30,13 @@ public class Agenda {
     private String agendaDate;
 
 
+    @ManyToMany
+    @JoinTable(name = "agenda_proposal",
+            joinColumns = @JoinColumn(name = "agendaCode"),
+            inverseJoinColumns = @JoinColumn(name = "proposalCode"))
+    List<Proposal> proposals;
+
+
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    private Anexo anexo;
 

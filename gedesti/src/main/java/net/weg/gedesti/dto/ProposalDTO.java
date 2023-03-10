@@ -38,8 +38,6 @@ public class ProposalDTO {
     @NotNull
     private Worker responsibleAnalyst;
 
-    private Agenda agenda;
-
     @NotNull
     private Demand demand;
 

@@ -2,6 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import lombok.ToString;
+import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.entity.Worker;
 
 import javax.validation.constraints.NotNull;
@@ -22,4 +23,6 @@ public class AgendaDTO {
     List<Worker> commission;
     @NotNull
     private String agendaDate;
+    @NotNull
+    List<Proposal> proposals;
 }
