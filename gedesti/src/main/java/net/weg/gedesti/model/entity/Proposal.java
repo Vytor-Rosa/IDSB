@@ -64,9 +64,6 @@ public class Proposal {
     @NotNull
     private String proposalDate;
 
-    @ManyToOne
-    private Agenda agenda;
-
     @Column(nullable = true)
     private String commissionOpinion;
 
