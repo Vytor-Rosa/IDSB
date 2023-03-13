@@ -1,7 +1,9 @@
 package net.weg.gedesti;
 
 import net.weg.gedesti.model.entity.Bu;
+import net.weg.gedesti.model.entity.Commission;
 import net.weg.gedesti.model.entity.Worker;
+import net.weg.gedesti.repository.CommissionRepository;
 import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,11 +13,13 @@ import net.weg.gedesti.repository.BuRepository;
 public class DatabaseInitializer implements CommandLineRunner {
     private final WorkerRepository workerRepository;
     private final BuRepository buRepository;
+    private final CommissionRepository commissionRepository;
 
 
-    public DatabaseInitializer(WorkerRepository workerRepository, BuRepository buRepository) {
+    public DatabaseInitializer(WorkerRepository workerRepository, BuRepository buRepository, CommissionRepository commissionRepository) {
         this.workerRepository = workerRepository;
         this.buRepository = buRepository;
+        this.commissionRepository = commissionRepository;
     }
 
     @Override
@@ -34,6 +38,13 @@ public class DatabaseInitializer implements CommandLineRunner {
         Bu bu7 = new Bu(7, "WTI – WEG Tintas");
         Bu bu8 = new Bu(8, "WTD – WEG Transmissão e Distribuição");
 
+        Commission commission1 = new Commission(1, "CPVM – Comissão de Processos de Vendas e Desenvolvimento de produtos", "CPVM");
+        Commission commission2 = new Commission(2, "CPGCI – Comissão de Processos da Cadeia Integrada", "CPGCI");
+        Commission commission3 = new Commission(3, "CPGPR – Comissão de Processos de Gestão de Projetos", "CPGPR");
+        Commission commission4 = new Commission(4, "CGPN – Comitê de Gestão de Processos de Negócio", "CGPN");
+        Commission commission5 = new Commission(5, "CTI – Comitê de TI", "CTI");
+        Commission commission6 = new Commission(6, "CWBS – Comitê WEG Business Services", "CWBS");
+        Commission commission7 = new Commission(7, "DTI – Diretoria de TI", "DTI");
 
 
         workerRepository.save(requester);
@@ -49,5 +60,13 @@ public class DatabaseInitializer implements CommandLineRunner {
         buRepository.save(bu6);
         buRepository.save(bu7);
         buRepository.save(bu8);
+
+        commissionRepository.save(commission1);
+        commissionRepository.save(commission2);
+        commissionRepository.save(commission3);
+        commissionRepository.save(commission4);
+        commissionRepository.save(commission5);
+        commissionRepository.save(commission6);
+        commissionRepository.save(commission7);
     }
 }
