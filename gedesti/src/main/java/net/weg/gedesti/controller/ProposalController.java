@@ -10,6 +10,7 @@ import net.weg.gedesti.model.service.ProposalService;
 import net.weg.gedesti.repository.ProposalRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,7 +39,9 @@ public class ProposalController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 9, size = 8, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
         return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll(pageable));
     }
 
