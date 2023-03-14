@@ -43,7 +43,7 @@ public class DemandController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 0, value = 1,size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
         int pageNumber = pageable.getPageNumber();
         pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
@@ -53,7 +53,7 @@ public class DemandController {
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-        if(demandAttachment != null) {
+        if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
@@ -83,7 +83,6 @@ public class DemandController {
     @Transactional
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
-                                         @RequestParam(value = "demandAttachment") MultipartFile demandAttachment,
                                          @PathVariable(value = "demandCode") Integer demandCode) {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
@@ -91,10 +90,11 @@ public class DemandController {
 
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-        demand.setDemandAttachment(demandAttachment);
+
         demand.setDemandCode(demandCode);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.saveAndFlush(demand));
     }
 
     @Modifying

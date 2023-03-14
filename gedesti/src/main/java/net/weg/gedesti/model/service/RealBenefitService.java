@@ -32,4 +32,8 @@ public class RealBenefitService {
     public void deleteById(Integer integer) {
         realBenefitRepository.deleteById(integer);
     }
+
+    public Object saveAndFlush(RealBenefit realBenefit) {
+        return realBenefitRepository.saveAndFlush(realBenefit);
+    }
 }

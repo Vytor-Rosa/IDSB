@@ -2,14 +2,18 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.QualitativeBenefitDTO;
+import net.weg.gedesti.dto.RealBenefitDTO;
 import net.weg.gedesti.model.entity.QualitativeBenefit;
+import net.weg.gedesti.model.entity.RealBenefit;
 import net.weg.gedesti.model.service.QualitativeBenefitService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +54,18 @@ public class QualitativeBenefitController {
         }
         qualitativeBenefitService.deleteById(qualitativeBenefitCode);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Qualitative BenefitCode " + qualitativeBenefitCode + " successfully deleted!");
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/{qualitativeBenefitCode}")
+    public ResponseEntity<Object> update(@PathVariable(value = "qualitativeBenefitCode") Integer qualitativeBenefitCode, @RequestBody @Valid QualitativeBenefitDTO qualitativeBenefitDTO) {
+        Optional<QualitativeBenefit> qualitativeBenefitOptional = qualitativeBenefitService.findById(qualitativeBenefitCode);
+        if (qualitativeBenefitOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No qualitative Benefit with code: " + qualitativeBenefitCode);
+        }
+        QualitativeBenefit qualitativeBenefit = qualitativeBenefitOptional.get();
+        BeanUtils.copyProperties(qualitativeBenefitDTO, qualitativeBenefit);
+        return ResponseEntity.status(HttpStatus.OK).body(qualitativeBenefitService.save(qualitativeBenefit));
     }
 }
