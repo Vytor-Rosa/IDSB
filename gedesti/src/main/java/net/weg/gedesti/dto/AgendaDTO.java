@@ -2,6 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import lombok.ToString;
+import net.weg.gedesti.model.entity.Commission;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.entity.Worker;
 
@@ -20,7 +21,7 @@ public class AgendaDTO {
     @NotNull
     private Integer yearAgenda;
     @NotNull
-    List<Worker> commission;
+    List<Commission> commission;
     @NotNull
     private String agendaDate;
     @NotNull
