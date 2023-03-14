@@ -83,14 +83,15 @@ public class DemandController {
     @Transactional
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
-                                         @PathVariable(value = "demandCode") Integer demandCode) {
+                                         @PathVariable(value = "demandCode") Integer demandCode,
+                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment  ) {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-
+        demand.setDemandAttachment(demandAttachment);
         demand.setDemandCode(demandCode);
 
 
