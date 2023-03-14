@@ -4,41 +4,27 @@
 //import io.jsonwebtoken.SignatureAlgorithm;
 //import net.weg.gedesti.model.entity.Worker;
 //import net.weg.gedesti.repository.WorkerRepository;
+//import net.weg.gedesti.security.Users.UserJpa;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.stereotype.Service;
+//import org.springframework.web.util.WebUtils;
 //
+//import javax.servlet.http.Cookie;
+//import javax.servlet.http.HttpServletRequest;
 //import java.util.Date;
 //import java.util.Optional;
 //
-//@Service
-//public class JpaService implements UserDetailsService {
-//
-//    @Autowired
-//    private WorkerRepository workerRepository;
+//public class TokenUtils {
 //
 //    private final String senhaForte = "c127a7b6adb013a5ff879ae71afa62afa4b4ceb72afaa54711dbcde67b6dc325";
 //
-//    @Override
-//    public UserDetails loadUserByUsername(
-//            String username) throws UsernameNotFoundException {
-//        System.out.println(username);
-//        Optional<Worker> workerOptional =
-//                workerRepository.findByCorporateEmail(username);
-//        if (workerOptional.isPresent()) {
-//            return new UserJpa(workerOptional.get());
-//        }
-//        throw new UsernameNotFoundException("Usuário não encontrado!");
-//    }
-//
 //    public String gerarToken(Authentication authentication) {
-//        Worker worker = (Worker) authentication.getPrincipal();
+//        UserJpa userJpa = (UserJpa) authentication.getPrincipal();
 //        return Jwts.builder()
-//                .setIssuer("Gedesti")
-//                .setSubject(worker.getWorkerCode().toString())
+//                .setIssuer("ids")
+//                .setSubject(userJpa.getWorker().getWorkerCode().toString())
 //                .setIssuedAt(new Date())
 //                .setExpiration(new Date(new Date().getTime() + 1800000))
 //                .signWith(SignatureAlgorithm.HS256, senhaForte)
@@ -55,11 +41,19 @@
 //
 //    }
 //
-//    public UserJpa getUsuario(String token) {
-//        Integer workerCode = Integer.parseInt(Jwts.parser()
+//    public Integer getUsuarioCode(String token) {
+//        return Integer.parseInt(Jwts.parser()
 //                .setSigningKey(senhaForte)
 //                .parseClaimsJws(token)
 //                .getBody().getSubject());
-//        return new UserJpa(workerRepository.findById(workerCode).get());
+//    }
+//
+//    public String buscarCookie(HttpServletRequest request) {
+//        Cookie cookie = WebUtils.getCookie(request, "jwt");
+//        System.out.println("cookie: " + cookie);
+//        if(cookie != null){
+//            return cookie.getValue();
+//        }
+//        throw new RuntimeException("Cookie não encontrado!");
 //    }
 //}

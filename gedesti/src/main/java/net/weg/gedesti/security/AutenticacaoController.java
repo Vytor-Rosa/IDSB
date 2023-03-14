@@ -1,7 +1,9 @@
 //package net.weg.gedesti.security;
 //
+//import net.weg.gedesti.model.entity.Worker;
+//import net.weg.gedesti.security.Service.JpaService;
+//import net.weg.gedesti.security.Users.UserJpa;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.security.authentication.AuthenticationManager;
@@ -12,27 +14,44 @@
 //import org.springframework.web.bind.annotation.RequestBody;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //
+//import javax.servlet.http.Cookie;
+//import javax.servlet.http.HttpServletResponse;
 //import javax.validation.Valid;
 //
 //@Controller
-//@RequestMapping("/login")
+//@RequestMapping("/ids/login")
 //public class AutenticacaoController {
+//
+//    private TokenUtils tokenUtils = new TokenUtils();
+//
+////    @Autowired
+////    private JpaService jpaService;
 //
 //    @Autowired
 //    private AuthenticationManager authenticationManager;
 //
-//    @Autowired
-//    private JpaService autenticacaoService;
+//    @PostMapping("/auth")
+//    public ResponseEntity<Object> autenticacao(
+//            @RequestBody @Valid UsuarioDTO usuarioDTO, HttpServletResponse response) {
 //
-//    @PostMapping
-//    public ResponseEntity<Object> autenticacao(@RequestBody @Valid UsuarioDTO usuarioDTO){
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(), usuarioDTO.getSenha());
-//        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(
+//                        usuarioDTO.getCorporateEmail(), usuarioDTO.getWorkerPassword());
 //
-//        if(authentication.isAuthenticated()){
-//           String token =  autenticacaoService.gerarToken(authentication);
-//            return ResponseEntity.status(HttpStatus.OK).body(new TokenDTO("Bearer", token));
+//        Authentication authentication =
+//                authenticationManager.authenticate(authenticationToken);
+//        System.out.println(authentication.isAuthenticated());
+//
+//        if (authentication.isAuthenticated()) {
+//            String token = tokenUtils.gerarToken(authentication);
+//            Cookie cookie = new Cookie("jwt", token);
+//            System.out.println("cookie: " + cookie);
+//            UserJpa userJpa = (UserJpa) authentication.getPrincipal();
+//            Worker worker = userJpa.getWorker();
+//
+//            response.addCookie(cookie);
+//            return ResponseEntity.status(HttpStatus.OK).body(worker);
 //        }
-//        return ResponseEntity.badRequest().build();
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //    }
 //}

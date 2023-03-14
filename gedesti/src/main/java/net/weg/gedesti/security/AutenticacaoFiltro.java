@@ -1,9 +1,11 @@
 //package net.weg.gedesti.security;
 //
 //import lombok.AllArgsConstructor;
-//import net.weg.gedesti.model.entity.Worker;
+//import net.weg.gedesti.security.Service.JpaService;
+//import net.weg.gedesti.security.Users.UserJpa;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.web.filter.OncePerRequestFilter;
 //
 //import javax.servlet.FilterChain;
@@ -16,27 +18,38 @@
 //public class AutenticacaoFiltro extends OncePerRequestFilter {
 //
 //    private JpaService jpaService;
+//    private TokenUtils tokenUtils;
 //
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        String token = request.getHeader("Authorization");
-//        if (token != null && token.startsWith("Bearer ")) {
-//            token = token.substring(7);
-//        } else {
-//            token = null;
+//
+//        if(request.getRequestURI().equals("/ids/login/auth") || request.getRequestURI().equals("/ids/login")){
+//            filterChain.doFilter(request, response);
+//            return;
 //        }
-//        Boolean valido = jpaService.validarToken(token);
+//
+////        String token = request.getHeader("Authorization");
+////        if (token != null && token.startsWith("Bearer ")) {
+////            token = token.substring(7);
+////        } else {
+////            token = null;
+////        }
+//
+//        String token = tokenUtils.buscarCookie(request);
+//
+//        Boolean valido = tokenUtils.validarToken(token);
 //        if (valido) {
-//            UserJpa usuario = jpaService.getUsuario(token);
+//            Integer userCode = tokenUtils.getUsuarioCode(token);
+//            UserDetails user = jpaService.loadUserByCode(userCode);
 //            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//                    new UsernamePasswordAuthenticationToken(usuario.getUsername(),
-//                            null, usuario.getAuthorities());
+//                    new UsernamePasswordAuthenticationToken(user.getUsername(),
+//                            null, user.getAuthorities());
 //            SecurityContextHolder.getContext().setAuthentication(
 //                    usernamePasswordAuthenticationToken
 //            );
-//        }else if(!request.getRequestURI().equals("/api/worker/") || !request.getRequestURI().equals("/api/worker")){
-//            response.setStatus(401);
+//            filterChain.doFilter(request, response);
+//            return;
 //        }
-//        filterChain.doFilter(request, response);
+//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //    }
 //}

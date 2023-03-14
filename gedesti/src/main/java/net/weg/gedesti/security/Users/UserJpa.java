@@ -1,5 +1,6 @@
-//package net.weg.gedesti.security;
+//package net.weg.gedesti.security.Users;
 //
+//import lombok.Data;
 //import lombok.Getter;
 //import net.weg.gedesti.model.entity.Worker;
 //import org.springframework.security.core.GrantedAuthority;
@@ -7,7 +8,7 @@
 //
 //import java.util.Collection;
 //
-//@Getter
+//@Data
 //public class UserJpa implements UserDetails {
 //    private Worker worker;
 //
@@ -20,11 +21,6 @@
 //
 //    public UserJpa(Worker worker){
 //        this.worker = worker;
-//    }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return null;
 //    }
 //
 //    @Override

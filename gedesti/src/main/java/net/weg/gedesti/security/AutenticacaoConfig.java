@@ -1,21 +1,27 @@
 //package net.weg.gedesti.security;
 //
 //
-//import org.hibernate.annotations.common.reflection.XMethod;
+//import lombok.AllArgsConstructor;
+//import net.weg.gedesti.security.Service.JpaService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.http.SessionCreationPolicy;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 //
 //import javax.servlet.ServletException;
 //import javax.servlet.http.HttpServletRequest;
@@ -23,29 +29,35 @@
 //import java.io.IOException;
 //
 //@Configuration
-//@EnableWebSecurity
+//@AllArgsConstructor
 //public class AutenticacaoConfig {
-//    @Autowired
+//
 //    private JpaService jpaService;
+//
+//    @Autowired
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(jpaService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+//    }
 //
 //    @Bean
 //    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setUserDetailsService(jpaService);
-//        provider.setPasswordEncoder(new BCryptPasswordEncoder());
-//        httpSecurity.authenticationProvider(provider);
-//
 //        httpSecurity.authorizeRequests()
-//                .antMatchers("/gedesti/login", "/api/worker/{workerOffice}").permitAll()
-//                .anyRequest().authenticated()
-//                .and().csrf().disable()
-//                .formLogin().permitAll()
-//                .loginPage("/gedesti/login")
-////                .defaultSuccessUrl().permitAll()
+//                .antMatchers("/ids",
+//                        "/ids/login", "/ids/login", "/ids/login/auth").permitAll()
+//                .anyRequest().authenticated();
+//        httpSecurity.csrf().disable().cors().disable();
+//        httpSecurity.formLogin().usernameParameter("corporateEmail").passwordParameter("workerPassword").permitAll()
 //                .and()
-//                .logout().permitAll()
-//                .logoutUrl("/gedesti/logout")
-//                .logoutSuccessUrl("/gedesti/login").permitAll();
+//                .logout().permitAll();
+//        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        httpSecurity.addFilterBefore(new AutenticacaoFiltro(jpaService, new TokenUtils()), UsernamePasswordAuthenticationFilter.class);
 //        return httpSecurity.build();
 //    }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration ac) throws Exception {
+//        //serve para fazer injeção de depencia no authenticationManager da Controller
+//        return ac.getAuthenticationManager();
+//    }
+//
 //}

@@ -26,7 +26,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) {
         Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt");
         Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt");
-        Worker ti = new Worker(3, "Ester Gireli", "ester@weg.net", "123", "ti", "pt");
+        Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt");
         Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt");
 
         Bu bu1 = new Bu(1, "WMO-I – WEG Motores Industrial");
