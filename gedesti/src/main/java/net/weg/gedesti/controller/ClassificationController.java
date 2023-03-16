@@ -5,6 +5,7 @@ import net.weg.gedesti.dto.ClassificationDTO;
 import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.repository.ClassificationRepository;
+import net.weg.gedesti.util.ClassificationUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,20 @@ public class ClassificationController {
         return ResponseEntity.status(HttpStatus.FOUND).body(classificationService.findAll());
     }
 
+//    @PostMapping
+//    public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificationDTO) {
+//        Classification classification  = new Classification();
+//        BeanUtils.copyProperties(classificationDTO, classification);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.save(classification));
+//    }
+
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid ClassificationDTO classificationDTO) {
-        Classification classification  = new Classification();
-        BeanUtils.copyProperties(classificationDTO, classification);
+    public ResponseEntity<Object> save(@RequestParam(value = "classification") @Valid String classificationJson, @RequestParam(value = "classificationAttachment", required = false) MultipartFile classificationAttachment) {
+        ClassificationUtil classficationUtil = new ClassificationUtil();
+        Classification classification = classficationUtil.convertJsonToModel(classificationJson);
+        if (classificationAttachment != null) {
+            classification.setAttachment(classificationAttachment);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.save(classification));
     }
 
