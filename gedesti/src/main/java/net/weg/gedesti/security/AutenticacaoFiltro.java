@@ -23,7 +23,7 @@
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 //
-//        if(request.getRequestURI().equals("/ids/login/auth") || request.getRequestURI().equals("/ids/login")){
+//        if(request.getRequestURI().equals("/login/auth") || request.getRequestURI().equals("/login") || request.getRequestURI().equals("/logout")){
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
@@ -41,9 +41,10 @@
 //        if (valido) {
 //            Integer userCode = tokenUtils.getUsuarioCode(token);
 //            UserDetails user = jpaService.loadUserByCode(userCode);
+//
+//
 //            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//                    new UsernamePasswordAuthenticationToken(user.getUsername(),
-//                            null, user.getAuthorities());
+//                    new UsernamePasswordAuthenticationToken(user.getUsername(),null, user.getAuthorities());
 //            SecurityContextHolder.getContext().setAuthentication(
 //                    usernamePasswordAuthenticationToken
 //            );

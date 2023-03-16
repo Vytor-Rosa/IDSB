@@ -22,9 +22,10 @@
 //
 //    public String gerarToken(Authentication authentication) {
 //        UserJpa userJpa = (UserJpa) authentication.getPrincipal();
+//        Worker worker = userJpa.getWorker();
 //        return Jwts.builder()
 //                .setIssuer("ids")
-//                .setSubject(userJpa.getWorker().getWorkerCode().toString())
+//                .setSubject(worker.getWorkerCode().toString())
 //                .setIssuedAt(new Date())
 //                .setExpiration(new Date(new Date().getTime() + 1800000))
 //                .signWith(SignatureAlgorithm.HS256, senhaForte)

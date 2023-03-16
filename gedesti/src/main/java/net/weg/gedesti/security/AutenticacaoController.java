@@ -19,7 +19,7 @@
 //import javax.validation.Valid;
 //
 //@Controller
-//@RequestMapping("/ids/login")
+//@RequestMapping("/login")
 //public class AutenticacaoController {
 //
 //    private TokenUtils tokenUtils = new TokenUtils();
@@ -45,7 +45,7 @@
 //        if (authentication.isAuthenticated()) {
 //            String token = tokenUtils.gerarToken(authentication);
 //            Cookie cookie = new Cookie("jwt", token);
-//            System.out.println("cookie: " + cookie);
+//            cookie.setPath("/");
 //            UserJpa userJpa = (UserJpa) authentication.getPrincipal();
 //            Worker worker = userJpa.getWorker();
 //

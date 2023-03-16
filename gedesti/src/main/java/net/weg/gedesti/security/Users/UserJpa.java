@@ -4,9 +4,12 @@
 //import lombok.Getter;
 //import net.weg.gedesti.model.entity.Worker;
 //import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 //
+//import java.util.ArrayList;
 //import java.util.Collection;
+//import java.util.List;
 //
 //@Data
 //public class UserJpa implements UserDetails {
@@ -31,5 +34,12 @@
 //    @Override
 //    public String getUsername() {
 //        return worker.getCorporateEmail();
+//    }
+//
+//    @Override
+//    public Collection<GrantedAuthority> getAuthorities() {
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority(this.getWorker().getWorkerOffice()));
+//        return authorities;
 //    }
 //}

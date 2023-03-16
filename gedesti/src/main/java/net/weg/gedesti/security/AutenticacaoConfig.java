@@ -6,6 +6,7 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
+//import org.springframework.http.HttpMethod;
 //import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -42,13 +43,13 @@
 //    @Bean
 //    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 //        httpSecurity.authorizeRequests()
-//                .antMatchers("/ids",
-//                        "/ids/login", "/ids/login", "/ids/login/auth").permitAll()
+//                .antMatchers("/login", "/login/auth", "/logout").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/worker/login").hasAuthority("ti")
 //                .anyRequest().authenticated();
-//        httpSecurity.csrf().disable().cors().disable();
+//        httpSecurity.csrf().disable()
+//                .cors().disable();
 //        httpSecurity.formLogin().usernameParameter("corporateEmail").passwordParameter("workerPassword").permitAll()
-//                .and()
-//                .logout().permitAll();
+//                .and().logout().permitAll();
 //        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //        httpSecurity.addFilterBefore(new AutenticacaoFiltro(jpaService, new TokenUtils()), UsernamePasswordAuthenticationFilter.class);
 //        return httpSecurity.build();
