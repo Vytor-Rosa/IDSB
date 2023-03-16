@@ -36,15 +36,15 @@ public class Classification {
     private Bu requesterBu;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Attachment attachment;
+    private Attachment classificationAttachment;
 
     @Bean
-    public void setAttachment(MultipartFile attachment) {
+    public void setAttachment(MultipartFile classificationAttachment) {
         try {
-            this.attachment = new Attachment(
-                    attachment.getOriginalFilename(),
-                    attachment.getContentType(),
-                    attachment.getBytes()
+            this.classificationAttachment = new Attachment(
+                    classificationAttachment.getOriginalFilename(),
+                    classificationAttachment.getContentType(),
+                    classificationAttachment.getBytes()
             );
         } catch (Exception exception) {
             throw new RuntimeException(exception);
