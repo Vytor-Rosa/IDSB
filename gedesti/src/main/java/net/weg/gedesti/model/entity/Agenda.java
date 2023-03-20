@@ -34,8 +34,4 @@ public class Agenda {
             inverseJoinColumns = @JoinColumn(name = "proposalCode"))
     List<Proposal> proposals;
 
-
-//    @ManyToOne(cascade=CascadeType.ALL)
-//    private Anexo anexo;
-
 }
