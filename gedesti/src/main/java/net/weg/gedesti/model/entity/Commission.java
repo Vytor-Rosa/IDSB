@@ -16,12 +16,12 @@ public class Commission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer comissionCode;
+    private Integer commissionCode;
 
     @Column(nullable = false)
-    private String comissionName;
+    private String commissionName;
 
     @Column(nullable = false)
-    private String comissionAcronym;
+    private String commissionAcronym;
 
 }

@@ -9,10 +9,12 @@ import javax.validation.constraints.NotNull;
 @Data
 public class CommissionDTO {
 
-    @NotBlank
-    private String comissionName;
+    @NotBlank Integer commissionCode;
 
     @NotBlank
-    private String comissionAcronym;
+    private String commissionName;
+
+    @NotBlank
+    private String commissionAcronym;
 
 }
