@@ -21,7 +21,10 @@ public class Agenda {
     @Column(nullable = false)
     private Integer yearAgenda;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "agenda_commission",
+            joinColumns = @JoinColumn(name = "agendaCode"),
+            inverseJoinColumns = @JoinColumn(name = "commissionCode"))
     List<Commission> commission;
 
     @Column(nullable = false)
