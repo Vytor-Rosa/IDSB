@@ -57,8 +57,8 @@ public class Proposal {
 
     @ManyToMany
     @JoinTable(name = "responsible_for_business",
-            joinColumns = @JoinColumn(name = "workerCode"),
-            inverseJoinColumns = @JoinColumn(name = "proposalCode"))
+            joinColumns = @JoinColumn(name = "proposalCode"),
+            inverseJoinColumns = @JoinColumn(name = "workerCode"))
     List<Worker> workers;
 
     @NotNull
