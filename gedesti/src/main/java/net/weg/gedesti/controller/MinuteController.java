@@ -36,10 +36,9 @@ public class MinuteController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson, @RequestParam(value = "minuteAttachment", required = false) MultipartFile minuteAttachment) {
+    public ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson ) {
         MinuteUtil util = new MinuteUtil();
         Minute minute = util.convertJsonToModel(minuteJson);
-        minute.setAttachment(minuteAttachment);
         return ResponseEntity.status(HttpStatus.CREATED).body(minuteService.save(minute));
     }
 

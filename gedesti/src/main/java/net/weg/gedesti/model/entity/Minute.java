@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "minute")
@@ -21,26 +23,12 @@ public class Minute {
     @Column(nullable = false)
     private String minuteName;
 
-    @Column(nullable = false)
-    private String minuteProblem;
+    @Column(nullable = true)
+    private String minuteStartDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Attachment attachment;
+    private String minuteEndDate;
 
     @OneToOne
     private Agenda agenda;
-
-    @Bean
-    public void setAttachment(MultipartFile attachment) {
-        try {
-            this.attachment = new Attachment(
-                    attachment.getOriginalFilename(),
-                    attachment.getContentType(),
-                    attachment.getBytes()
-            );
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
 
 }
