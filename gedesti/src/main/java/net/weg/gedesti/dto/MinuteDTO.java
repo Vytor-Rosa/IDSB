@@ -18,6 +18,5 @@ public class MinuteDTO {
 
     private String minuteEndDate;
 
-    @NotNull
     private Agenda agenda;
 }

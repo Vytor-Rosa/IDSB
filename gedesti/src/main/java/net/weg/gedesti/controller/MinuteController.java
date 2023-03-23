@@ -1,9 +1,11 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.dto.MinuteDTO;
 import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.model.service.MinuteService;
 import net.weg.gedesti.util.MinuteUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,10 +37,17 @@ public class MinuteController {
         return ResponseEntity.status(HttpStatus.FOUND).body(minuteService.findAll(pageable));
     }
 
+//    @PostMapping
+//    public ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson ) {
+//        MinuteUtil util = new MinuteUtil();
+//        Minute minute = util.convertJsonToModel(minuteJson);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(minuteService.save(minute));
+//    }
+
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "minute") @Valid String minuteJson ) {
-        MinuteUtil util = new MinuteUtil();
-        Minute minute = util.convertJsonToModel(minuteJson);
+    public ResponseEntity<Object> save(@RequestBody @Valid MinuteDTO minuteDTO) {
+        Minute minute = new Minute();
+        BeanUtils.copyProperties(minuteDTO, minute);
         return ResponseEntity.status(HttpStatus.CREATED).body(minuteService.save(minute));
     }
 
