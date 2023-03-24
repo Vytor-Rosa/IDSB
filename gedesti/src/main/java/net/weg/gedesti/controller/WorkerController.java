@@ -1,10 +1,14 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.WorkerDTO;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.WorkerService;
+import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCrypt;
@@ -13,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +27,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class WorkerController {
     private WorkerService workerSerivce;
+    private WorkerRepository workerRepository;
 
     @GetMapping
     public ResponseEntity<List<Worker>> findAll() {
@@ -82,5 +88,18 @@ public class WorkerController {
         }
         workerSerivce.deleteById(workerCode);
         return ResponseEntity.status(HttpStatus.OK).body("Worker " + workerCode + " successfully deleted!");
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/language/{workerCode}")
+    public ResponseEntity<Object> updateClassification(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setLanguage(workerDTO.getLanguage());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
     }
 }
