@@ -31,7 +31,7 @@ public class Minute {
     @OneToOne
     private Agenda agenda;
 
-//    @OneToOne
-//    private Worker director;
+    @OneToOne
+    private Worker director;
 
 }
