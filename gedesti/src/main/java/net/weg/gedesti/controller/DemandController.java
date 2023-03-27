@@ -91,7 +91,9 @@ public class DemandController {
 
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-        demand.setDemandAttachment(demandAttachment);
+        if(demandAttachment != null) {
+            demand.setDemandAttachment(demandAttachment);
+        }
         demand.setDemandCode(demandCode);
 
 
