@@ -35,4 +35,7 @@ public class Expense {
 
     @ManyToOne
     private Proposal proposal;
+
+    @ManyToOne
+    private CostCenter costCenter;
 }
