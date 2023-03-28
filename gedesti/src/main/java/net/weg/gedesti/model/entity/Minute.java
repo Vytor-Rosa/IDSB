@@ -34,4 +34,7 @@ public class Minute {
     @OneToOne
     private Worker director;
 
+    @Column(nullable = false)
+    private String minuteType;
+
 }

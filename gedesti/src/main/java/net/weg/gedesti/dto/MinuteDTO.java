@@ -22,4 +22,7 @@ public class MinuteDTO {
     private Agenda agenda;
 
     private Worker director;
+
+    @NotNull
+    private String minuteType;
 }

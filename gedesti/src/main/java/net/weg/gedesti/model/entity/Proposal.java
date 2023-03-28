@@ -67,4 +67,7 @@ public class Proposal {
     @Column(nullable = true)
     private String commissionOpinion;
 
+    @Column(nullable = true)
+    private Boolean published;
+
 }

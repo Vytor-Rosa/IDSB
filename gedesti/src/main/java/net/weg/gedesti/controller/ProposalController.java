@@ -94,4 +94,16 @@ public class ProposalController {
         proposal.setCommissionOpinion(proposalDTO.getCommissionOpinion());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/published/{proposalCode}")
+    public  ResponseEntity<Object> updatePublish(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO){
+        if (!proposalService.existsById(proposalCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+        Proposal proposal = proposalRepository.findById(proposalCode).get();
+        proposal.setPublished(proposalDTO.getPublished());
+        return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
+    }
 }
