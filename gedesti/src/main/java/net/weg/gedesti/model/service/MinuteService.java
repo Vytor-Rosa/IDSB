@@ -38,4 +38,6 @@ public class MinuteService {
     public Optional<Minute> findById(Integer integer) {
         return minuteRepository.findById(integer);
     }
+
+    public List<Minute> findByMinuteType(String minuteType) { return minuteRepository.findByMinuteType(minuteType); }
 }

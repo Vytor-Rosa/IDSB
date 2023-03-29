@@ -63,6 +63,14 @@ public class MinuteController {
         return ResponseEntity.status(HttpStatus.FOUND).body(minuteOptional);
     }
 
+    @GetMapping("/type/{minuteType}")
+    public ResponseEntity<Object> findByPublished(@PathVariable(value = "minuteType") String minuteType) {
+        List<Minute> minutes = minuteService.findByMinuteType(minuteType);
+        if (minutes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minutes published");
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(minutes);
+    }
 
     @DeleteMapping("/{minuteCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "minuteCode") Integer minuteCode) {
