@@ -22,9 +22,6 @@ public class Expense {
     private String expenseProfile;
 
     @Column(nullable = false)
-    private Integer runTime;
-
-    @Column(nullable = false)
     private String amountOfHours;
 
     @Column(nullable = false)

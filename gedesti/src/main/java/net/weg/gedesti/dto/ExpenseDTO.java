@@ -15,8 +15,6 @@ public class ExpenseDTO {
     private String expenseType;
     @NotBlank
     private String expenseProfile;
-    @NotNull @Positive
-    private Integer runTime;
     @NotBlank
     private String amountOfHours;
     @NotNull
