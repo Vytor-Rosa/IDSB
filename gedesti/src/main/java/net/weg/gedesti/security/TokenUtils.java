@@ -61,7 +61,6 @@ public class TokenUtils {
 
     public String buscarCookie(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, "jwt");
-        System.out.println(cookie);
         if(cookie != null){
             return cookie.getValue();
         }

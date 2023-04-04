@@ -40,8 +40,6 @@ public class AutenticacaoController {
 
         Authentication authentication =
                 authenticationManager.authenticate(authenticationToken);
-        System.out.println(authentication.isAuthenticated());
-
         if (authentication.isAuthenticated()) {
             UserJpa userJpa = (UserJpa) authentication.getPrincipal();
             Worker worker = userJpa.getWorker();
