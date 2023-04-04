@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/historical")
 public class HistoricalController {

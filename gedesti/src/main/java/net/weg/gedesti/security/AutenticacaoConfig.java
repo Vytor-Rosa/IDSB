@@ -59,14 +59,14 @@ public class AutenticacaoConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/login", "/login/auth", "/logout").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
-                .antMatchers(HttpMethod.HEAD, "/api/**").permitAll()
-                .antMatchers(HttpMethod.TRACE, "/api/**").permitAll()
+                .antMatchers("/login", "/login/auth", "/logout", "/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.HEAD, "/**").permitAll()
+                .antMatchers(HttpMethod.TRACE, "/**").permitAll()
                 .anyRequest().authenticated();
         httpSecurity.csrf().disable()
                 .cors().configurationSource(corsConfigurationSource());

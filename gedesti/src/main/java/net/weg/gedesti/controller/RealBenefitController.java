@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/realbenefit")
 public class RealBenefitController {

@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/demand")
 public class DemandController {

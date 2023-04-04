@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/proposal")
 public class ProposalController {

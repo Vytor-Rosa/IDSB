@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/classification")
 public class ClassificationController {
