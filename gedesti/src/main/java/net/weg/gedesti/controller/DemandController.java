@@ -10,6 +10,9 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -26,9 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,7 +94,20 @@ public class DemandController {
                 }
             System.out.println("Excel file created successfully");
             workbook.write(outputStream);
+            outputStream.close();
+            openFile(attachmentName);
         }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openFile(String attachmentName) throws IOException {
+        try {
+            File file = new File("C:\\Users\\vytor_rosa\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("cmd.exe", "/c", "start", "", file.toString());
+            processBuilder.start();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
