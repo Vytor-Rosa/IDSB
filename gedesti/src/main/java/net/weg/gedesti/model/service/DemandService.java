@@ -44,4 +44,8 @@ public class DemandService {
     public Object saveAndFlush(Demand demand) {
         return demandRepository.saveAndFlush(demand);
     }
+
+    public List<Demand> findByDemandStatus(String status) {
+        return demandRepository.findByDemandStatus(status);
+    }
 }

@@ -57,7 +57,7 @@ public class DemandController {
     public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
         try(var workbook = new XSSFWorkbook();
             var outputStream = new FileOutputStream(attachmentName)) {
-                var sheet = workbook.createSheet("Demandas");
+                var sheet = workbook.createSheet("Demands");
                 int rowNum = 0;
                 var row = sheet.createRow(rowNum++);
                 var cell = row.createCell(0);
@@ -90,6 +90,7 @@ public class DemandController {
                     cell = row.createCell(5);
                     cell.setCellValue(demand.getDemandObjective());
                 }
+            System.out.println("Excel file created successfully");
             workbook.write(outputStream);
         }catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -171,5 +172,16 @@ public class DemandController {
         Demand demand = demandRepository.findById(demandCode).get();
         demand.setDemandStatus(demandDTO.getDemandStatus());
         return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+    }
+
+    @GetMapping("/filter/{type}/{value}")
+    public ResponseEntity<Object> filter(@PathVariable(value = "type") String type, @PathVariable(value = "value") String value) throws IOException {
+        if (type.equals("status")) {
+            List<Demand> demands = demandService.findByDemandStatus(value);
+            saveExcel("demands(" + demands.size() + ").xlsx", demands);
+            return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND).body("No demands found");
     }
 }

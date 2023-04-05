@@ -10,4 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Integer> {
+    List<Demand> findByDemandStatus(String status);
 }
