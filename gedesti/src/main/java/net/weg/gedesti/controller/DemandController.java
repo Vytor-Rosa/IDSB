@@ -10,9 +10,9 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -31,6 +31,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.*;
 import java.io.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,39 +60,89 @@ public class DemandController {
     public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
         try(var workbook = new XSSFWorkbook();
             var outputStream = new FileOutputStream(attachmentName)) {
+
+            CellStyle style = workbook.createCellStyle();
+
+            CellStyle boldCellStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            boldCellStyle.setFont(font);
+
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setWrapText(false);
+            style.setFont(workbook.createFont());
+
+            CellStyle bodyStyle = workbook.createCellStyle();
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+
+            CellRangeAddress mergedRegion = new CellRangeAddress(0, 0, 0, 5);
+
                 var sheet = workbook.createSheet("Demands");
+                sheet.setColumnWidth(4, 23 * 256);
+                sheet.setColumnWidth(2, 15 * 256);
+                sheet.setColumnWidth(3, 15 * 256);
+                sheet.addMergedRegion(mergedRegion);
                 int rowNum = 0;
                 var row = sheet.createRow(rowNum++);
                 var cell = row.createCell(0);
+                sheet.autoSizeColumn(0);
+                cell.setCellStyle(style);
                 cell.setCellValue("Demandas");
                 row = sheet.createRow(rowNum++);
                 cell = row.createCell(0);
                 cell.setCellValue("Código");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 cell = row.createCell(1);
                 cell.setCellValue("Titulo");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 cell = row.createCell(2);
                 cell.setCellValue("Data de Criação");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 cell = row.createCell(3);
                 cell.setCellValue("Status");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 cell = row.createCell(4);
                 cell.setCellValue("Responsável");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 cell = row.createCell(5);
                 cell.setCellValue("Objetivo");
+                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
                 for(Demand demand : demands) {
                     row = sheet.createRow(rowNum++);
                     cell = row.createCell(0);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getDemandCode());
                     cell = row.createCell(1);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getDemandTitle());
                     cell = row.createCell(2);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getDemandDate());
                     cell = row.createCell(3);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getDemandStatus());
                     cell = row.createCell(4);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
                     cell = row.createCell(5);
+                    cell.setCellStyle(style);
                     cell.setCellValue(demand.getDemandObjective());
                 }
+
             System.out.println("Excel file created successfully");
             workbook.write(outputStream);
             outputStream.close();
