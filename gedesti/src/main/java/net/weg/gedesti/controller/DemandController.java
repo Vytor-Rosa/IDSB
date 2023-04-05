@@ -63,11 +63,9 @@ public class DemandController {
 
             CellStyle style = workbook.createCellStyle();
 
-            CellStyle boldCellStyle = workbook.createCellStyle();
             Font font = workbook.createFont();
             font.setBold(true);
-            boldCellStyle.setFont(font);
-
+            style.setFont(font);
             style.setBorderBottom(BorderStyle.THIN);
             style.setBorderTop(BorderStyle.THIN);
             style.setBorderRight(BorderStyle.THIN);
@@ -75,72 +73,110 @@ public class DemandController {
             style.setAlignment(HorizontalAlignment.CENTER);
             style.setVerticalAlignment(VerticalAlignment.CENTER);
             style.setWrapText(false);
-            style.setFont(workbook.createFont());
 
             CellStyle bodyStyle = workbook.createCellStyle();
-            style.setBorderBottom(BorderStyle.THIN);
-            style.setBorderTop(BorderStyle.THIN);
-            style.setBorderRight(BorderStyle.THIN);
-            style.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setBorderBottom(BorderStyle.THIN);
+            bodyStyle.setBorderTop(BorderStyle.THIN);
+            bodyStyle.setBorderRight(BorderStyle.THIN);
+            bodyStyle.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+            bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            bodyStyle.setWrapText(false);
 
-            CellRangeAddress mergedRegion = new CellRangeAddress(0, 0, 0, 5);
+            var sheet = workbook.createSheet();
+            sheet.setColumnWidth(2, 15 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 23 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 25 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 25 * 256);
 
-                var sheet = workbook.createSheet("Demands");
-                sheet.setColumnWidth(4, 23 * 256);
-                sheet.setColumnWidth(2, 15 * 256);
-                sheet.setColumnWidth(3, 15 * 256);
-                sheet.addMergedRegion(mergedRegion);
                 int rowNum = 0;
-                var row = sheet.createRow(rowNum++);
+                var row = sheet.createRow(rowNum);
                 var cell = row.createCell(0);
                 sheet.autoSizeColumn(0);
                 cell.setCellStyle(style);
-                cell.setCellValue("Demandas");
                 row = sheet.createRow(rowNum++);
                 cell = row.createCell(0);
                 cell.setCellValue("Código");
-                cell.setCellStyle(boldCellStyle);
                 cell.setCellStyle(style);
                 cell = row.createCell(1);
                 cell.setCellValue("Titulo");
-                cell.setCellStyle(boldCellStyle);
                 cell.setCellStyle(style);
                 cell = row.createCell(2);
                 cell.setCellValue("Data de Criação");
-                cell.setCellStyle(boldCellStyle);
                 cell.setCellStyle(style);
                 cell = row.createCell(3);
                 cell.setCellValue("Status");
-                cell.setCellStyle(boldCellStyle);
                 cell.setCellStyle(style);
                 cell = row.createCell(4);
                 cell.setCellValue("Responsável");
-                cell.setCellStyle(boldCellStyle);
                 cell.setCellStyle(style);
                 cell = row.createCell(5);
                 cell.setCellValue("Objetivo");
-                cell.setCellStyle(boldCellStyle);
+                cell.setCellStyle(style);
+                cell = row.createCell(6);
+                cell.setCellValue("Centro de Custos");
+                cell.setCellStyle(style);
+                cell = row.createCell(7);
+                cell.setCellValue("Beneficio Potencial");
+                cell.setCellStyle(style);
+                cell = row.createCell(8);
+                cell.setCellValue("Beneficio Qualitativo");
+                cell.setCellStyle(style);
+                cell = row.createCell(9);
+                cell.setCellValue("Beneficio Real");
+                cell.setCellStyle(style);
+                cell = row.createCell(10);
+                cell.setCellValue("Código PPM");
+                cell.setCellStyle(style);
+                cell = row.createCell(11);
+                cell.setCellValue("Link Epic Jira");
                 cell.setCellStyle(style);
                 for(Demand demand : demands) {
+                    int index = 0;
                     row = sheet.createRow(rowNum++);
                     cell = row.createCell(0);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getDemandCode());
                     cell = row.createCell(1);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getDemandTitle());
                     cell = row.createCell(2);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getDemandDate());
                     cell = row.createCell(3);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getDemandStatus());
                     cell = row.createCell(4);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
                     cell = row.createCell(5);
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getDemandObjective());
+                    cell = row.createCell(6);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
+                    cell = row.createCell(7);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getPotentialBenefit().getPotentialBenefitDescription());
+                    cell = row.createCell(8);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+                    cell = row.createCell(9);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getRealBenefit().getRealBenefitDescription());
+                    cell = row.createCell(10);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getPpmCode());
+                    cell = row.createCell(11);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                    index++;
                 }
 
             System.out.println("Excel file created successfully");
@@ -154,7 +190,7 @@ public class DemandController {
 
     public void openFile(String attachmentName) throws IOException {
         try {
-            File file = new File("C:\\Users\\vytor_rosa\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
+            File file = new File("C:\\Users\\" + System.getProperty("user.name") +"\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command("cmd.exe", "/c", "start", "", file.toString());
             processBuilder.start();
