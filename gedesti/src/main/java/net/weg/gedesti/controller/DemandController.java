@@ -10,7 +10,7 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,48 +53,48 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
     }
 
-//    @PostMapping("/excel")
-//    public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
-//        try(var workbook = new XSSFWorkbook();
-//            var outputStream = new FileOutputStream(attachmentName)) {
-//                var sheet = workbook.createSheet("Demandas");
-//                int rowNum = 0;
-//                var row = sheet.createRow(rowNum++);
-//                var cell = row.createCell(0);
-//                cell.setCellValue("Demandas");
-//                row = sheet.createRow(rowNum++);
-//                cell = row.createCell(0);
-//                cell.setCellValue("Código");
-//                cell = row.createCell(1);
-//                cell.setCellValue("Titulo");
-//                cell = row.createCell(2);
-//                cell.setCellValue("Data de Criação");
-//                cell = row.createCell(3);
-//                cell.setCellValue("Status");
-//                cell = row.createCell(4);
-//                cell.setCellValue("Responsável");
-//                cell = row.createCell(5);
-//                cell.setCellValue("Objetivo");
-//                for(Demand demand : demands) {
-//                    row = sheet.createRow(rowNum++);
-//                    cell = row.createCell(0);
-//                    cell.setCellValue(demand.getDemandCode());
-//                    cell = row.createCell(1);
-//                    cell.setCellValue(demand.getDemandTitle());
-//                    cell = row.createCell(2);
-//                    cell.setCellValue(demand.getDemandDate());
-//                    cell = row.createCell(3);
-//                    cell.setCellValue(demand.getDemandStatus());
-//                    cell = row.createCell(4);
-//                    cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
-//                    cell = row.createCell(5);
-//                    cell.setCellValue(demand.getDemandObjective());
-//                }
-//            workbook.write(outputStream);
-//        }catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @PostMapping("/excel")
+    public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
+        try(var workbook = new XSSFWorkbook();
+            var outputStream = new FileOutputStream(attachmentName)) {
+                var sheet = workbook.createSheet("Demandas");
+                int rowNum = 0;
+                var row = sheet.createRow(rowNum++);
+                var cell = row.createCell(0);
+                cell.setCellValue("Demandas");
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellValue("Código");
+                cell = row.createCell(1);
+                cell.setCellValue("Titulo");
+                cell = row.createCell(2);
+                cell.setCellValue("Data de Criação");
+                cell = row.createCell(3);
+                cell.setCellValue("Status");
+                cell = row.createCell(4);
+                cell.setCellValue("Responsável");
+                cell = row.createCell(5);
+                cell.setCellValue("Objetivo");
+                for(Demand demand : demands) {
+                    row = sheet.createRow(rowNum++);
+                    cell = row.createCell(0);
+                    cell.setCellValue(demand.getDemandCode());
+                    cell = row.createCell(1);
+                    cell.setCellValue(demand.getDemandTitle());
+                    cell = row.createCell(2);
+                    cell.setCellValue(demand.getDemandDate());
+                    cell = row.createCell(3);
+                    cell.setCellValue(demand.getDemandStatus());
+                    cell = row.createCell(4);
+                    cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
+                    cell = row.createCell(5);
+                    cell.setCellValue(demand.getDemandObjective());
+                }
+            workbook.write(outputStream);
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
