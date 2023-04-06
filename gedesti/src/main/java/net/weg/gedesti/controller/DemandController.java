@@ -2,9 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
-import net.weg.gedesti.model.entity.Classification;
 import net.weg.gedesti.model.entity.Demand;
-import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
@@ -12,9 +10,7 @@ import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +19,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.awt.*;
 import java.io.*;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
