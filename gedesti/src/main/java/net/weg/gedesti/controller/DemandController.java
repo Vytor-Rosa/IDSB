@@ -21,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
@@ -85,7 +87,9 @@ public class DemandController {
             sheet.setColumnWidth(8, 25 * 256);
             sheet.setColumnWidth(9, 25 * 256);
             sheet.setColumnWidth(10, 25 * 256);
-            sheet.setColumnWidth(11, 25 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 25 * 256);
+            sheet.setColumnWidth(13, 50 * 256);
 
                 int rowNum = 0;
                 var row = sheet.createRow(rowNum);
@@ -118,16 +122,22 @@ public class DemandController {
                 cell.setCellValue("Beneficio Potencial");
                 cell.setCellStyle(style);
                 cell = row.createCell(8);
-                cell.setCellValue("Beneficio Qualitativo");
-                cell.setCellStyle(style);
-                cell = row.createCell(9);
                 cell.setCellValue("Beneficio Real");
                 cell.setCellStyle(style);
-                cell = row.createCell(10);
+                cell = row.createCell(9);
                 cell.setCellValue("Código PPM");
                 cell.setCellStyle(style);
-                cell = row.createCell(11);
+                cell = row.createCell(10);
                 cell.setCellValue("Link Epic Jira");
+                cell.setCellStyle(style);
+                cell = row.createCell(11);
+                cell.setCellValue("Tamanho");
+                cell.setCellStyle(style);
+                cell = row.createCell(12);
+                cell.setCellValue("Bu Solicitante");
+                cell.setCellStyle(style);
+                cell = row.createCell(13);
+                cell.setCellValue("Sessão TI Responsável");
                 cell.setCellStyle(style);
                 for(Demand demand : demands) {
                     int index = 0;
@@ -155,25 +165,40 @@ public class DemandController {
                     cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
                     cell = row.createCell(7);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getPotentialBenefit().getPotentialBenefitDescription());
+                    cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + demand.getPotentialBenefit().getPotentialMonthlyValue());
                     cell = row.createCell(8);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
-                    cell = row.createCell(9);
-                    cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getRealBenefit().getRealBenefitDescription());
+                    cell.setCellValue(demand.getRealBenefit().getRealMonthlyValue());
                     if(demand.getClassification() != null) {
-                        cell = row.createCell(10);
+                        cell = row.createCell(9);
                         cell.setCellStyle(bodyStyle);
                         cell.setCellValue(demand.getClassification().getPpmCode());
-                        cell = row.createCell(11);
+                        cell = row.createCell(10);
                         cell.setCellStyle(bodyStyle);
                         cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                        cell = row.createCell(11);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue(demand.getClassification().getClassificationSize());
+                        cell = row.createCell(12);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue(demand.getClassification().getRequesterBu().getBu());
+                        cell = row.createCell(13);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue(demand.getClassification().getItSection());
                     }else{
+                        cell = row.createCell(9);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue("");
                         cell = row.createCell(10);
                         cell.setCellStyle(bodyStyle);
                         cell.setCellValue("");
                         cell = row.createCell(11);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue("");
+                        cell = row.createCell(12);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue("");
+                        cell = row.createCell(13);
                         cell.setCellStyle(bodyStyle);
                         cell.setCellValue("");
                     }
