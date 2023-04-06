@@ -170,12 +170,21 @@ public class DemandController {
                     cell = row.createCell(9);
                     cell.setCellStyle(bodyStyle);
                     cell.setCellValue(demand.getRealBenefit().getRealBenefitDescription());
-                    cell = row.createCell(10);
-                    cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getClassification().getPpmCode());
-                    cell = row.createCell(11);
-                    cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                    if(demand.getClassification() != null) {
+                        cell = row.createCell(10);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue(demand.getClassification().getPpmCode());
+                        cell = row.createCell(11);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                    }else{
+                        cell = row.createCell(10);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue("");
+                        cell = row.createCell(11);
+                        cell.setCellStyle(bodyStyle);
+                        cell.setCellValue("");
+                    }
                     index++;
                 }
 
