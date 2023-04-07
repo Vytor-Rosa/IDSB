@@ -28,7 +28,7 @@ public class TokenUtils {
                 .setIssuer("ids")
                 .setSubject(worker.getWorkerCode().toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 1800000))
+                .setExpiration(new Date(new Date().getTime() + 180000000))
                 .signWith(SignatureAlgorithm.HS256, senhaForte)
                 .compact();
     }
@@ -36,7 +36,7 @@ public class TokenUtils {
     public Cookie gerarCookie(Authentication authentication){
         Cookie cookie = new Cookie("jwt", gerarToken(authentication));
         cookie.setPath("/");
-        cookie.setMaxAge(3600);
+        cookie.setMaxAge(180000000);
         return cookie;
     }
 
