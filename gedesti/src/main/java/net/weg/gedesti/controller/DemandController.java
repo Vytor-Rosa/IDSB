@@ -165,10 +165,10 @@ public class DemandController {
                     cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
                     cell = row.createCell(7);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + demand.getPotentialBenefit().getPotentialMonthlyValue());
+                    cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
                     cell = row.createCell(8);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getRealBenefit().getRealMonthlyValue());
+                    cell.setCellValue(demand.getRealBenefit().getRealMonthlyValue() + " " + demand.getRealBenefit().getRealMonthlyValue());
                     if(demand.getClassification() != null) {
                         cell = row.createCell(9);
                         cell.setCellStyle(bodyStyle);
