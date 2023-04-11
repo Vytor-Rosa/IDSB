@@ -78,6 +78,7 @@ public class DemandController {
             bodyStyle.setWrapText(false);
 
             var sheet = workbook.createSheet();
+            sheet.setColumnWidth(1, 30 * 256);
             sheet.setColumnWidth(2, 15 * 256);
             sheet.setColumnWidth(3, 15 * 256);
             sheet.setColumnWidth(4, 23 * 256);
@@ -88,8 +89,8 @@ public class DemandController {
             sheet.setColumnWidth(9, 25 * 256);
             sheet.setColumnWidth(10, 25 * 256);
             sheet.setColumnWidth(11, 20 * 256);
-            sheet.setColumnWidth(12, 25 * 256);
-            sheet.setColumnWidth(13, 50 * 256);
+            sheet.setColumnWidth(12, 30 * 256);
+            sheet.setColumnWidth(13, 65 * 256);
 
                 int rowNum = 0;
                 var row = sheet.createRow(rowNum);
@@ -168,7 +169,7 @@ public class DemandController {
                     cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
                     cell = row.createCell(8);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getRealBenefit().getRealMonthlyValue() + " " + demand.getRealBenefit().getRealMonthlyValue());
+                    cell.setCellValue(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
                     if(demand.getClassification() != null) {
                         cell = row.createCell(9);
                         cell.setCellStyle(bodyStyle);
