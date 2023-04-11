@@ -26,7 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -41,6 +43,19 @@ public class DemandController {
     @GetMapping
     public ResponseEntity<List<Demand>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll());
+    }
+
+    public List<Demand> findByStatus(String value) {
+        List<Demand> demandList = demandService.findAll();
+        List<Demand> demandsStatus = new ArrayList<>();
+        for (Demand demand : demandList) {
+            System.out.println("demand: " + demand.getDemandStatus().toLowerCase());
+            System.out.println("value: " + value.toLowerCase());
+            if (demand.getDemandStatus().trim().toLowerCase().contains(value.trim().toLowerCase())) {
+                demandsStatus.add(demand);
+            }
+        }
+        return demandsStatus;
     }
 
     @GetMapping("/page")
@@ -306,7 +321,7 @@ public class DemandController {
     @GetMapping("/filter/{type}/{value}")
     public ResponseEntity<Object> filter(@PathVariable(value = "type") String type, @PathVariable(value = "value") String value) throws IOException {
         if (type.equals("status")) {
-            List<Demand> demands = demandService.findByDemandStatus(value);
+            List<Demand> demands = findByStatus(value);
             saveExcel("demands(" + demands.size() + ").xlsx", demands);
             return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
         }
