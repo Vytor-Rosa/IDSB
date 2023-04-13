@@ -49,8 +49,6 @@ public class DemandController {
         List<Demand> demandList = demandService.findAll();
         List<Demand> demandsStatus = new ArrayList<>();
         for (Demand demand : demandList) {
-            System.out.println("demand: " + demand.getDemandStatus().toLowerCase());
-            System.out.println("value: " + value.toLowerCase());
             if (demand.getDemandStatus().trim().toLowerCase().contains(value.trim().toLowerCase())) {
                 demandsStatus.add(demand);
             }
@@ -67,8 +65,8 @@ public class DemandController {
 
     @PostMapping("/excel")
     public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
-        try(var workbook = new XSSFWorkbook();
-            var outputStream = new FileOutputStream(attachmentName)) {
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new FileOutputStream(attachmentName)) {
 
             CellStyle style = workbook.createCellStyle();
 
@@ -107,132 +105,132 @@ public class DemandController {
             sheet.setColumnWidth(12, 30 * 256);
             sheet.setColumnWidth(13, 65 * 256);
 
-                int rowNum = 0;
-                var row = sheet.createRow(rowNum);
-                var cell = row.createCell(0);
-                sheet.autoSizeColumn(0);
-                cell.setCellStyle(style);
+            int rowNum = 0;
+            var row = sheet.createRow(rowNum);
+            var cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
+            cell.setCellStyle(style);
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue("Código");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue("Titulo");
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue("Data de Criação");
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue("Status");
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue("Responsável");
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue("Objetivo");
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            cell.setCellValue("Centro de Custos");
+            cell.setCellStyle(style);
+            cell = row.createCell(7);
+            cell.setCellValue("Beneficio Potencial");
+            cell.setCellStyle(style);
+            cell = row.createCell(8);
+            cell.setCellValue("Beneficio Real");
+            cell.setCellStyle(style);
+            cell = row.createCell(9);
+            cell.setCellValue("Código PPM");
+            cell.setCellStyle(style);
+            cell = row.createCell(10);
+            cell.setCellValue("Link Epic Jira");
+            cell.setCellStyle(style);
+            cell = row.createCell(11);
+            cell.setCellValue("Tamanho");
+            cell.setCellStyle(style);
+            cell = row.createCell(12);
+            cell.setCellValue("Bu Solicitante");
+            cell.setCellStyle(style);
+            cell = row.createCell(13);
+            cell.setCellValue("Sessão TI Responsável");
+            cell.setCellStyle(style);
+            for (Demand demand : demands) {
+                int index = 0;
                 row = sheet.createRow(rowNum++);
                 cell = row.createCell(0);
-                cell.setCellValue("Código");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandCode());
                 cell = row.createCell(1);
-                cell.setCellValue("Titulo");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandTitle());
                 cell = row.createCell(2);
-                cell.setCellValue("Data de Criação");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandDate());
                 cell = row.createCell(3);
-                cell.setCellValue("Status");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandStatus());
                 cell = row.createCell(4);
-                cell.setCellValue("Responsável");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
                 cell = row.createCell(5);
-                cell.setCellValue("Objetivo");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandObjective());
                 cell = row.createCell(6);
-                cell.setCellValue("Centro de Custos");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
                 cell = row.createCell(7);
-                cell.setCellValue("Beneficio Potencial");
-                cell.setCellStyle(style);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
                 cell = row.createCell(8);
-                cell.setCellValue("Beneficio Real");
-                cell.setCellStyle(style);
-                cell = row.createCell(9);
-                cell.setCellValue("Código PPM");
-                cell.setCellStyle(style);
-                cell = row.createCell(10);
-                cell.setCellValue("Link Epic Jira");
-                cell.setCellStyle(style);
-                cell = row.createCell(11);
-                cell.setCellValue("Tamanho");
-                cell.setCellStyle(style);
-                cell = row.createCell(12);
-                cell.setCellValue("Bu Solicitante");
-                cell.setCellStyle(style);
-                cell = row.createCell(13);
-                cell.setCellValue("Sessão TI Responsável");
-                cell.setCellStyle(style);
-                for(Demand demand : demands) {
-                    int index = 0;
-                    row = sheet.createRow(rowNum++);
-                    cell = row.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+                if (demand.getClassification() != null) {
+                    cell = row.createCell(9);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getDemandCode());
-                    cell = row.createCell(1);
+                    cell.setCellValue(demand.getClassification().getPpmCode());
+                    cell = row.createCell(10);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getDemandTitle());
-                    cell = row.createCell(2);
+                    cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                    cell = row.createCell(11);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getDemandDate());
-                    cell = row.createCell(3);
+                    cell.setCellValue(demand.getClassification().getClassificationSize());
+                    cell = row.createCell(12);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getDemandStatus());
-                    cell = row.createCell(4);
+                    cell.setCellValue(demand.getClassification().getRequesterBu().getBu());
+                    cell = row.createCell(13);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
-                    cell = row.createCell(5);
+                    cell.setCellValue(demand.getClassification().getItSection());
+                } else {
+                    cell = row.createCell(9);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getDemandObjective());
-                    cell = row.createCell(6);
+                    cell.setCellValue("");
+                    cell = row.createCell(10);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
-                    cell = row.createCell(7);
+                    cell.setCellValue("");
+                    cell = row.createCell(11);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
-                    cell = row.createCell(8);
+                    cell.setCellValue("");
+                    cell = row.createCell(12);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
-                    if(demand.getClassification() != null) {
-                        cell = row.createCell(9);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue(demand.getClassification().getPpmCode());
-                        cell = row.createCell(10);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue(demand.getClassification().getEpicJiraLink());
-                        cell = row.createCell(11);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue(demand.getClassification().getClassificationSize());
-                        cell = row.createCell(12);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue(demand.getClassification().getRequesterBu().getBu());
-                        cell = row.createCell(13);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue(demand.getClassification().getItSection());
-                    }else{
-                        cell = row.createCell(9);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue("");
-                        cell = row.createCell(10);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue("");
-                        cell = row.createCell(11);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue("");
-                        cell = row.createCell(12);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue("");
-                        cell = row.createCell(13);
-                        cell.setCellStyle(bodyStyle);
-                        cell.setCellValue("");
-                    }
-                    index++;
+                    cell.setCellValue("");
+                    cell = row.createCell(13);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
                 }
+                index++;
+            }
 
             System.out.println("Excel file created successfully");
             workbook.write(outputStream);
             outputStream.close();
             openFile(attachmentName);
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public void openFile(String attachmentName) throws IOException {
         try {
-            File file = new File("C:\\Users\\" + System.getProperty("user.name") +"\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
+            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command("cmd.exe", "/c", "start", "", file.toString());
             processBuilder.start();
@@ -276,14 +274,14 @@ public class DemandController {
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
-                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment  ) {
+                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
-        if(demandAttachment != null) {
+        if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
         demand.setDemandCode(demandCode);
@@ -328,4 +326,32 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.FOUND).body("No demands found");
     }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/approve/{demandCode}")
+    public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+        if (!demandService.existsById(demandCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Demand demand = demandRepository.findById(demandCode).get();
+        Integer demandSize = 0;
+
+        if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
+            demandSize = 1;
+        } else if (demand.getClassification().getClassificationSize().equals("Pequeno")) {
+            demandSize = 41;
+        } else if (demand.getClassification().getClassificationSize().equals("Médio")) {
+            demandSize = 301;
+        } else if (demand.getClassification().getClassificationSize().equals("Grande")) {
+            demandSize = 1001;
+        } else if (demand.getClassification().getClassificationSize().equals("Muito Grande")) {
+            demandSize = 3001;
+        }
+        Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + 3) / demandSize;
+        demand.setScore(score);
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+    }
+
 }
