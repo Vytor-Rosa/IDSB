@@ -26,6 +26,7 @@ public class Demand {
     @Size(max = 5000)
     private String demandObjective;
     private String demandStatus;
+    @Column(nullable = true)
     private Double score;
     private String executionPeriod;
 

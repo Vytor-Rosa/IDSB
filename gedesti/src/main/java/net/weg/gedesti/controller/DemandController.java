@@ -26,10 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @RestController
 @AllArgsConstructor
@@ -54,13 +54,6 @@ public class DemandController {
             }
         }
         return demandsStatus;
-    }
-
-    @GetMapping("/page")
-    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
-        int pageNumber = pageable.getPageNumber();
-        pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
     }
 
     @PostMapping("/excel")
@@ -285,9 +278,7 @@ public class DemandController {
             demand.setDemandAttachment(demandAttachment);
         }
         demand.setDemandCode(demandCode);
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandService.saveAndFlush(demand));
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
     }
 
     @Modifying
@@ -327,16 +318,44 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.FOUND).body("No demands found");
     }
 
+    @GetMapping("/page")
+    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
+
+        List<Demand> demandList = demandService.findAll();
+        for (Demand demand : demandList) {
+            if (demand.getScore() != null) {
+                demand.setScore(score(demand));
+                demandRepository.saveAndFlush(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
+    }
+
     @Modifying
     @Transactional
     @PutMapping("/approve/{demandCode}")
     public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+
+        System.out.println("1313123");
+
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
 
         Demand demand = demandRepository.findById(demandCode).get();
+        demand.setScore(score(demand));
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+    }
+
+    public Double score(Demand demand) {
         Integer demandSize = 0;
+
+        LocalDate actualDate = LocalDate.now();
+        String createDate = demand.getDemandDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
 
         if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
             demandSize = 1;
@@ -349,9 +368,8 @@ public class DemandController {
         } else if (demand.getClassification().getClassificationSize().equals("Muito Grande")) {
             demandSize = 3001;
         }
-        Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + 3) / demandSize;
-        demand.setScore(score);
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+        Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
+        return score;
     }
 
 }
