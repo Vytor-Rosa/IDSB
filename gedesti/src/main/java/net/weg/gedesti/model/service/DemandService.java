@@ -25,6 +25,10 @@ public class DemandService {
         return demandRepository.findAll(pageable);
     }
 
+    public Page<Demand> findAllByOrderByScoreDesc(Pageable pageable) {
+        return demandRepository.findAllByOrderByScoreDesc(pageable);
+    }
+
     public <S extends Demand> S save(S entity) {
         return demandRepository.save(entity);
     }

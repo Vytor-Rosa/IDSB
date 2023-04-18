@@ -330,7 +330,7 @@ public class DemandController {
                 demandRepository.saveAndFlush(demand);
             }
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByOrderByScoreDesc(pageable));
     }
 
     @Modifying
