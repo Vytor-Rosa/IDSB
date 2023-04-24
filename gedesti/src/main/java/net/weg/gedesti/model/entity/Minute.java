@@ -29,6 +29,7 @@ public class Minute {
     private String minuteEndDate;
 
     @OneToOne
+    @JoinColumn(name = "agendaCode")
     private Agenda agenda;
 
     @OneToOne

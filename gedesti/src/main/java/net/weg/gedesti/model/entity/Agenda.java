@@ -1,5 +1,6 @@
 package net.weg.gedesti.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,9 @@ public class Agenda {
     @Column(nullable = false)
     private String agendaDate;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "agenda")
+    private Minute minute;
 
     @ManyToMany
     @JoinTable(name = "agenda_proposal",
