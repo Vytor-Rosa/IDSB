@@ -1,9 +1,13 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.dto.HistoricalDTO;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Historical;
+import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.HistoricalService;
 import net.weg.gedesti.util.HistoricalUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,7 @@ import java.util.Optional;
 public class HistoricalController {
 
     private HistoricalService historicalService;
+    private DemandService demandService;
 
     @GetMapping
     public ResponseEntity<List<Historical>> findAll() {
@@ -28,10 +33,13 @@ public class HistoricalController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "historical") @Valid String historicalJson, @RequestParam(value = "historicalAttachment") MultipartFile historicalAttachment) {
-        HistoricalUtil historicalUtil = new HistoricalUtil();
-        Historical historical = historicalUtil.convertJsonToModel(historicalJson);
-        historical.setAnexo(historicalAttachment);
+    public ResponseEntity<Object> save(@RequestBody @Valid HistoricalDTO historicalDTO) {
+        Historical historical = new Historical();
+        BeanUtils.copyProperties(historicalDTO, historical);
+        Demand demand = demandService.findById(historical.getDemand().getDemandCode()).get();
+        System.out.println(demand);
+        historical.setNewDemand(demand);
+        System.out.println(historical.getNewDemand());
         return ResponseEntity.status(HttpStatus.CREATED).body(historicalService.save(historical));
     }
 

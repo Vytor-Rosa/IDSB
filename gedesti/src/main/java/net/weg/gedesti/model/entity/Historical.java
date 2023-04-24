@@ -22,19 +22,15 @@ public class Historical {
     @OneToOne
     private Demand demand;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Attachment historicalAttachment;
+    @Transient
+    private Demand newDemand;
 
-    @Bean
-    public void setAnexo(MultipartFile historicalAttachment){
-        try{
-            this.historicalAttachment = new Attachment(
-                    historicalAttachment.getOriginalFilename(),
-                    historicalAttachment.getContentType(),
-                    historicalAttachment.getBytes()
-            );
-        }catch (Exception exception){
-            throw new RuntimeException(exception);
-        }
-    }
+    @ManyToOne
+    private Worker editor;
+
+    @Column(nullable = false)
+    private String historicalDate;
+
+    @Column(nullable = false)
+    private String historicalHour;
 }
