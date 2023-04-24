@@ -32,8 +32,8 @@ public class Agenda {
     private String agendaDate;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "agenda")
-    private Minute minute;
+    @OneToMany(mappedBy = "agenda")
+    private List<Minute> minutes;
 
     @ManyToMany
     @JoinTable(name = "agenda_proposal",
