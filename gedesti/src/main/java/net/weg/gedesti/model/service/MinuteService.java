@@ -40,4 +40,6 @@ public class MinuteService {
     }
 
     public List<Minute> findByMinuteType(String minuteType) { return minuteRepository.findByMinuteType(minuteType); }
+
+    public List<Minute> findByAgenda(Integer agendaCode) { return minuteRepository.findByAgenda(agendaCode); }
 }

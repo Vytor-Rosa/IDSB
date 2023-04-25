@@ -72,6 +72,15 @@ public class MinuteController {
         return ResponseEntity.status(HttpStatus.FOUND).body(minutes);
     }
 
+    @GetMapping("/agenda/{agendaCode}")
+    public ResponseEntity<Object> findByAgenda(@PathVariable(value = "agendaCode") Integer agendaCode) {
+        List<Minute> minutes = minuteService.findByAgenda(agendaCode);
+        if (minutes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minutes published");
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(minutes);
+    }
+
     @DeleteMapping("/{minuteCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "minuteCode") Integer minuteCode) {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);

@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MinuteRepository extends JpaRepository <Minute, Integer> {
     List<Minute> findByMinuteType(String minuteType);
+    List<Minute> findByAgenda(Integer agendaCode);
 }
