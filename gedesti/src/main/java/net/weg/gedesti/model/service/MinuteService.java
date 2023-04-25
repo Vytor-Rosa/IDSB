@@ -1,6 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.repository.MinuteRepository;
 import org.springframework.data.domain.Page;
@@ -41,5 +42,5 @@ public class MinuteService {
 
     public List<Minute> findByMinuteType(String minuteType) { return minuteRepository.findByMinuteType(minuteType); }
 
-    public List<Minute> findByAgenda(Integer agendaCode) { return minuteRepository.findByAgenda(agendaCode); }
+    public List<Minute> findByAgenda(Agenda agenda) { return minuteRepository.findByAgenda(agenda); }
 }

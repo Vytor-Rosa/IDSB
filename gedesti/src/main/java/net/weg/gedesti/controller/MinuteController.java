@@ -2,6 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.MinuteDTO;
+import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.model.service.MinuteService;
 import net.weg.gedesti.util.MinuteUtil;
@@ -73,7 +74,7 @@ public class MinuteController {
     }
 
     @GetMapping("/agenda/{agendaCode}")
-    public ResponseEntity<Object> findByAgenda(@PathVariable(value = "agendaCode") Integer agendaCode) {
+    public ResponseEntity<Object> findByAgenda(@PathVariable(value = "agendaCode") Agenda agendaCode) {
         List<Minute> minutes = minuteService.findByAgenda(agendaCode);
         if (minutes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minutes published");
