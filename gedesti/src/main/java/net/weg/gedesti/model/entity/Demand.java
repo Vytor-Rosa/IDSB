@@ -14,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@IdClass(DemandId.class)
+//@IdClass(DemandId.class)
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer demandCode;
 
-    @Id
-    private Integer demandVersion;
+//    @Id
+//    private Integer demandVersion;
 
     private String demandDate;
     private String demandTitle;
