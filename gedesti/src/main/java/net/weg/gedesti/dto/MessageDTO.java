@@ -1,7 +1,7 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
-import net.weg.gedesti.model.entity.Chat;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
 
 import javax.validation.constraints.NotBlank;
@@ -18,7 +18,7 @@ public class MessageDTO {
     @NotBlank
     private String messageTime;
     @NotNull
-    private Chat chat;
+    private Demand demand;
     @NotNull
-    private Worker worker;
+    private Worker sender;
 }

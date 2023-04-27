@@ -17,8 +17,6 @@ public class Message {
     @Column(nullable = false, unique = true)
     private Integer messageCode;
 
-    @Column(nullable = false)
-    private String message;
 
     @Column(nullable = false)
     private Date dateMessage;
@@ -27,10 +25,11 @@ public class Message {
     private String messageTime;
 
     @ManyToOne
-    private Chat chat;
+    private Demand demand;
 
     @OneToOne
-    private Worker worker;
+    private Worker sender;
 
-
+    @Column(nullable = false)
+    private String message;
 }
