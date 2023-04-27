@@ -1,5 +1,6 @@
 package net.weg.gedesti.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,4 +19,5 @@ public class CostCenter {
 
     @Column(nullable = false)
     private String costCenter;
+
 }

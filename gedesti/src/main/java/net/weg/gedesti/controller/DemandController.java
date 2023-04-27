@@ -1,8 +1,12 @@
 package net.weg.gedesti.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.DemandAttachment;
+import net.weg.gedesti.model.entity.Historical;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
@@ -267,7 +271,7 @@ public class DemandController {
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
-                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
+                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws IOException {
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
@@ -278,6 +282,12 @@ public class DemandController {
             demand.setDemandAttachment(demandAttachment);
         }
         demand.setDemandCode(demandCode);
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Demand demandMapper = objectMapper.readValue(demandJson, Demand.class);
+//        byte[] arquivoBytes = demandAttachment.getBytes();
+//        DemandAttachment produtoArquivo = new DemandAttachment(demandMapper, arquivoBytes);
+//        objectMapper.writeValueAsString(produtoArquivo);
         return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
     }
 

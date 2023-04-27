@@ -14,11 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@IdClass(DemandId.class)
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer demandCode;
+
+    @Id
+    private Integer demandVersion;
+
     private String demandDate;
     private String demandTitle;
     @Size(max = 5000)
@@ -59,9 +64,10 @@ public class Demand {
     }
 
     @ManyToMany
-    @JoinTable(name = "demandCenter",
-            joinColumns = @JoinColumn(name = "costCenterCode"),
-            inverseJoinColumns = @JoinColumn(name = "demandCode"))
+    @JoinColumns({
+            @JoinColumn(name = "demandCode", referencedColumnName = "demandCode"),
+            @JoinColumn(name = "demandVersion", referencedColumnName = "demandVersion")
+    })
     List<CostCenter> costCenter;
 
     @JoinColumn(nullable = true)

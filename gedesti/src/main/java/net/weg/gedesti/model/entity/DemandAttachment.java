@@ -26,4 +26,6 @@ public class DemandAttachment {
     @NonNull
     private byte[] dice;
 
+    public DemandAttachment(Demand demandMapper, byte[] arquivoBytes) {
+    }
 }
