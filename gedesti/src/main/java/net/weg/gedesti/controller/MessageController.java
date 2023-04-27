@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.MessageDTO;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Message;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.MessageService;
 import net.weg.gedesti.model.service.WorkerService;
@@ -65,6 +66,16 @@ public class MessageController {
         BeanUtils.copyProperties(messageDTO, message);
         return  messageService.save(message);
     }
-
+    @GetMapping("/{workerCode}")
+    public ResponseEntity<Object> findAllByDemandRequester(@PathVariable(value = "workerCode") Worker workerCode){
+        List<Demand> demandList = demandService.findAllByRequesterRegistration(workerCode);
+        for (int i = 0; i <= demandList.size(); i++){
+            List<Message> messages = messageService.findAllByDemand(demandList.get(i));
+            if(!messages.isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body(true);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
 
 }

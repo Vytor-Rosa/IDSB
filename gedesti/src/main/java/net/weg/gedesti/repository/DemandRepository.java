@@ -14,4 +14,5 @@ import java.util.Optional;
 public interface DemandRepository extends JpaRepository<Demand, Integer> {
     List<Demand> findByDemandStatus(String status);
     Page<Demand> findAllByOrderByScoreDesc(Pageable pageable);
+    List<Demand> findAllByRequesterRegistration(Worker worker);
 }

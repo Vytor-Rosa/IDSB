@@ -48,4 +48,6 @@ public class DemandService {
     public List<Demand> findByDemandStatus(String status) {
         return demandRepository.findByDemandStatus(status);
     }
+
+    public List<Demand> findAllByRequesterRegistration(Worker worker){ return demandRepository.findAllByRequesterRegistration(worker); }
 }
