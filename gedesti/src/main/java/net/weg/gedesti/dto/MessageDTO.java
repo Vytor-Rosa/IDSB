@@ -10,13 +10,11 @@ import java.util.Date;
 
 @Data
 public class MessageDTO {
-    private Integer messageCode;
+
     @NotBlank
     private String message;
     @NotNull
-    private Date dateMessage;
-    @NotBlank
-    private String messageTime;
+    private String dateMessage;
     @NotNull
     private Demand demand;
     @NotNull

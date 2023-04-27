@@ -19,10 +19,7 @@ public class Message {
 
 
     @Column(nullable = false)
-    private Date dateMessage;
-
-    @Column(nullable = false)
-    private String messageTime;
+    private String dateMessage;
 
     @ManyToOne
     private Demand demand;
