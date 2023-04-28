@@ -37,7 +37,6 @@ public class HistoricalController {
         Historical historical = new Historical();
         BeanUtils.copyProperties(historicalDTO, historical);
         Demand demand = demandService.findById(historical.getDemand().getDemandCode()).get();
-        System.out.println(demand);
         historical.setNewDemand(demand);
         System.out.println(historical.getNewDemand());
         return ResponseEntity.status(HttpStatus.CREATED).body(historicalService.save(historical));

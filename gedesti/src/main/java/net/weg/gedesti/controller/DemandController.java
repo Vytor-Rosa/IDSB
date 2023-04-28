@@ -348,8 +348,6 @@ public class DemandController {
     @PutMapping("/approve/{demandCode}")
     public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
 
-        System.out.println("1313123");
-
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
         }
