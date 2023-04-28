@@ -66,7 +66,7 @@ public class MessageController {
         BeanUtils.copyProperties(messageDTO, message);
         return  messageService.save(message);
     }
-    @GetMapping("/{workerCode}")
+    @GetMapping("/worker/{workerCode}")
     public ResponseEntity<Object> findAllByDemandRequester(@PathVariable(value = "workerCode") Worker workerCode){
         List<Demand> demandList = demandService.findAllByRequesterRegistration(workerCode);
         for (int i = 0; i <= demandList.size(); i++){
