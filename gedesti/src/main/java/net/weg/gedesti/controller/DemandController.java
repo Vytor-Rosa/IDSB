@@ -240,6 +240,13 @@ public class DemandController {
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
+        demand.setDemandVersion(1);
+
+        List<Demand> demands = demandRepository.findAllByActiveVersion();
+        Integer size = demands.size();
+        demand.setDemandCode(size + 1);
+        demand.setActiveVersion(true);
+
         if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
@@ -247,13 +254,15 @@ public class DemandController {
     }
 
     @GetMapping("/{demandCode}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "demandCode") Integer demandCode) {
-        Optional<Demand> demandOptional = demandService.findById(demandCode);
-        if (demandOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
-        }
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) {
+        List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandOptional);
+        for (Demand demand : demandOptional) {
+            if (demand.getActiveVersion() == true) {
+                return ResponseEntity.status(HttpStatus.OK).body(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
     @DeleteMapping("/{demandCode}")
@@ -272,49 +281,61 @@ public class DemandController {
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
                                          @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws IOException {
-        if (!demandService.existsById(demandCode)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
-        }
-
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
-        demand.setDemandCode(demandCode);
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Demand demandMapper = objectMapper.readValue(demandJson, Demand.class);
-//        byte[] arquivoBytes = demandAttachment.getBytes();
-//        DemandAttachment produtoArquivo = new DemandAttachment(demandMapper, arquivoBytes);
-//        objectMapper.writeValueAsString(produtoArquivo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+        demand.setDemandCode(demandCode);
+        Integer maxVersion = 0;
+        List<Demand> demandList = demandService.findAll();
+
+        for (int i = 0; i < demandList.size(); i++) {
+            if (demandList.get(i).getDemandCode() == demandCode) {
+                if (demandList.get(i).getDemandVersion() > maxVersion) {
+                    demandList.get(i).setActiveVersion(false);
+                    maxVersion = demandList.get(i).getDemandVersion();
+                }
+            }
+        }
+
+        demand.setDemandVersion(maxVersion + 1);
+        demand.setActiveVersion(true);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.save(demand));
     }
 
     @Modifying
     @Transactional
     @PutMapping("/updateclassification/{demandCode}")
     public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
-        if (!demandService.existsById(demandCode)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setClassification(demandDTO.getClassification());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
 
-        Demand demand = demandRepository.findById(demandCode).get();
-        demand.setClassification(demandDTO.getClassification());
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
     @Modifying
     @Transactional
     @PutMapping("/updatestatus/{demandCode}")
     public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
-        if (!demandService.existsById(demandCode)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setDemandStatus(demandDTO.getDemandStatus());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
 
-        Demand demand = demandRepository.findById(demandCode).get();
-        demand.setDemandStatus(demandDTO.getDemandStatus());
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
     @GetMapping("/filter/{type}/{value}")
@@ -340,13 +361,15 @@ public class DemandController {
                 demandRepository.saveAndFlush(demand);
             }
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByOrderByScoreDesc(pageable));
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionOrderByScoreDesc(pageable));
     }
 
     @Modifying
     @Transactional
     @PutMapping("/approve/{demandCode}")
     public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+
+        System.out.println("1313123");
 
         if (!demandService.existsById(demandCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");

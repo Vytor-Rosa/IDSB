@@ -14,25 +14,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-//@IdClass(DemandId.class)
+@IdClass(DemandId.class)
 public class Demand {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer demandCode;
 
-//    @Id
-//    private Integer demandVersion;
+    @Id
+    private Integer demandVersion;
+
+    private Boolean activeVersion;
 
     private String demandDate;
+
     private String demandTitle;
+
     @Size(max = 5000)
     private String currentProblem;
+
     @Size(max = 5000)
     private String demandObjective;
+
     private String demandStatus;
+
     @Column(nullable = true)
     private Double score;
+
     private String executionPeriod;
 
     @ManyToOne

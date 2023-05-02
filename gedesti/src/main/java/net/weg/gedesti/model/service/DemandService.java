@@ -6,6 +6,9 @@ import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.repository.DemandRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +28,13 @@ public class DemandService {
         return demandRepository.findAll(pageable);
     }
 
-    public Page<Demand> findAllByOrderByScoreDesc(Pageable pageable) {
-        return demandRepository.findAllByOrderByScoreDesc(pageable);
+
+    public Page<Demand> findAllByActiveVersionOrderByScoreDesc(Pageable pageable) {
+        return demandRepository.findAllByActiveVersionOrderByScoreDesc(pageable);
+    }
+
+    public List<Demand> findByDemandCode(Integer integer) {
+        return demandRepository.findByDemandCode(integer);
     }
 
     public <S extends Demand> S save(S entity) {
@@ -49,5 +57,7 @@ public class DemandService {
         return demandRepository.findByDemandStatus(status);
     }
 
-    public List<Demand> findAllByRequesterRegistration(Worker worker){ return demandRepository.findAllByRequesterRegistration(worker); }
+    public List<Demand> findAllByRequesterRegistration(Worker worker) {
+        return demandRepository.findAllByRequesterRegistration(worker);
+    }
 }

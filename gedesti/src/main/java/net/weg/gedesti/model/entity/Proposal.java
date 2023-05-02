@@ -43,8 +43,8 @@ public class Proposal {
     private Worker responsibleAnalyst;
 
     @JoinColumns({
-            @JoinColumn(name = "demandCode", referencedColumnName = "demandCode")
-//            @JoinColumn(name = "demandVersion", referencedColumnName = "demandVersion")
+            @JoinColumn(name = "demandCode", referencedColumnName = "demandCode"),
+            @JoinColumn(name = "demandVersion", referencedColumnName = "demandVersion")
     })
     @OneToOne
     private Demand demand;
