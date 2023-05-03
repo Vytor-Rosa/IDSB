@@ -4,6 +4,7 @@ package net.weg.gedesti.model.service;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Message;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,11 @@ public class MessageService {
         return messageRepository.existsById(integer);
     }
 
-    public List<Message> findAllByDemand(Demand demand) {
-        return messageRepository.findAllByDemand(demand);
+    public List<Message> findAllByDemand(Integer demandCode) {
+        return messageRepository.findAllByDemandCode(demandCode);
+    }
+
+    public List<Message> findAllBySenderAndDemand(Worker sender, Integer demandCode) {
+        return messageRepository.findAllBySenderAndDemandCode(sender, demandCode);
     }
 }

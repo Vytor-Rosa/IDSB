@@ -16,7 +16,7 @@ public class MessageDTO {
     @NotNull
     private String dateMessage;
     @NotNull
-    private Demand demand;
+    private Integer demandCode;
     @NotNull
     private Worker sender;
 }

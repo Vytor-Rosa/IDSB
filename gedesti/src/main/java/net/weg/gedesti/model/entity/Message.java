@@ -21,8 +21,7 @@ public class Message {
     @Column(nullable = false)
     private String dateMessage;
 
-    @ManyToOne
-    private Demand demand;
+    private Integer demandCode;
 
     @OneToOne
     private Worker sender;
