@@ -22,4 +22,5 @@ public interface DemandRepository extends JpaRepository<Demand, Integer> {
     Page<Demand> findAllByActiveVersionOrderByScoreDesc(Pageable pageable);
     List<Demand> findAllByRequesterRegistration(Worker worker);
     List<Demand> findByDemandCode(Integer integer);
+    List<Demand> findAllByDemandCode(Integer integer);
 }
