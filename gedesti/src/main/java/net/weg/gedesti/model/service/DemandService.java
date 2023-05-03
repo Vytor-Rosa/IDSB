@@ -28,6 +28,9 @@ public class DemandService {
         return demandRepository.findAll(pageable);
     }
 
+    public List<Demand> findAllByDemandCode(Integer integer){
+        return demandRepository.findAllByDemandCode(integer);
+    }
 
     public Page<Demand> findAllByActiveVersionOrderByScoreDesc(Pageable pageable) {
         return demandRepository.findAllByActiveVersionOrderByScoreDesc(pageable);

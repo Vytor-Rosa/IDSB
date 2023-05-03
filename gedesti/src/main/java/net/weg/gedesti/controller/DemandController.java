@@ -236,6 +236,11 @@ public class DemandController {
         }
     }
 
+    @GetMapping("/historical/{demandCode}")
+    public ResponseEntity<List<Demand>> historical(@PathVariable(value = "demandCode") Integer demandCode){
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByDemandCode(demandCode));
+    }
+
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
