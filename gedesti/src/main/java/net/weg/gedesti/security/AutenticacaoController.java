@@ -44,6 +44,10 @@ public class AutenticacaoController {
             UserJpa userJpa = (UserJpa) authentication.getPrincipal();
             Worker worker = userJpa.getWorker();
             response.addCookie(tokenUtils.gerarCookie(authentication));
+
+            Cookie userCookie = tokenUtils.gerarUserCookie(userJpa);
+            response.addCookie(userCookie);
+
             return ResponseEntity.status(HttpStatus.OK).body(worker);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

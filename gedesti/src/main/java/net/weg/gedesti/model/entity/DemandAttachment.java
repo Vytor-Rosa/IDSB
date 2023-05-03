@@ -24,6 +24,7 @@ public class DemandAttachment {
 
     @Lob
     @NonNull
+    @Column(length=100000000)
     private byte[] dice;
 
     public DemandAttachment(Demand demandMapper, byte[] arquivoBytes) {
