@@ -31,6 +31,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -246,6 +247,7 @@ public class DemandController {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
+        demand.setDemandHour(LocalTime.now());
 
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
@@ -295,7 +297,6 @@ public class DemandController {
         demand.setDemandCode(demandCode);
         Integer maxVersion = 0;
         List<Demand> demandList = demandService.findAll();
-
         for (int i = 0; i < demandList.size(); i++) {
             if (demandList.get(i).getDemandCode() == demandCode) {
                 if (demandList.get(i).getDemandVersion() > maxVersion) {
@@ -304,7 +305,7 @@ public class DemandController {
                 }
             }
         }
-
+        demand.setDemandHour(LocalTime.now());
         demand.setDemandVersion(maxVersion + 1);
         demand.setActiveVersion(true);
 

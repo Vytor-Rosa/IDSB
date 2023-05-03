@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class Demand {
     private Boolean activeVersion;
 
     private String demandDate;
+
+    private LocalTime demandHour;
 
     private String demandTitle;
 
