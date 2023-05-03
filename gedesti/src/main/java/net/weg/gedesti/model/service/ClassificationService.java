@@ -35,4 +35,8 @@ public class ClassificationService {
     public void deleteById(Integer integer) {
         classificationRepository.deleteById(integer);
     }
+
+    public Object saveAndFlush(Classification classification) {
+        return classificationRepository.saveAndFlush(classification);
+    }
 }

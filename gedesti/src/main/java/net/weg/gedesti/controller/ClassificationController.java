@@ -47,7 +47,7 @@ public class ClassificationController {
         if (classificationAttachment != null) {
             classification.setAttachment(classificationAttachment);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.save(classification));
+        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.saveAndFlush(classification));
     }
 
     @GetMapping("/{classificationCode}")
