@@ -308,7 +308,7 @@ public class DemandController {
         demand.setDemandVersion(maxVersion + 1);
         demand.setActiveVersion(true);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.save(demand));
+        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
     }
 
     @Modifying
