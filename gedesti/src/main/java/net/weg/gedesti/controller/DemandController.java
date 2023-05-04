@@ -443,10 +443,28 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
-
     @GetMapping("/demand/{demandCode}/{demandVersion}")
     public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "demandVersion") Integer demandVersion) {
         return ResponseEntity.status(HttpStatus.OK).body(demandService.findByDemandCodeAndDemandVersion(demandCode, demandVersion));
     }
+    @Modifying
+    @Transactional
+    @PutMapping("/setactive/{demandCode}/{nextDemandVersion}")
+    public ResponseEntity<Object> setActiveVersion(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "nextDemandVersion") Integer nextDemandVersion) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+        Demand returnDemand = new Demand();
 
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setActiveVersion(false);
+                demandRepository.saveAndFlush(demand);
+            }
+            if (demand.getDemandVersion() == nextDemandVersion) {
+                demand.setActiveVersion(true);
+                demandRepository.saveAndFlush(demand);
+                returnDemand = demand;
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(returnDemand);
+    }
 }
