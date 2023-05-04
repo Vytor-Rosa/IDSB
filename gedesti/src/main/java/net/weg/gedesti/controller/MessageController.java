@@ -55,16 +55,13 @@ public class MessageController {
     @GetMapping("/{demandCode}")
     public ResponseEntity<?> demandMessages(@PathVariable(value = "demandCode") Integer demandCode) {
         System.out.println("Entrou no get");
-        if(messageService.findAllByDemand(demandCode).size() == 0){
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
         for(Demand demand : demandList){
             if(demand.getActiveVersion() == true){
                 return ResponseEntity.ok(messageService.findAllByDemand(demand.getDemandCode()));
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandCode);
     }
 
     @MessageMapping("/demand/{id}") // Mandando a requisição
