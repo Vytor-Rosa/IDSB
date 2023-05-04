@@ -428,4 +428,20 @@ public class DemandController {
         return score;
     }
 
+    @Modifying
+    @Transactional
+    @PutMapping("/costcenter/{demandCode}")
+    public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setCostCenter(demandDTO.getCostCenter());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
+    }
+
 }
