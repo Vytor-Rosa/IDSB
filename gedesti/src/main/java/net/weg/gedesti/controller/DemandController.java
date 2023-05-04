@@ -426,6 +426,7 @@ public class DemandController {
         }
         Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
         return score;
+        
     }
 
     @Modifying
