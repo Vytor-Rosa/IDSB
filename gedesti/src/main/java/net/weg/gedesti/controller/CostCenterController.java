@@ -65,4 +65,16 @@ public class CostCenterController {
         BeanUtils.copyProperties(costCenterDTO, costCenter);
         return ResponseEntity.status(HttpStatus.CREATED).body(costCenterService.save(costCenter));
     }
+    @Modifying
+    @Transactional
+    @PutMapping("/update/{CostCenterCode}")
+    public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "CostCenterCode") Integer CostCenterCode, @RequestBody @Valid CostCenterDTO costCenterDTO) {
+        Optional<CostCenter> costCenterOptional = costCenterService.findById(CostCenterCode);
+        if(costCenterOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No cost center with code: " + CostCenterCode);
+        }
+        CostCenter costCenter = costCenterOptional.get();
+        BeanUtils.copyProperties(costCenterDTO, costCenter);
+        return ResponseEntity.status(HttpStatus.CREATED).body(costCenterService.saveAndFlush(costCenter));
+    }
 }

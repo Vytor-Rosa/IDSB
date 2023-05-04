@@ -28,4 +28,8 @@ public class CostCenterService {
     public void deleteById(Integer integer) {
         costCenterRepository.deleteById(integer);
     }
+
+    public Object saveAndFlush(CostCenter costCenter) {
+        return costCenterRepository.saveAndFlush(costCenter);
+    }
 }
