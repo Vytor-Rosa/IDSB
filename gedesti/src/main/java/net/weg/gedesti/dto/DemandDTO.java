@@ -5,6 +5,7 @@ import net.weg.gedesti.model.entity.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +16,6 @@ public class DemandDTO {
     private String demandTitle;
 
     private String currentProblem;
-
-    private String demandDate;
 
     private String demandObjective;
 

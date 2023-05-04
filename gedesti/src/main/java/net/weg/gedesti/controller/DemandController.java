@@ -238,7 +238,7 @@ public class DemandController {
     }
 
     @GetMapping("/historical/{demandCode}")
-    public ResponseEntity<List<Demand>> historical(@PathVariable(value = "demandCode") Integer demandCode){
+    public ResponseEntity<List<Demand>> historical(@PathVariable(value = "demandCode") Integer demandCode) {
         return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByDemandCode(demandCode));
     }
 
@@ -248,6 +248,12 @@ public class DemandController {
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
         demand.setDemandHour(LocalTime.now());
+
+        LocalDate createDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        String formattedString = createDate.format(formatter);
+
+        demand.setDemandDate(formattedString);
 
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
@@ -306,6 +312,10 @@ public class DemandController {
             }
         }
         demand.setDemandHour(LocalTime.now());
+        LocalDate createDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        String formattedString = createDate.format(formatter);
+        demand.setDemandDate(formattedString);
         demand.setDemandVersion(maxVersion + 1);
         demand.setActiveVersion(true);
 
@@ -374,23 +384,32 @@ public class DemandController {
     @Transactional
     @PutMapping("/approve/{demandCode}")
     public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+        List<Demand> demandList = demandService.findAllByDemandCode(demandCode);
 
-        System.out.println("1313123");
-
-        if (!demandService.existsById(demandCode)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                System.out.println(demand);
+                demand.setScore(score(demand));
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
-
-        Demand demand = demandRepository.findById(demandCode).get();
-        demand.setScore(score(demand));
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
     public Double score(Demand demand) {
         Integer demandSize = 0;
 
+        List<Demand> demandList = demandService.findAllByDemandCode(demand.getDemandCode());
+        Demand demandDate = new Demand();
+
+        for (Demand demand1 : demandList) {
+            if (demand1.getDemandVersion() == 1) {
+                demandDate = demand1;
+            }
+        }
+
         LocalDate actualDate = LocalDate.now();
-        String createDate = demand.getDemandDate();
+        String createDate = demandDate.getDemandDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
         long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
 

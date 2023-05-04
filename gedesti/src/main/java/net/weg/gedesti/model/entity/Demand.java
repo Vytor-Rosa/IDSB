@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
