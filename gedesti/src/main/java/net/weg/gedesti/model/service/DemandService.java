@@ -63,4 +63,8 @@ public class DemandService {
     public List<Demand> findAllByRequesterRegistration(Worker worker) {
         return demandRepository.findAllByRequesterRegistration(worker);
     }
+
+    public Demand findByDemandCodeAndDemandVersion(Integer demandCode, Integer demandVersion) {
+        return demandRepository.findByDemandCodeAndDemandVersion(demandCode, demandVersion);
+    }
 }

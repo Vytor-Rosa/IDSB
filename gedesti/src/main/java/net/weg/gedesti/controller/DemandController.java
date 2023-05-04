@@ -426,7 +426,6 @@ public class DemandController {
         }
         Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
         return score;
-        
     }
 
     @Modifying
@@ -443,6 +442,11 @@ public class DemandController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
+    }
+
+    @GetMapping("/demand/{demandCode}/{demandVersion}")
+    public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "demandVersion") Integer demandVersion) {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findByDemandCodeAndDemandVersion(demandCode, demandVersion));
     }
 
 }
