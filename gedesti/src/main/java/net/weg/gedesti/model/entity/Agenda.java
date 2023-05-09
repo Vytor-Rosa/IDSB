@@ -17,16 +17,12 @@ public class Agenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Integer agendaCode;
+
     @Column(nullable = false)
     private Integer sequentialNumber;
+
     @Column(nullable = false)
     private Integer yearAgenda;
-
-    @ManyToMany
-    @JoinTable(name = "agenda_commission",
-            joinColumns = @JoinColumn(name = "agendaCode"),
-            inverseJoinColumns = @JoinColumn(name = "commissionCode"))
-    List<Commission> commission;
 
     @Column(nullable = false)
     private String agendaDate;
@@ -34,6 +30,12 @@ public class Agenda {
     @JsonIgnore
     @OneToMany(mappedBy = "agenda")
     private List<Minute> minutes;
+
+    @ManyToMany
+    @JoinTable(name = "agenda_commission",
+            joinColumns = @JoinColumn(name = "agendaCode"),
+            inverseJoinColumns = @JoinColumn(name = "commissionCode"))
+    List<Commission> commission;
 
     @ManyToMany
     @JoinTable(name = "agenda_proposal",
