@@ -22,6 +22,6 @@ public class Expenses {
     private Proposal proposal;
     @ManyToMany
     private List<CostCenter> costCenter;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Expense> expense;
 }

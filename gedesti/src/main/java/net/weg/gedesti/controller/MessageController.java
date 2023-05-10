@@ -75,7 +75,7 @@ public class MessageController {
     @GetMapping("/worker/{workerCode}")
     public ResponseEntity<Object> findAllByDemandRequester(@PathVariable(value = "workerCode") Worker workerCode){
         List<Demand> demandList = demandService.findAllByRequesterRegistration(workerCode);
-        for (int i = 0; i <= demandList.size(); i++){
+        for (int i = 0; i < demandList.size(); i++){
             List<Message> messages = messageService.findAllByDemand(demandList.get(i).getDemandCode());
             if(!messages.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK).body(true);
