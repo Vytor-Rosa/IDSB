@@ -106,4 +106,14 @@ public class ProposalController {
         proposal.setPublished(proposalDTO.getPublished());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
+
+    @GetMapping("/demand/{demandCode}")
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Demand demandCode) {
+        Optional<Proposal> proposalOptional = proposalService.findByDemandDemandCode(demandCode);
+        if(proposalOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demandCode + " doesn't exists");
+        }else{
+            return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
+        }
+    }
 }
