@@ -44,11 +44,11 @@ public class ExpensesController {
     }
 
     @GetMapping("/proposal/{proposalCode}")
-    public ResponseEntity<Object> findByProposal(@PathVariable(value = "proposalCode") Proposal proposal) {
-        if(expensesService.findByProposal(proposal).isEmpty()){
+    public ResponseEntity<Object> findAllByProposal(@PathVariable(value = "proposalCode") Proposal proposal) {
+        if(expensesService.findAllByProposal(proposal).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no expenses with code: " + proposal);
         }
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(expensesService.findByProposal(proposal));
+        return ResponseEntity.status(HttpStatus.FOUND).body(expensesService.findAllByProposal(proposal));
     }
 }
