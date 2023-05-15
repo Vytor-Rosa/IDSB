@@ -57,8 +57,8 @@ public class MessageController {
     public ResponseEntity<?> demandMessages(@PathVariable(value = "demandCode") Integer demandCode) {
         System.out.println("Entrou no get");
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
-        for(Demand demand : demandList){
-            if(demand.getActiveVersion() == true){
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
                 return ResponseEntity.ok(messageService.findAllByDemand(demand.getDemandCode()));
             }
         }
@@ -67,43 +67,37 @@ public class MessageController {
 
     @MessageMapping("/demand/{id}") // Mandando a requisição
     @SendTo("/{id}/chat") // Buscando a requisição toda hora pra ver se tem mensagem nova
-    public Message save(@Payload MessageDTO messageDTO){
+    public Message save(@Payload MessageDTO messageDTO) {
         System.out.println("Entrou no save");
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
-        return  messageService.save(message);
+        return messageService.save(message);
     }
+
     @GetMapping("/worker/{workerCode}")
-    public ResponseEntity<Object> findAllByDemandRequester(@PathVariable(value = "workerCode") Worker workerCode){
+    public ResponseEntity<Object> findAllByDemandRequester(@PathVariable(value = "workerCode") Worker workerCode) {
         List<Demand> demandList = demandService.findAllByRequesterRegistration(workerCode);
-        for (int i = 0; i < demandList.size(); i++){
+        for (int i = 0; i < demandList.size(); i++) {
             List<Message> messages = messageService.findAllByDemand(demandList.get(i).getDemandCode());
-            if(!messages.isEmpty()){
+            if (!messages.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.OK).body(true);
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(false);
     }
 
-//    @GetMapping("/worker/{workerCode}/demand")
-//    public ResponseEntity<Object> findChatByDemand(@PathVariable(value = "workerCode") Integer workerCode) {
-//        List<Demand> allDemands = demandService.findAll();
-//        List<Demand> demandList = new ArrayList<>();
-//        List<Worker> allWorkers = workerService.findAll();
-//        for (Demand demand : allDemands) {
-//            for(Worker worker : allWorkers) {
-//                if (demand.getRequesterRegistration().equals(workerCode) || demand.getWorkerRegistration().equals(workerCode)) {
-//                    demandList.add(demand);
-//                }
-//            }
-//            List<Message> messages = messageService.findAllBySenderAndDemand(workerCode, demand);
-//            if (demand.getRequesterRegistration().equals(workerCode)) {
-//                if (messages.isEmpty()) {
-//                    demandList.add(demand);
-//                }
-//            }
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body(demandList);
-//    }
+    @GetMapping("/worker/demand/{workerCode}")
+    public ResponseEntity<Object> findChatByDemand(@PathVariable(value = "workerCode") Worker workerCode) {
+        List<Demand> demandList = demandService.findAll();
+        List<Message> messageList = new ArrayList<>();
 
+        for (Demand demand : demandList) {
+            if (!messageService.findAllBySenderAndDemand(workerCode, demand.getDemandCode()).isEmpty()) {
+                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()))) {
+                    messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()));
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
+    }
 }

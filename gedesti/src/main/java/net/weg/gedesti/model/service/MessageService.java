@@ -36,6 +36,10 @@ public class MessageService {
         return messageRepository.findAllByDemandCode(demandCode);
     }
 
+    public Message findTopByDemandCodeOrderByMessageCodeDesc(Integer demandCode){
+        return messageRepository.findTopByDemandCodeOrderByMessageCodeDesc(demandCode);
+    }
+
     public List<Message> findAllBySenderAndDemand(Worker sender, Integer demandCode) {
         return messageRepository.findAllBySenderAndDemandCode(sender, demandCode);
     }

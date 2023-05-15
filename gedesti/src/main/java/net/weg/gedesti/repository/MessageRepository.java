@@ -14,4 +14,6 @@ public interface MessageRepository extends JpaRepository <Message, Integer> {
     List<Message> findAllByDemandCode(Integer demandCode);
 
     List<Message> findAllBySenderAndDemandCode(Worker sender, Integer demandCode);
+
+    Message findTopByDemandCodeOrderByMessageCodeDesc(Integer demandCode);
 }
