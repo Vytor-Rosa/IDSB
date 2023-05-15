@@ -22,7 +22,7 @@ public class Agenda {
     private Integer sequentialNumber;
 
     @Column(nullable = false)
-    private Integer yearAgenda;
+    private String yearAgenda;
 
     @Column(nullable = false)
     private String agendaDate;

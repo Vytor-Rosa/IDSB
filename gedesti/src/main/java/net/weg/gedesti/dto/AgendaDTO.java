@@ -19,7 +19,7 @@ public class AgendaDTO {
     @Positive
     private Integer sequentialNumber;
     @NotNull
-    private Integer yearAgenda;
+    private String yearAgenda;
     @NotNull
     List<Commission> commission;
     @NotNull
