@@ -2,11 +2,13 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.ExpensesDTO;
+import net.weg.gedesti.model.entity.Expense;
 import net.weg.gedesti.model.entity.Expenses;
 import net.weg.gedesti.model.entity.ExpensesCostCenters;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.ExpensesCostCentersService;
 import net.weg.gedesti.model.service.ExpensesService;
+import net.weg.gedesti.repository.ExpenseRepository;
 import net.weg.gedesti.repository.ExpensesCostCentersRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,8 @@ import java.util.List;
 @RequestMapping("/api/expenses")
 public class ExpensesController {
     private ExpensesService expensesService;
-    private ExpensesCostCentersService expensesCostCentersService;
     private ExpensesCostCentersRepository expensesCostCentersRepository;
+    private ExpenseRepository expenseRepository;
 
     @GetMapping
     public ResponseEntity<List<Expenses>> findAll() {
@@ -37,16 +39,28 @@ public class ExpensesController {
         BeanUtils.copyProperties(expensesDTO, expenses);
 
         List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
+        List<Expense> expenseList = expenses.getExpense();
+
         expenses.setExpensesCostCenters(null);
+        expenses.setExpense(null);
 
         Expenses finalExpenses = expensesService.save(expenses);
 
         List<ExpensesCostCenters> expensesCostCentersListSave = new ArrayList<>();
+        List<Expense> expenseListSave = new ArrayList<>();
 
         if (expensesCostCentersList != null) {
             for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
                 expensesCostCenters.setExpenses(finalExpenses);
                 expensesCostCentersListSave.add(expensesCostCentersRepository.save(expensesCostCenters));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OUT");
+        }
+
+        if (expenseList != null) {
+            for (Expense expense : expenseList) {
+                expenseListSave.add(expenseRepository.save(expense));
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OUT");
