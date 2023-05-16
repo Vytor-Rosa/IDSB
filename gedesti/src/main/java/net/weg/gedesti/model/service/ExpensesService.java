@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Expenses;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.repository.ExpensesRepository;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

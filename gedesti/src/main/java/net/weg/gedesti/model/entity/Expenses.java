@@ -1,8 +1,7 @@
 package net.weg.gedesti.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,16 +11,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Getter
+@Setter
 public class Expenses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer expensesCode;
+
     @Column(nullable = false)
     private String expensesType;
+
     @ManyToOne
     private Proposal proposal;
-    @ManyToMany
-    private List<CostCenter> costCenter;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expenses")
+    private List<ExpensesCostCenters> expensesCostCenters;
+
+    @OneToMany
+    @JoinColumn(name = "expense")
     private List<Expense> expense;
 }

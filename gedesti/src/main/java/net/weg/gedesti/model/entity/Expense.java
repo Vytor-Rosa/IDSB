@@ -31,5 +31,9 @@ public class Expense {
     private Double totalValue;
 
 //    @ManyToOne
+//    @JoinColumn(name = "expenses_code")
+//    private Expenses expenses;
+
+//    @ManyToOne
 //    private Proposal proposal;
 }
