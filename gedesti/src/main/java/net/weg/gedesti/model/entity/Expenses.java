@@ -27,7 +27,7 @@ public class Expenses {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "expenses")
     private List<ExpensesCostCenters> expensesCostCenters;
 
-    @OneToMany
-    @JoinColumn(name = "expense")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "expenses_code")
     private List<Expense> expense;
 }
