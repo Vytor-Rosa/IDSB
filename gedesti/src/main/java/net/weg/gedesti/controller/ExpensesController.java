@@ -45,12 +45,13 @@ public class ExpensesController {
 
         Expenses finalExpenses = expensesService.save(expenses);
 
+        List<ExpensesCostCenters> expensesCostCentersListSave = new ArrayList<>();
         List<Expense> expenseListSave = new ArrayList<>();
 
         if (expensesCostCentersList != null) {
             for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
                 expensesCostCenters.setExpenses(finalExpenses);
-                expensesCostCentersRepository.save(expensesCostCenters);
+                expensesCostCentersListSave.add(expensesCostCentersRepository.save(expensesCostCenters));
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OUT");
