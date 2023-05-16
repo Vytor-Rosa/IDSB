@@ -38,6 +38,9 @@ public class Worker {
     @Column(nullable = false)
     private String language;
 
+    @Column(nullable = false)
+    private String department;
+
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(new SimpleGrantedAuthority(cargoFuncionario));

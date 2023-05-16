@@ -15,7 +15,11 @@ public class WorkerDTO {
     private String corporateEmail;
     @NotBlank
     private String workerPassword;
+
     private String workerOffice;
 
     private String language;
+
+    private String department;
+
 }
