@@ -42,7 +42,6 @@ public class ExpensesController {
         List<Expense> expenseList = expenses.getExpense();
 
         expenses.setExpensesCostCenters(null);
-        expenses.setExpense(null);
 
         Expenses finalExpenses = expensesService.save(expenses);
 
