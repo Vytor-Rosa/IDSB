@@ -90,12 +90,26 @@ public class MessageController {
     public ResponseEntity<Object> findChatByDemand(@PathVariable(value = "workerCode") Worker workerCode) {
         List<Demand> demandList = demandService.findAll();
         List<Message> messageList = new ArrayList<>();
+        List<Demand> demandsFinal = new ArrayList<>();
+        Demand demandFinal = new Demand();
 
         for (Demand demand : demandList) {
             if (!messageService.findAllBySenderAndDemand(workerCode, demand.getDemandCode()).isEmpty()) {
                 if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()))) {
                     messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()));
                 }
+            }
+
+            demandsFinal = demandService.findByDemandCode(demand.getDemandCode());
+            for (Demand demandActive : demandsFinal) {
+                if (demandActive.getActiveVersion() == true) {
+                    demandFinal = demandActive;
+                }
+            }
+
+            if (demandFinal.getRequesterRegistration().getWorkerCode() == workerCode.getWorkerCode()) {
+                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode())))
+                    messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));
             }
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
