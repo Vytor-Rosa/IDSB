@@ -55,7 +55,6 @@ public class MessageController {
 
     @GetMapping("/{demandCode}")
     public ResponseEntity<?> demandMessages(@PathVariable(value = "demandCode") Integer demandCode) {
-        System.out.println("Entrou no get");
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
         for (Demand demand : demandList) {
             if (demand.getActiveVersion() == true) {
@@ -68,7 +67,6 @@ public class MessageController {
     @MessageMapping("/demand/{id}") // Mandando a requisição
     @SendTo("/{id}/chat") // Buscando a requisição toda hora pra ver se tem mensagem nova
     public Message save(@Payload MessageDTO messageDTO) {
-        System.out.println("Entrou no save");
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
         return messageService.save(message);

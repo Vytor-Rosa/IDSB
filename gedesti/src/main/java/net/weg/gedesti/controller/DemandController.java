@@ -217,7 +217,6 @@ public class DemandController {
                 index++;
             }
 
-            System.out.println("Excel file created successfully");
             workbook.write(outputStream);
             outputStream.close();
             openFile(attachmentName);
@@ -388,7 +387,6 @@ public class DemandController {
 
         for (Demand demand : demandList) {
             if (demand.getActiveVersion() == true) {
-                System.out.println(demand);
                 demand.setScore(score(demand));
                 return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
             }
