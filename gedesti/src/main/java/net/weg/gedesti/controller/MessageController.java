@@ -112,4 +112,23 @@ public class MessageController {
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
     }
+
+    @GetMapping("/worker/demand/{workerCode}/{demandCode}")
+    public ResponseEntity<?> findSender(@PathVariable(value = "workerCode") Worker workerCode, @PathVariable(value = "demandCode") Integer demandCode) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+        Demand demandFinal = new Demand();
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demandFinal = demand;
+
+            }
+        }
+        List<Message> messageList = messageService.findAllByDemand(demandFinal.getDemandCode());
+        for(Message message : messageList) {
+            if(message.getSender().getWorkerCode() != workerCode.getWorkerCode()) {
+                return ResponseEntity.status(HttpStatus.FOUND).body(message.getSender());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("OUT");
+    }
 }
