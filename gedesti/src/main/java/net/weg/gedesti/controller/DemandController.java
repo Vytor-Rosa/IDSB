@@ -120,27 +120,33 @@ public class DemandController {
 
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BENEFÍCIO REAL");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Real");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Valor mensal: " + demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText( demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Descrição: " + demand.getRealBenefit().getRealBenefitDescription());
+            contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
 
             // Benefício Potencial
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BENEFÍCIO POTENCIAL");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Potencial");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Valor mensal: " + demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
-            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
 
             String legalObrigation = "Não";
             if (demand.getPotentialBenefit().getLegalObrigation() == true) {
                 legalObrigation = "Sim";
             }
 
-            contentStream.showText("Obrigação legal: " + legalObrigation);
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Descrição: " + demand.getPotentialBenefit().getPotentialBenefitDescription());
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("                  Obrigação legal: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(legalObrigation);
+            contentStream.newLineAtOffset(0,-20);
+            contentStream.showText(demand.getPotentialBenefit().getPotentialBenefitDescription());
 
             // Benefício Qualitativo
             contentStream.newLineAtOffset(0, -20);
