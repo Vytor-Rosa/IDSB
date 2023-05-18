@@ -2,6 +2,7 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
+import net.weg.gedesti.model.entity.Bu;
 import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.ClassificationService;
@@ -75,6 +76,8 @@ public class DemandController {
             contentStream.newLineAtOffset(100, 700);
             contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
             contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Status: " + demand.getDemandStatus());
+            contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Solicitante: " + demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Data: " + demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
@@ -132,6 +135,34 @@ public class DemandController {
             for (CostCenter costCenter : costCenterList) {
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
+            }
+
+            // Classificação
+            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement")) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+                contentStream.newLineAtOffset(0, -20);
+
+                contentStream.showText("BUs Beneficiadas: ");
+                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+                for (Bu bu : requestersBUsList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText(bu.getBu());
+                }
+
+                if (demand.getDemandStatus().equals("BacklogComplement")) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+                }
             }
 
             contentStream.endText();
@@ -356,6 +387,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
+                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
