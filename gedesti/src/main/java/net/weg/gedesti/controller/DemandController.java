@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.awt.Color;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -74,17 +75,48 @@ public class DemandController {
 
             // Dados gerais da demanda
             contentStream.newLineAtOffset(100, 700);
-            contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            String blueWeg = "#00579D";
+            Color color = Color.decode(blueWeg);
+            contentStream.setNonStrokingColor(color);
+            contentStream.showText(demand.getDemandTitle() + " -  " + demand.getDemandCode());
+            contentStream.newLineAtOffset(0, -30);
+
+            String black = "#000000";
+            Color color1 = Color.decode(black);
+            contentStream.setNonStrokingColor(color1);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Data/Hora: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(String.valueOf(demand.getDemandDate()+ " - " + demand.getDemandHour() + "h"));
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Status: " + demand.getDemandStatus());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Solicitante: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Solicitante: " + demand.getRequesterRegistration().getWorkerName());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Status: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandStatus());
+            contentStream.newLineAtOffset(0, -40);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Situação Atual ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Data: " + demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getCurrentProblem());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Situação atual: " + demand.getCurrentProblem());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Objetivo ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Objetivo: " + demand.getDemandObjective());
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandObjective());
+            contentStream.newLineAtOffset(0, -20);
 
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
