@@ -1,17 +1,19 @@
 package net.weg.gedesti.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
+import net.weg.gedesti.model.entity.Bu;
+import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
-import net.weg.gedesti.model.entity.DemandAttachment;
-import net.weg.gedesti.model.entity.Historical;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,8 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.awt.Color;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
@@ -59,6 +61,156 @@ public class DemandController {
             }
         }
         return demandsStatus;
+    }
+
+    public void savePdf(final Demand demand) throws IOException {
+        try {
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            contentStream.beginText();
+
+            // Dados gerais da demanda
+            contentStream.newLineAtOffset(100, 700);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            String blueWeg = "#00579D";
+            Color color = Color.decode(blueWeg);
+            contentStream.setNonStrokingColor(color);
+            contentStream.showText(demand.getDemandTitle() + " -  " + demand.getDemandCode());
+            contentStream.newLineAtOffset(0, -30);
+
+            String black = "#000000";
+            Color color1 = Color.decode(black);
+            contentStream.setNonStrokingColor(color1);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Data/Hora: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(String.valueOf(demand.getDemandDate()+ " - " + demand.getDemandHour() + "h"));
+            contentStream.newLineAtOffset(0, -20);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Solicitante: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getRequesterRegistration().getWorkerName());
+            contentStream.newLineAtOffset(0, -20);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Status: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandStatus());
+            contentStream.newLineAtOffset(0, -40);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Situação Atual ");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getCurrentProblem());
+            contentStream.newLineAtOffset(0, -20);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Objetivo ");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandObjective());
+            contentStream.newLineAtOffset(0, -20);
+
+            // Benefício Real
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Real");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText( demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
+
+            // Benefício Potencial
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Potencial");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
+
+            String legalObrigation = "Não";
+            if (demand.getPotentialBenefit().getLegalObrigation() == true) {
+                legalObrigation = "Sim";
+            }
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("                  Obrigação legal: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(legalObrigation);
+            contentStream.newLineAtOffset(0,-20);
+            contentStream.showText(demand.getPotentialBenefit().getPotentialBenefitDescription());
+
+            // Benefício Qualitativo
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("BENEFÍCIO QUALITATIVO");
+            contentStream.newLineAtOffset(0, -20);
+
+            String interalControlsRequirements = "Não";
+            if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
+                interalControlsRequirements = "Sim";
+            }
+
+            contentStream.showText("Requisitos de controle interno: " + interalControlsRequirements);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Descrição: " + demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+
+            // Centros de custos
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("CENTRO DE CUSTO");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Centro de custo               Nome do centro de custo");
+
+            List<CostCenter> costCenterList = demand.getCostCenter();
+
+            for (CostCenter costCenter : costCenterList) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
+            }
+
+            // Classificação
+            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement")) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+                contentStream.newLineAtOffset(0, -20);
+
+                contentStream.showText("BUs Beneficiadas: ");
+                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+                for (Bu bu : requestersBUsList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText(bu.getBu());
+                }
+
+                if (demand.getDemandStatus().equals("BacklogComplement")) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+                }
+            }
+
+            contentStream.endText();
+            contentStream.close();
+
+            document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @PostMapping("/excel")
@@ -242,7 +394,8 @@ public class DemandController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
+    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String
+                                               demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
@@ -262,15 +415,17 @@ public class DemandController {
         if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
 
     @GetMapping("/{demandCode}")
-    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) {
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) throws IOException {
         List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
+                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
@@ -292,7 +447,8 @@ public class DemandController {
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
-                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws IOException {
+                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws
+            IOException {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         if (demandAttachment != null) {
@@ -324,7 +480,8 @@ public class DemandController {
     @Modifying
     @Transactional
     @PutMapping("/updateclassification/{demandCode}")
-    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
+    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer
+                                                               demandCode, @RequestBody DemandDTO demandDTO) {
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
 
         for (Demand demand : demandList) {
@@ -340,7 +497,8 @@ public class DemandController {
     @Modifying
     @Transactional
     @PutMapping("/updatestatus/{demandCode}")
-    public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
+    public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer
+                                                       demandCode, @RequestBody DemandDTO demandDTO) {
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
 
         for (Demand demand : demandList) {
@@ -354,7 +512,8 @@ public class DemandController {
     }
 
     @GetMapping("/filter/{type}/{value}")
-    public ResponseEntity<Object> filter(@PathVariable(value = "type") String type, @PathVariable(value = "value") String value) throws IOException {
+    public ResponseEntity<Object> filter(@PathVariable(value = "type") String
+                                                 type, @PathVariable(value = "value") String value) throws IOException {
         if (type.equals("status")) {
             List<Demand> demands = findByStatus(value);
             saveExcel("demands(" + demands.size() + ").xlsx", demands);
@@ -365,7 +524,8 @@ public class DemandController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Demand>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<Demand>> findAll
+            (@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
         int pageNumber = pageable.getPageNumber();
         pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
 
@@ -429,7 +589,8 @@ public class DemandController {
     @Modifying
     @Transactional
     @PutMapping("/costcenter/{demandCode}")
-    public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "demandCode") Integer demandCode, @RequestBody DemandDTO demandDTO) {
+    public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "demandCode") Integer
+                                                           demandCode, @RequestBody DemandDTO demandDTO) {
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
 
         for (Demand demand : demandList) {
@@ -441,14 +602,18 @@ public class DemandController {
 
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
+
     @GetMapping("/demand/{demandCode}/{demandVersion}")
-    public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "demandVersion") Integer demandVersion) {
+    public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer
+                                                                           demandCode, @PathVariable(value = "demandVersion") Integer demandVersion) {
         return ResponseEntity.status(HttpStatus.OK).body(demandService.findByDemandCodeAndDemandVersion(demandCode, demandVersion));
     }
+
     @Modifying
     @Transactional
     @PutMapping("/setactive/{demandCode}/{nextDemandVersion}")
-    public ResponseEntity<Object> setActiveVersion(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "nextDemandVersion") Integer nextDemandVersion) {
+    public ResponseEntity<Object> setActiveVersion(@PathVariable(value = "demandCode") Integer
+                                                           demandCode, @PathVariable(value = "nextDemandVersion") Integer nextDemandVersion) {
         List<Demand> demandList = demandService.findByDemandCode(demandCode);
         Demand returnDemand = new Demand();
 

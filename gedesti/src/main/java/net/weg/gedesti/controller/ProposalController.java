@@ -4,10 +4,15 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.ProposalDTO;
+import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.ProposalService;
 import net.weg.gedesti.repository.ProposalRepository;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,6 +121,89 @@ public class ProposalController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demandCode + " doesn't exists");
         }else{
             return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
+        }
+    }
+
+    public void savePdf(final Proposal proposal) throws IOException {
+        try {
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            contentStream.beginText();
+
+            // Dados gerais da proposta
+            contentStream.newLineAtOffset(100, 700);
+            contentStream.showText(proposal.getProposalName() + " - " + proposal.getProposalCode());
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Solicitante: " + demand.getRequesterRegistration().getWorkerName());
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Data: " + demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Situação atual: " + demand.getCurrentProblem());
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Objetivo: " + demand.getDemandObjective());
+//
+//            // Benefício Real
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("BENEFÍCIO REAL");
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Valor mensal: " + demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Descrição: " + demand.getRealBenefit().getRealBenefitDescription());
+//
+//            // Benefício Potencial
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("BENEFÍCIO POTENCIAL");
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Valor mensal: " + demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
+//            contentStream.newLineAtOffset(0, -20);
+//
+//            String legalObrigation = "Não";
+//            if (demand.getPotentialBenefit().getLegalObrigation() == true) {
+//                legalObrigation = "Sim";
+//            }
+//
+//            contentStream.showText("Obrigação legal: " + legalObrigation);
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Descrição: " + demand.getPotentialBenefit().getPotentialBenefitDescription());
+//
+//            // Benefício Qualitativo
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("BENEFÍCIO QUALITATIVO");
+//            contentStream.newLineAtOffset(0, -20);
+//
+//            String interalControlsRequirements = "Não";
+//            if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
+//                interalControlsRequirements = "Sim";
+//            }
+//
+//            contentStream.showText("Requisitos de controle interno: " + interalControlsRequirements);
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Descrição: " + demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+//
+//            // Centros de custos
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("CENTRO DE CUSTO");
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Centro de custo               Nome do centro de custo");
+//
+//            List<CostCenter> costCenterList = demand.getCostCenter();
+//
+//            for (CostCenter costCenter : costCenterList) {
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
+//            }
+
+//            contentStream.endText();
+//            contentStream.close();
+//
+//            document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
