@@ -29,4 +29,8 @@ public class ExpensesService {
     public List<Expenses> findAllByProposal(Proposal proposal) {
         return expensesRepository.findAllByProposal(proposal);
     }
+
+    public Object saveAndFlush(Expenses finalExpenses) {
+        return expensesRepository.saveAndFlush(finalExpenses);
+    }
 }
