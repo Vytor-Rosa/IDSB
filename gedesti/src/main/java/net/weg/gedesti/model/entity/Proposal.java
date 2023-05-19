@@ -1,6 +1,7 @@
 package net.weg.gedesti.model.entity;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -72,5 +73,9 @@ public class Proposal {
 
     @Column(nullable = true)
     private Boolean published;
+
+//    @OneToMany(mappedBy = "proposal")
+//    @JsonIgnore
+//    private List<Expenses> expensesList;
 
 }

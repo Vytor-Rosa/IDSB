@@ -6,7 +6,6 @@ import net.weg.gedesti.model.entity.Expense;
 import net.weg.gedesti.model.entity.Expenses;
 import net.weg.gedesti.model.entity.ExpensesCostCenters;
 import net.weg.gedesti.model.entity.Proposal;
-import net.weg.gedesti.model.service.ExpensesCostCentersService;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.repository.ExpenseRepository;
 import net.weg.gedesti.repository.ExpensesCostCentersRepository;
@@ -68,6 +67,12 @@ public class ExpensesController {
         finalExpenses.setExpense(expenseListSave);
         return ResponseEntity.status(HttpStatus.FOUND).body(finalExpenses);
     }
+
+//    @PutMapping
+//    public ResponseEntity<Object> edit(@RequestBody @Valid ExpensesDTO expensesDTO) {
+//        Expenses expenses = new Expenses();
+//        BeanUtils.copyProperties(expensesDTO, expenses);
+//    }
 
     @GetMapping("/{expensesCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "expensesCode") Integer integer) {

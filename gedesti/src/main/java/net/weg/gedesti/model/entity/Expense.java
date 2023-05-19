@@ -30,10 +30,4 @@ public class Expense {
     @Column(nullable = false)
     private Double totalValue;
 
-//    @ManyToOne
-//    @JoinColumn(name = "expenses_code")
-//    private Expenses expenses;
-
-//    @ManyToOne
-//    private Proposal proposal;
 }
