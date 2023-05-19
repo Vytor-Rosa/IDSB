@@ -231,7 +231,6 @@ public class DemandController {
             contentStream.showText("Nome Centro de Custo ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
 
-
             for (int i = 0; i < ListCostCenter.size(); i++) {
                if(i==0){
                    textX=(-270);
