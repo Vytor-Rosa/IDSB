@@ -24,7 +24,7 @@ public class QualitativeBenefit {
     @Column(nullable = false)
     private String qualitativeBenefitDescription;
 
-    @Column(nullable = false)
+    @Column()
     private boolean interalControlsRequirements;
 
 }

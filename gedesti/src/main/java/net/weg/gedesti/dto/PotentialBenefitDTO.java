@@ -16,7 +16,6 @@ public class PotentialBenefitDTO {
     @NotNull @Positive
     private Double potentialMonthlyValue;
 
-    @NotNull
     private Boolean legalObrigation;
 
     @NotBlank
