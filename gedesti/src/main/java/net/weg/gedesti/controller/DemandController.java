@@ -3,6 +3,7 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Bu;
+import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
@@ -35,6 +36,7 @@ import java.awt.Color;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -214,77 +216,76 @@ public class DemandController {
 //            }
 
 
-            // codigo abaixo da tabela não da erro porem não cria ela no pdf!!!!!
             float margin = 0;
             float yStart = page.getMediaBox().getHeight() - margin;
             System.out.println(yStart);
-            float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
-            float yPosition = yStart;
-            float tableHeight = 100;
-            float cellMargin = 10;
 
-            // Definição dos dados da tabela
-            String[][] content = {
-                    {"Coluna 1", "Coluna 2", "Coluna 3"},
-                    {"Dado 1", "Dado 2", "Dado 3"},
-                    {"Dado 4", "Dado 5", "Dado 6"}
-            };
+            List<CostCenter> ListCostCenter = demand.getCostCenter();
+
+            int textX = -60;
+            int textY = 0;
+            contentStream.newLineAtOffset(0, -40);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Centro de Custo ");
+            contentStream.newLineAtOffset(300, textY);
+            contentStream.showText("Nome Centro de Custo ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
 
 
-            float textX = 0;
-            float textY = -20;
-            for (int i = 0; i < content.length; i++) {
-                textX = -60;
+            for (int i = 0; i < ListCostCenter.size(); i++) {
+               if(i==0){
+                   textX=(-270);
+               }else{
+                   textX=-120;
+               }
                 textY = 0;
-                for (int j = 0; j < content[i].length; j++) {
-                    contentStream.newLineAtOffset(0, -20);
-                    String text = content[i][j];
-                    contentStream.newLineAtOffset(textX, textY);
-                    contentStream.showText(text + " ");
-                    textX += 60;
-                    textY = 20;
-                }
-            }
-            // codigo a cima  da tabela não da erro porem não cria ela no pdf!!!!!
+                CostCenter costCenter = ListCostCenter.get(i);
 
-
-            // Classificação
-            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement")) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
-                contentStream.newLineAtOffset(0, -20);
-
-                contentStream.showText("BUs Beneficiadas: ");
-                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
-
-                for (Bu bu : requestersBUsList) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText(bu.getBu());
-                }
-
-                if (demand.getDemandStatus().equals("BacklogComplement")) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
-                }
+                contentStream.newLineAtOffset(textX, -20);
+                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
+                textX = 120;
+                contentStream.newLineAtOffset(textX, textY);
+                contentStream.showText(costCenter.getCostCenter());
             }
 
-            contentStream.endText();
-            contentStream.close();
 
-            document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
-            document.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                // Classificação
+                if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+                    contentStream.newLineAtOffset(0, -20);
+
+                    contentStream.showText("BUs Beneficiadas: ");
+                    List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+                    for (Bu bu : requestersBUsList) {
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.showText(bu.getBu());
+                    }
+
+                    if (demand.getDemandStatus().equals("BacklogComplement")) {
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+                    }
+                }
+
+                contentStream.endText();
+                contentStream.close();
+
+                document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
+                document.close();
+            } catch(FileNotFoundException e){
+                e.printStackTrace();
+            }
         }
-    }
 
     @PostMapping("/excel")
     public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
