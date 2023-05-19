@@ -25,6 +25,7 @@ public class ExpensesService {
     public Optional<Expenses> findById(Integer integer) {
         return expensesRepository.findById(integer);
     }
+
     public List<Expenses> findAllByProposal(Proposal proposal) {
         return expensesRepository.findAllByProposal(proposal);
     }

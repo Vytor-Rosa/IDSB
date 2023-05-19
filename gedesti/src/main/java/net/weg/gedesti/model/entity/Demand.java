@@ -1,6 +1,7 @@
 package net.weg.gedesti.model.entity;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,7 +86,4 @@ public class Demand {
     @OneToOne
     private Classification classification;
 
-//    @JoinColumn(nullable = true)
-//    @OneToOne
-//    private Proposal proposal;
 }

@@ -57,7 +57,6 @@ public class Classification {
             inverseJoinColumns = @JoinColumn(name = "classificationCode"))
     private List<Bu> beneficiaryBu;
 
-
     @ManyToOne
     private Worker analistRegistry;
 }
