@@ -3,7 +3,6 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Bu;
-import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
@@ -13,7 +12,9 @@ import net.weg.gedesti.util.DemandUtil;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -27,6 +28,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+import java.awt.Color;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -72,47 +76,117 @@ public class DemandController {
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.beginText();
 
+//            float maxWidth = 300; // Defina a largura máxima desejada
+//
+//            // Adicionar texto
+//            String longText = "Este é um texto longo que precisa ser quebrado em várias linhas para caber na página.";
+//            float fontSize = 12;
+//            float leading = 1.5f * fontSize; // Espaçamento entre linhas
+//
+//            contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+//            contentStream.newLineAtOffset(50, 700); // Posição inicial do texto
+//
+//            String[] words = longText.split(" ");
+//            StringBuilder lineBuilder = new StringBuilder();
+//            float currentWidth = 0;
+//
+//            for (String word : words) {
+//                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontSize;
+//
+//                if (currentWidth + wordWidth > maxWidth) {
+//                    contentStream.showText(lineBuilder.toString());
+//                    contentStream.newLine();
+//                    lineBuilder.setLength(0);
+//                    currentWidth = 0;
+//                }
+//
+//                lineBuilder.append(word).append(" ");
+//                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontSize;
+//            }
+//
+//            // Exibir a última linha
+//            contentStream.showText(lineBuilder.toString());
+
+
             // Dados gerais da demanda
             contentStream.newLineAtOffset(100, 700);
-            contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            String blueWeg = "#00579D";
+            Color color = Color.decode(blueWeg);
+            contentStream.setNonStrokingColor(color);
+            contentStream.showText(demand.getDemandTitle() + " -  " + demand.getDemandCode());
+            contentStream.newLineAtOffset(0, -30);
+
+            String black = "#000000";
+            Color color1 = Color.decode(black);
+            contentStream.setNonStrokingColor(color1);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Data/Hora: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(String.valueOf(demand.getDemandDate() + " - " + demand.getDemandHour() + "h"));
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Status: " + demand.getDemandStatus());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Solicitante: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Solicitante: " + demand.getRequesterRegistration().getWorkerName());
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Status: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandStatus());
+            contentStream.newLineAtOffset(0, -40);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Situação Atual ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Data: " + demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getCurrentProblem());
+            contentStream.newLineAtOffset(0, -40);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Objetivo ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Situação atual: " + demand.getCurrentProblem());
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getDemandObjective());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Objetivo: " + demand.getDemandObjective());
 
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BENEFÍCIO REAL");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Real");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Valor mensal: " + demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Descrição: " + demand.getRealBenefit().getRealBenefitDescription());
+            contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
 
             // Benefício Potencial
+            contentStream.newLineAtOffset(0, -40);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Potencial");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BENEFÍCIO POTENCIAL");
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Valor mensal: " + demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
-            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
 
             String legalObrigation = "Não";
             if (demand.getPotentialBenefit().getLegalObrigation() == true) {
                 legalObrigation = "Sim";
             }
 
-            contentStream.showText("Obrigação legal: " + legalObrigation);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("                  Obrigação legal: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(legalObrigation);
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Descrição: " + demand.getPotentialBenefit().getPotentialBenefitDescription());
+            contentStream.showText(demand.getPotentialBenefit().getPotentialBenefitDescription());
 
             // Benefício Qualitativo
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BENEFÍCIO QUALITATIVO");
+            contentStream.newLineAtOffset(0, -40);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
 
             String interalControlsRequirements = "Não";
@@ -120,22 +194,59 @@ public class DemandController {
                 interalControlsRequirements = "Sim";
             }
 
-            contentStream.showText("Requisitos de controle interno: " + interalControlsRequirements);
+            contentStream.showText("Requisitos de controle interno: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(interalControlsRequirements);
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Descrição: " + demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+            contentStream.showText(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
 
-            // Centros de custos
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("CENTRO DE CUSTO");
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Centro de custo               Nome do centro de custo");
+            // Centros de custos -----> Tabela
+//            contentStream.newLineAtOffset(0, -40);
+//            contentStream.showText("Centro de Cu");
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.showText("Centro de custo               Nome do centro de custo");
+//
+//            List<CostCenter> costCenterList = demand.getCostCenter();
+//
+//            for (CostCenter costCenter : costCenterList) {
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
+//            }
 
-            List<CostCenter> costCenterList = demand.getCostCenter();
 
-            for (CostCenter costCenter : costCenterList) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
+            // codigo abaixo da tabela não da erro porem não cria ela no pdf!!!!!
+            float margin = 0;
+            float yStart = page.getMediaBox().getHeight() - margin;
+            System.out.println(yStart);
+            float tableWidth = page.getMediaBox().getWidth() - 2 * margin;
+            float yPosition = yStart;
+            float tableHeight = 100;
+            float cellMargin = 10;
+
+            // Definição dos dados da tabela
+            String[][] content = {
+                    {"Coluna 1", "Coluna 2", "Coluna 3"},
+                    {"Dado 1", "Dado 2", "Dado 3"},
+                    {"Dado 4", "Dado 5", "Dado 6"}
+            };
+
+
+            float textX = 0;
+            float textY = -20;
+            for (int i = 0; i < content.length; i++) {
+                textX = -60;
+                textY = 0;
+                for (int j = 0; j < content[i].length; j++) {
+                    contentStream.newLineAtOffset(0, -20);
+                    String text = content[i][j];
+                    contentStream.newLineAtOffset(textX, textY);
+                    contentStream.showText(text + " ");
+                    textX += 60;
+                    textY = 20;
+                }
             }
+            // codigo a cima  da tabela não da erro porem não cria ela no pdf!!!!!
+
 
             // Classificação
             if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement")) {

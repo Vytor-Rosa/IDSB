@@ -20,7 +20,7 @@ public class PotentialBenefit {
     @Column(nullable = false)
     private Double potentialMonthlyValue;
 
-    @Column(nullable = false)
+    @Column()
     private Boolean legalObrigation;
 
     @Size(max = 5000)
