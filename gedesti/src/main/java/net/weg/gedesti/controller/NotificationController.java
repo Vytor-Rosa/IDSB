@@ -15,6 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +41,9 @@ public class NotificationController {
 
     }
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid NotificationDTO notificationDTO) {
-
+    @MessageMapping("/worker/{workerCode}")
+    @SendTo("/notifications/{workerCode}")
+    public ResponseEntity<?> save(@Payload NotificationDTO notificationDTO) {
         Notification notification = new Notification();
         BeanUtils.copyProperties(notificationDTO, notification);
         return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.save(notification));
