@@ -77,8 +77,6 @@ public class DemandController {
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.beginText();
-            
-
 
 
             // Dados gerais da demanda
@@ -197,7 +195,8 @@ public class DemandController {
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
-
+            contentStream.showText(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+            contentStream.newLineAtOffset(0, -20);
             String interalControlsRequirements = "Não";
             if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
                 interalControlsRequirements = "Sim";
@@ -206,8 +205,7 @@ public class DemandController {
             contentStream.showText("Requisitos de controle interno: ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
             contentStream.showText(interalControlsRequirements);
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
+
 
             // Centros de custos
             float margin = 0;
