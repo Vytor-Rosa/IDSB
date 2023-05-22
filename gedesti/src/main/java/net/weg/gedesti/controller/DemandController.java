@@ -1,5 +1,7 @@
 package net.weg.gedesti.controller;
 
+import ch.qos.logback.core.Layout;
+import com.itextpdf.text.Paragraph;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Bu;
@@ -15,7 +17,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -29,14 +30,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.w3c.dom.Text;
 
 import java.awt.Color;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -77,41 +77,12 @@ public class DemandController {
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.beginText();
+            
 
-//            float maxWidth = 300; // Defina a largura máxima desejada
-//
-//            // Adicionar texto
-//            String longText = "Este é um texto longo que precisa ser quebrado em várias linhas para caber na página.";
-//            float fontSize = 12;
-//            float leading = 1.5f * fontSize; // Espaçamento entre linhas
-//
-//            contentStream.setFont(PDType1Font.HELVETICA, fontSize);
-//            contentStream.newLineAtOffset(50, 700); // Posição inicial do texto
-//
-//            String[] words = longText.split(" ");
-//            StringBuilder lineBuilder = new StringBuilder();
-//            float currentWidth = 0;
-//
-//            for (String word : words) {
-//                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontSize;
-//
-//                if (currentWidth + wordWidth > maxWidth) {
-//                    contentStream.showText(lineBuilder.toString());
-//                    contentStream.newLine();
-//                    lineBuilder.setLength(0);
-//                    currentWidth = 0;
-//                }
-//
-//                lineBuilder.append(word).append(" ");
-//                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontSize;
-//            }
-//
-//            // Exibir a última linha
-//            contentStream.showText(lineBuilder.toString());
 
 
             // Dados gerais da demanda
-            contentStream.newLineAtOffset(100, 700);
+            contentStream.newLineAtOffset(75, 700);
 
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             String blueWeg = "#00579D";
@@ -145,14 +116,50 @@ public class DemandController {
             contentStream.showText("Situação Atual ");
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA, 10);
-            contentStream.showText(demand.getCurrentProblem());
+
+            float maxWidth = 500;
+            String text = demand.getCurrentProblem();
+            StringBuilder lineBuilder = new StringBuilder();
+            float currentWidth = 0;
+
+            for (String word : text.split(" ")) {
+                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
+
+                if (currentWidth + wordWidth > maxWidth) {
+                    contentStream.showText(lineBuilder.toString());
+                    contentStream.newLineAtOffset(0,-20);
+                    lineBuilder.setLength(0);
+                    currentWidth = 0;
+                }
+
+                lineBuilder.append(word).append(" ");
+                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * 10;
+            }
+            contentStream.showText(lineBuilder.toString());
+
             contentStream.newLineAtOffset(0, -40);
 
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Objetivo ");
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA, 10);
-            contentStream.showText(demand.getDemandObjective());
+
+            String objecive = demand.getCurrentProblem();
+
+            for (String word : objecive.split(" ")) {
+                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
+
+                if (currentWidth + wordWidth > maxWidth) {
+                    contentStream.showText(lineBuilder.toString());
+                    contentStream.newLineAtOffset(0,-20);
+                    lineBuilder.setLength(0);
+                    currentWidth = 0;
+                }
+
+                lineBuilder.append(word).append(" ");
+                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * 10;
+            }
+            contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -20);
 
             // Benefício Real
@@ -202,20 +209,7 @@ public class DemandController {
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getQualitativeBenefit().getQualitativeBenefitDescription());
 
-            // Centros de custos -----> Tabela
-//            contentStream.newLineAtOffset(0, -40);
-//            contentStream.showText("Centro de Cu");
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Centro de custo               Nome do centro de custo");
-//
-//            List<CostCenter> costCenterList = demand.getCostCenter();
-//
-//            for (CostCenter costCenter : costCenterList) {
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
-//            }
-
-
+            // Centros de custos
             float margin = 0;
             float yStart = page.getMediaBox().getHeight() - margin;
             System.out.println(yStart);
