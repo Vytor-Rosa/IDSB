@@ -1,6 +1,5 @@
 package net.weg.gedesti.controller;
 
-import com.lowagie.text.DocumentException;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.dto.DemandDTO;
@@ -14,7 +13,11 @@ import net.weg.gedesti.repository.ProposalRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.jsoup.Jsoup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +30,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -177,151 +188,208 @@ public class ProposalController {
             contentStream.newLineAtOffset(0, -20);
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
-            color = Color.decode("#00579D");
-            contentStream.setNonStrokingColor(color);
             contentStream.showText("Situação atual: ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
-            color = Color.decode("#000000");
-            contentStream.setNonStrokingColor(color);
-//            contentStream.showText(proposal.getDemand().getCurrentProblem());
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+
 
             String currentProblem = proposal.getDemand().getCurrentProblem();
             currentProblem = currentProblem.replaceAll("&nbsp;", " ");
-            ITextRenderer renderer = new ITextRenderer();
-            renderer.setDocumentFromString("<html><head></head><body><div>" + currentProblem + "</div></body></html>");
-            renderer.layout();
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            String renderedContent = baos.toString();
-//            System.out.println(renderedContent);
 
-            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                renderer.createPDF(baos);
-                baos.flush();
-                try (InputStream is = new ByteArrayInputStream(baos.toByteArray())) {
-                    PDDocument pdfDocument = PDDocument.load(is);
-                    if (pdfDocument.getNumberOfPages() > 0) {
-                        PDPage pagee = pdfDocument.getPage(0);
-                        document.addPage(pagee);
-                    }
-                }
+            Document doc = Jsoup.parse(currentProblem);
+            String currentProblemFinal = doc.text();
+            contentStream.showText(currentProblemFinal);
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Objetivo: ");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+
+            String objective = demand.getDemandObjective();
+            objective = objective.replaceAll("&nbsp;", " ");
+
+            doc = Jsoup.parse(objective);
+            String objectiveFinal = doc.text();
+            contentStream.showText(objectiveFinal);
+
+            // Benefício Real
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Benefício Real");
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.showText("Valor mensal: " + demand.getRealBenefit().getRealCurrency() + " " + proposal.getDemand().getRealBenefit().getRealMonthlyValue());
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Descrição: " + demand.getRealBenefit().getRealBenefitDescription());
+
+            // Benefício Potencial
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Benefício Potencial");
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.showText("Valor mensal: " + demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
+            contentStream.newLineAtOffset(0, -20);
+
+            String legalObrigation = "Não";
+            if (demand.getPotentialBenefit().getLegalObrigation() == true) {
+                legalObrigation = "Sim";
             }
 
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Objetivo: " + demand.getDemandObjective());
-//
-//            // Benefício Real
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("BENEFÍCIO REAL");
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Valor mensal: " + demand.getRealBenefit().getRealCurrency() + " " + proposal.getDemand().getRealBenefit().getRealMonthlyValue());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Descrição: " + demand.getRealBenefit().getRealBenefitDescription());
-//
-//            // Benefício Potencial
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("BENEFÍCIO POTENCIAL");
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Valor mensal: " + demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
-//            contentStream.newLineAtOffset(0, -20);
-//
-//            String legalObrigation = "Não";
-//            if (demand.getPotentialBenefit().getLegalObrigation() == true) {
-//                legalObrigation = "Sim";
-//            }
-//
-//            contentStream.showText("Obrigação legal: " + legalObrigation);
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Descrição: " + demand.getPotentialBenefit().getPotentialBenefitDescription());
-//
-//            // Benefício Qualitativo
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("BENEFÍCIO QUALITATIVO");
-//            contentStream.newLineAtOffset(0, -20);
-//
-//            String interalControlsRequirements = "Não";
-//            if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
-//                interalControlsRequirements = "Sim";
-//            }
-//
-//            contentStream.showText("Requisitos de controle interno: " + interalControlsRequirements);
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Descrição: " + demand.getQualitativeBenefit().getQualitativeBenefitDescription());
-//
-//            // Centros de custos
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("CENTRO DE CUSTO");
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Centro de custo               Nome do centro de custo");
-//
-//            List<CostCenter> costCenterList = demand.getCostCenter();
-//
-//            for (CostCenter costCenter : costCenterList) {
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText(costCenter.getCostCenterCode() + "           " + costCenter.getCostCenter());
-//            }
-//
-//            // Classificação
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
-//            contentStream.newLineAtOffset(0, -20);
-//
-//            contentStream.showText("BUs Beneficiadas: ");
-//            List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
-//
-//            for (Bu bu : requestersBUsList) {
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText(bu.getBu());
-//            }
-//
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
-//
-//            // Dados da proposta
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Payback: " + proposal.getPayback());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Período inicial de execução: " + proposal.getInitialRunPeriod());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Perído final de execução: " + proposal.getFinalExecutionPeriod());
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("Escopo do projeto: " + proposal.getDescriptiveProposal());
-//            contentStream.newLineAtOffset(0, -20);
-//
-//            contentStream.showText("RESPONSÁVEIS PELO NEGÓCIO");
-//            List<Worker> responsibleForBusiness = proposal.getWorkers();
-//
-//            for (Worker worker : responsibleForBusiness) {
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText(worker.getWorkerCode() + " - " + worker.getWorkerName());
-//            }
-//
-//            contentStream.newLineAtOffset(0, -20);
-//            contentStream.showText("CUSTOS DE EXECUÇÃO");
-//
-////            List<Expenses> expensesList = proposal.getExpensesList();
-////            System.out.println(expensesList);
-//
-//            if (!proposal.getProposalStatus().equals("Pending")) {
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText("Opinião da comissão: " + proposal.getCommissionOpinion());
-//                contentStream.newLineAtOffset(0, -20);
-//                contentStream.showText("Proposta publicada: " + proposal.getPublished());
-//            }
+            contentStream.showText("Obrigação legal: " + legalObrigation);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Descrição: " + demand.getPotentialBenefit().getPotentialBenefitDescription());
+
+            // Benefício Qualitativo
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Benefício Qualitativo");
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+
+            String interalControlsRequirements = "Não";
+            if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
+                interalControlsRequirements = "Sim";
+            }
+
+            contentStream.showText("Requisitos de controle interno: " + interalControlsRequirements);
+            contentStream.newLineAtOffset(0, -20);
+
+            String description = demand.getDemandObjective();
+            description = description.replaceAll("&nbsp;", " ");
+
+            doc = Jsoup.parse(description);
+            String descriptionFinal = doc.text();
+
+            contentStream.showText("Descrição: " + descriptionFinal);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Frequência de uso: " + demand.getQualitativeBenefit().getFrequencyOfUse());
+
+            // Centros de custos
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Centros de custo");
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.showText("Centro de custo               Nome do centro de custo");
+
+            List<CostCenter> costCenterList = demand.getCostCenter();
+
+            for (CostCenter costCenter : costCenterList) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText(costCenter.getCostCenterCode() + "                                           " + costCenter.getCostCenter());
+            }
+
+            // Classificação
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Classificação");
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+            contentStream.newLineAtOffset(0, -20);
+
+            contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+            contentStream.newLineAtOffset(0, -20);
+
+            contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+            contentStream.newLineAtOffset(0, -20);
+
+            PDRectangle mediaBox = page.getMediaBox();
+            float larguraPagina = mediaBox.getWidth() - 2 * 50;
+            float alturaPagina = mediaBox.getHeight() - 2 * 50;
+            float alturaConteudo = PDType1Font.HELVETICA.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * 11;
+            System.out.println("Altura do conteúdo: " + alturaConteudo);
+
+            contentStream.showText("BUs Beneficiadas: ");
+            List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+            for (Bu bu : requestersBUsList) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("• " + bu.getBu());
+            }
+
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+
+            // Dados da proposta
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Dados da Proposta");
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.showText("Payback: " + proposal.getPayback() + " meses");
+
+            contentStream.newLineAtOffset(0, -20);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date currentDate = proposal.getInitialRunPeriod();
+            String formattedInitialDate = dateFormat.format(currentDate);
+            contentStream.showText("Período inicial de execução: " + formattedInitialDate);
+
+            contentStream.newLineAtOffset(0, -20);
+            currentDate = proposal.getFinalExecutionPeriod();
+            String formattedFinalDate = dateFormat.format(currentDate);
+            contentStream.showText("Perído final de execução: " + formattedFinalDate);
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Escopo do projeto: ");
+
+            contentStream.newLineAtOffset(0, -20);
+            String descriptive = proposal.getDescriptiveProposal();
+            descriptive = descriptive.replaceAll("&nbsp;", " ");
+
+            doc = Jsoup.parse(descriptive);
+            String descriptiveFinal = doc.text();
+            contentStream.showText(descriptiveFinal);
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Responsáveis pelo negócio: ");
+            List<Worker> responsibleForBusiness = proposal.getWorkers();
+
+            for (Worker worker : responsibleForBusiness) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText(worker.getWorkerCode() + " - " + worker.getWorkerName());
+            }
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Custos de Execução: ");
+
+//            List<Expenses> expensesList = proposal.getExpensesList();
+//            System.out.println(expensesList);
+
+            if (!proposal.getProposalStatus().equals("Pending")) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Opinião da comissão: " + proposal.getCommissionOpinion());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Proposta publicada: " + proposal.getPublished());
+            }
 
             contentStream.endText();
             contentStream.close();
 
             document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + proposal.getProposalCode() + " - " + proposal.getProposalName() + ".pdf"));
             document.close();
-        } catch (IOException | DocumentException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
