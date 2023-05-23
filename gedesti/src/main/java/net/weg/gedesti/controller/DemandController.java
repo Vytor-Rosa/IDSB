@@ -40,6 +40,7 @@ import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -83,24 +84,49 @@ public class DemandController {
 
 
             // Imagem ------> WEG
-            
+
 //            File imageFile = new File("/Users/ester_girelli/Documents/GitHub/IDSB/gedesti/src/main/java/net/weg/gedesti/controller/img.png");
+//
 //            PDImageXObject image = PDImageXObject.createFromFileByExtension(imageFile, document);
-//            PDPageContentStream contentStreamImage = new PDPageContentStream(document, page);
+//
 //
 //            float x = 100;
 //            float y = 100;
 //            float width = 200;
 //            float height = 100;
+//
 //            contentStream.drawImage(image, x, y, width, height);
 //
 //            contentStream.close();
+//
+//            String outputFilePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
+//            OutputStream output = new FileOutputStream(outputFilePath);
+//
+//            document.save(output);
 //            document.close();
+//            output.close();
+
+//            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
+//            PDDocument doc = PDDocument.load(file);
+
+//            PDPage pageImage = doc.getPage(0);
+
+
+//            PDImageXObject pdImage = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png", document);
+//
+//            System.out.println("Imagem:" + pdImage);
+//            contentStream.drawImage(pdImage, 200, 250,20,20);
+
+//            String outputFilePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
+//            OutputStream output = new FileOutputStream(outputFilePath);
+
+//            document.save(output);
+//            contentStream.close();
+//            document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
+//            document.close();
+//            output.close();
 
             contentStream.beginText();
-
-
-
 
             // Dados gerais da demanda
             contentStream.newLineAtOffset(75, 700);
@@ -148,7 +174,7 @@ public class DemandController {
 
                 if (currentWidth + wordWidth > maxWidth) {
                     contentStream.showText(lineBuilder.toString());
-                    contentStream.newLineAtOffset(0,-20);
+                    contentStream.newLineAtOffset(0, -20);
                     lineBuilder.setLength(0);
                     currentWidth = 0;
                 }
@@ -172,7 +198,7 @@ public class DemandController {
 
                 if (currentWidth + wordWidth > maxWidth) {
                     contentStream.showText(lineBuilder.toString());
-                    contentStream.newLineAtOffset(0,-20);
+                    contentStream.newLineAtOffset(0, -20);
                     lineBuilder.setLength(0);
                     currentWidth = 0;
                 }
@@ -247,11 +273,11 @@ public class DemandController {
             contentStream.setFont(PDType1Font.HELVETICA, 10);
 
             for (int i = 0; i < ListCostCenter.size(); i++) {
-               if(i==0){
-                   textX=(-270);
-               }else{
-                   textX=-120;
-               }
+                if (i == 0) {
+                    textX = (-270);
+                } else {
+                    textX = -120;
+                }
                 textY = 0;
                 CostCenter costCenter = ListCostCenter.get(i);
 
@@ -263,43 +289,43 @@ public class DemandController {
             }
 
 
-                // Classificação
-                if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
-                    contentStream.newLineAtOffset(0, -20);
+            // Classificação
+            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+                contentStream.newLineAtOffset(0, -20);
 
-                    contentStream.showText("BUs Beneficiadas: ");
-                    List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+                contentStream.showText("BUs Beneficiadas: ");
+                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
 
-                    for (Bu bu : requestersBUsList) {
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.showText(bu.getBu());
-                    }
-
-                    if (demand.getDemandStatus().equals("BacklogComplement")) {
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
-                    }
+                for (Bu bu : requestersBUsList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText(bu.getBu());
                 }
 
-                contentStream.endText();
-                contentStream.close();
-
-                document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
-                document.close();
-            } catch(FileNotFoundException e){
-                e.printStackTrace();
+                if (demand.getDemandStatus().equals("BacklogComplement")) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+                }
             }
+
+            contentStream.endText();
+            contentStream.close();
+
+            document.save("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
+            document.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+    }
 
     @PostMapping("/excel")
     public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
