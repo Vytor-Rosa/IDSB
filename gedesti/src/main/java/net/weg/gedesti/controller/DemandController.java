@@ -17,6 +17,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -37,6 +38,9 @@ import java.awt.Color;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -76,7 +80,26 @@ public class DemandController {
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+
+
+            // Imagem ------> WEG
+            
+//            File imageFile = new File("/Users/ester_girelli/Documents/GitHub/IDSB/gedesti/src/main/java/net/weg/gedesti/controller/img.png");
+//            PDImageXObject image = PDImageXObject.createFromFileByExtension(imageFile, document);
+//            PDPageContentStream contentStreamImage = new PDPageContentStream(document, page);
+//
+//            float x = 100;
+//            float y = 100;
+//            float width = 200;
+//            float height = 100;
+//            contentStream.drawImage(image, x, y, width, height);
+//
+//            contentStream.close();
+//            document.close();
+
             contentStream.beginText();
+
+
 
 
             // Dados gerais da demanda
