@@ -85,36 +85,10 @@ public class DemandController {
 
             // Imagem ------> WEG
 
-//            File imageFile = new File("/Users/ester_girelli/Documents/GitHub/IDSB/gedesti/src/main/java/net/weg/gedesti/controller/img.png");
-//
-//            PDImageXObject image = PDImageXObject.createFromFileByExtension(imageFile, document);
-//
-//
-//            float x = 100;
-//            float y = 100;
-//            float width = 200;
-//            float height = 100;
-//
-//            contentStream.drawImage(image, x, y, width, height);
-//
-//            contentStream.close();
-//
-//            String outputFilePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
-//            OutputStream output = new FileOutputStream(outputFilePath);
-//
-//            document.save(output);
-//            document.close();
-//            output.close();
-
-//            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
-//            PDDocument doc = PDDocument.load(file);
-
-//            PDPage pageImage = doc.getPage(0);
-
 
 //            PDImageXObject pdImage = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png", document);
 //
-//            System.out.println("Imagem:" + pdImage);
+//            System.out.println("Imagem:"+ pdImage);
 //            contentStream.drawImage(pdImage, 200, 250,20,20);
 
 //            String outputFilePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
