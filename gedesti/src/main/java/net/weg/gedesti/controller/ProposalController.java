@@ -200,6 +200,8 @@ public class ProposalController {
             String currentProblemFinal = doc.text();
             contentStream.showText(currentProblemFinal);
 
+
+
             contentStream.newLineAtOffset(0, -20);
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
