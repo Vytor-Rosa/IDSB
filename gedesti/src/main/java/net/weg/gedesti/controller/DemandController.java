@@ -1,4 +1,5 @@
 package net.weg.gedesti.controller;
+
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Bu;
@@ -127,7 +128,6 @@ public class DemandController {
             contentStream.newLineAtOffset(0, -40);
 
 
-
             //Situação Atual
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Situação Atual ");
@@ -156,7 +156,6 @@ public class DemandController {
 
             contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -40);
-
 
 
             //Objetivo
@@ -190,7 +189,6 @@ public class DemandController {
             contentStream.newLineAtOffset(0, -20);
 
 
-
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
@@ -200,7 +198,6 @@ public class DemandController {
             contentStream.showText(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
-
 
 
             // Benefício Potencial
@@ -264,7 +261,6 @@ public class DemandController {
             contentStream.showText(interalControlsRequirements);
 
 
-
             // Centros de custos
             float margin = 0;
             float yStart = page.getMediaBox().getHeight() - margin;
@@ -281,21 +277,21 @@ public class DemandController {
             contentStream.showText("Nome Centro de Custo ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
 
-                for (int i2 = 0; i2 < ListCostCenter.size(); i2++) {
-                    if (i2 == 0) {
-                        textX = (-270);
-                    } else {
-                        textX = -120;
-                    }
-                    textY = 0;
-                    CostCenter costCenter = ListCostCenter.get(i2);
-
-                    contentStream.newLineAtOffset(textX, -20);
-                    contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
-                    textX = 120;
-                    contentStream.newLineAtOffset(textX, textY);
-                    contentStream.showText(costCenter.getCostCenter());
+            for (int i2 = 0; i2 < ListCostCenter.size(); i2++) {
+                if (i2 == 0) {
+                    textX = (-270);
+                } else {
+                    textX = -120;
                 }
+                textY = 0;
+                CostCenter costCenter = ListCostCenter.get(i2);
+
+                contentStream.newLineAtOffset(textX, -20);
+                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
+                textX = 120;
+                contentStream.newLineAtOffset(textX, textY);
+                contentStream.showText(costCenter.getCostCenter());
+            }
 
 
             // Classificação
@@ -326,434 +322,432 @@ public class DemandController {
                 }
             }
 
-        contentStream.endText();
-        contentStream.close();
+            contentStream.endText();
+            contentStream.close();
 
-        document.save("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
-        document.close();
-    } catch(
-    FileNotFoundException e)
-
-    {
-        e.printStackTrace();
+            document.save("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
+            document.close();
+        } catch (
+                FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
-}
 
-@PostMapping("/excel")
-public void saveExcel(final String attachmentName,final List<Demand> demands)throws IOException{
-        try(var workbook=new XSSFWorkbook();
-        var outputStream=new FileOutputStream(attachmentName)){
+    @PostMapping("/excel")
+    public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new FileOutputStream(attachmentName)) {
 
-        CellStyle style=workbook.createCellStyle();
+            CellStyle style = workbook.createCellStyle();
 
-        Font font=workbook.createFont();
-        font.setBold(true);
-        style.setFont(font);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBorderTop(BorderStyle.THIN);
-        style.setBorderRight(BorderStyle.THIN);
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.CENTER);
-        style.setWrapText(false);
+            Font font = workbook.createFont();
+            font.setBold(true);
+            style.setFont(font);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setWrapText(false);
 
-        CellStyle bodyStyle=workbook.createCellStyle();
-        bodyStyle.setBorderBottom(BorderStyle.THIN);
-        bodyStyle.setBorderTop(BorderStyle.THIN);
-        bodyStyle.setBorderRight(BorderStyle.THIN);
-        bodyStyle.setBorderLeft(BorderStyle.THIN);
-        bodyStyle.setAlignment(HorizontalAlignment.CENTER);
-        bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        bodyStyle.setWrapText(false);
+            CellStyle bodyStyle = workbook.createCellStyle();
+            bodyStyle.setBorderBottom(BorderStyle.THIN);
+            bodyStyle.setBorderTop(BorderStyle.THIN);
+            bodyStyle.setBorderRight(BorderStyle.THIN);
+            bodyStyle.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+            bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            bodyStyle.setWrapText(false);
 
-        var sheet=workbook.createSheet();
-        sheet.setColumnWidth(1,30*256);
-        sheet.setColumnWidth(2,15*256);
-        sheet.setColumnWidth(3,15*256);
-        sheet.setColumnWidth(4,23*256);
-        sheet.setColumnWidth(5,20*256);
-        sheet.setColumnWidth(6,25*256);
-        sheet.setColumnWidth(7,25*256);
-        sheet.setColumnWidth(8,25*256);
-        sheet.setColumnWidth(9,25*256);
-        sheet.setColumnWidth(10,25*256);
-        sheet.setColumnWidth(11,20*256);
-        sheet.setColumnWidth(12,30*256);
-        sheet.setColumnWidth(13,65*256);
+            var sheet = workbook.createSheet();
+            sheet.setColumnWidth(1, 30 * 256);
+            sheet.setColumnWidth(2, 15 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 23 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 25 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 30 * 256);
+            sheet.setColumnWidth(13, 65 * 256);
 
-        int rowNum=0;
-        var row=sheet.createRow(rowNum);
-        var cell=row.createCell(0);
-        sheet.autoSizeColumn(0);
-        cell.setCellStyle(style);
-        row=sheet.createRow(rowNum++);
-        cell=row.createCell(0);
-        cell.setCellValue("Código");
-        cell.setCellStyle(style);
-        cell=row.createCell(1);
-        cell.setCellValue("Titulo");
-        cell.setCellStyle(style);
-        cell=row.createCell(2);
-        cell.setCellValue("Data de Criação");
-        cell.setCellStyle(style);
-        cell=row.createCell(3);
-        cell.setCellValue("Status");
-        cell.setCellStyle(style);
-        cell=row.createCell(4);
-        cell.setCellValue("Responsável");
-        cell.setCellStyle(style);
-        cell=row.createCell(5);
-        cell.setCellValue("Objetivo");
-        cell.setCellStyle(style);
-        cell=row.createCell(6);
-        cell.setCellValue("Centro de Custos");
-        cell.setCellStyle(style);
-        cell=row.createCell(7);
-        cell.setCellValue("Beneficio Potencial");
-        cell.setCellStyle(style);
-        cell=row.createCell(8);
-        cell.setCellValue("Beneficio Real");
-        cell.setCellStyle(style);
-        cell=row.createCell(9);
-        cell.setCellValue("Código PPM");
-        cell.setCellStyle(style);
-        cell=row.createCell(10);
-        cell.setCellValue("Link Epic Jira");
-        cell.setCellStyle(style);
-        cell=row.createCell(11);
-        cell.setCellValue("Tamanho");
-        cell.setCellStyle(style);
-        cell=row.createCell(12);
-        cell.setCellValue("Bu Solicitante");
-        cell.setCellStyle(style);
-        cell=row.createCell(13);
-        cell.setCellValue("Sessão TI Responsável");
-        cell.setCellStyle(style);
-        for(Demand demand:demands){
-        int index=0;
-        row=sheet.createRow(rowNum++);
-        cell=row.createCell(0);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getDemandCode());
-        cell=row.createCell(1);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getDemandTitle());
-        cell=row.createCell(2);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getDemandDate());
-        cell=row.createCell(3);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getDemandStatus());
-        cell=row.createCell(4);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
-        cell=row.createCell(5);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getDemandObjective());
-        cell=row.createCell(6);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
-        cell=row.createCell(7);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency()+" "+demand.getPotentialBenefit().getPotentialMonthlyValue());
-        cell=row.createCell(8);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getRealBenefit().getRealCurrency()+" "+demand.getRealBenefit().getRealMonthlyValue());
-        if(demand.getClassification()!=null){
-        cell=row.createCell(9);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getClassification().getPpmCode());
-        cell=row.createCell(10);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getClassification().getEpicJiraLink());
-        cell=row.createCell(11);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getClassification().getClassificationSize());
-        cell=row.createCell(12);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getClassification().getRequesterBu().getBu());
-        cell=row.createCell(13);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue(demand.getClassification().getItSection());
-        }else{
-        cell=row.createCell(9);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue("");
-        cell=row.createCell(10);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue("");
-        cell=row.createCell(11);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue("");
-        cell=row.createCell(12);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue("");
-        cell=row.createCell(13);
-        cell.setCellStyle(bodyStyle);
-        cell.setCellValue("");
+            int rowNum = 0;
+            var row = sheet.createRow(rowNum);
+            var cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
+            cell.setCellStyle(style);
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue("Código");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue("Titulo");
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue("Data de Criação");
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue("Status");
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue("Responsável");
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue("Objetivo");
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            cell.setCellValue("Centro de Custos");
+            cell.setCellStyle(style);
+            cell = row.createCell(7);
+            cell.setCellValue("Beneficio Potencial");
+            cell.setCellStyle(style);
+            cell = row.createCell(8);
+            cell.setCellValue("Beneficio Real");
+            cell.setCellStyle(style);
+            cell = row.createCell(9);
+            cell.setCellValue("Código PPM");
+            cell.setCellStyle(style);
+            cell = row.createCell(10);
+            cell.setCellValue("Link Epic Jira");
+            cell.setCellStyle(style);
+            cell = row.createCell(11);
+            cell.setCellValue("Tamanho");
+            cell.setCellStyle(style);
+            cell = row.createCell(12);
+            cell.setCellValue("Bu Solicitante");
+            cell.setCellStyle(style);
+            cell = row.createCell(13);
+            cell.setCellValue("Sessão TI Responsável");
+            cell.setCellStyle(style);
+            for (Demand demand : demands) {
+                int index = 0;
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandCode());
+                cell = row.createCell(1);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandTitle());
+                cell = row.createCell(2);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandDate());
+                cell = row.createCell(3);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandStatus());
+                cell = row.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getRequesterRegistration().getWorkerName());
+                cell = row.createCell(5);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getDemandObjective());
+                cell = row.createCell(6);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getCostCenter().get(index).getCostCenter());
+                cell = row.createCell(7);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
+                cell = row.createCell(8);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
+                if (demand.getClassification() != null) {
+                    cell = row.createCell(9);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getPpmCode());
+                    cell = row.createCell(10);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getEpicJiraLink());
+                    cell = row.createCell(11);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getClassificationSize());
+                    cell = row.createCell(12);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getRequesterBu().getBu());
+                    cell = row.createCell(13);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue(demand.getClassification().getItSection());
+                } else {
+                    cell = row.createCell(9);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
+                    cell = row.createCell(10);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
+                    cell = row.createCell(11);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
+                    cell = row.createCell(12);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
+                    cell = row.createCell(13);
+                    cell.setCellStyle(bodyStyle);
+                    cell.setCellValue("");
+                }
+                index++;
+            }
+
+            workbook.write(outputStream);
+            outputStream.close();
+            openFile(attachmentName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        index++;
-        }
+    }
 
-        workbook.write(outputStream);
-        outputStream.close();
-        openFile(attachmentName);
-        }catch(FileNotFoundException e){
-        e.printStackTrace();
+    public void openFile(String attachmentName) throws IOException {
+        try {
+            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("cmd.exe", "/c", "start", "", file.toString());
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        }
+    }
 
-public void openFile(String attachmentName)throws IOException{
-        try{
-        File file=new File("C:\\Users\\"+System.getProperty("user.name")+"\\Documents\\GitHub\\IDSB\\gedesti\\"+attachmentName);
-        ProcessBuilder processBuilder=new ProcessBuilder();
-        processBuilder.command("cmd.exe","/c","start","",file.toString());
-        processBuilder.start();
-        }catch(IOException e){
-        e.printStackTrace();
-        }
-        }
-
-@GetMapping("/historical/{demandCode}")
-public ResponseEntity<List<Demand>>historical(@PathVariable(value = "demandCode") Integer demandCode){
+    @GetMapping("/historical/{demandCode}")
+    public ResponseEntity<List<Demand>> historical(@PathVariable(value = "demandCode") Integer demandCode) {
         return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByDemandCode(demandCode));
-        }
+    }
 
-@PostMapping
-public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String
-        demandJson,@RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment){
-        DemandUtil demandUtil=new DemandUtil();
-        Demand demand=demandUtil.convertJsonToModel(demandJson);
+    @PostMapping
+    public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String
+                                               demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
+        DemandUtil demandUtil = new DemandUtil();
+        Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
         demand.setDemandHour(LocalTime.now());
 
-        LocalDate createDate=LocalDate.now();
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd/M/yyyy");
-        String formattedString=createDate.format(formatter);
+        LocalDate createDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        String formattedString = createDate.format(formatter);
 
         demand.setDemandDate(formattedString);
 
-        List<Demand> demands=demandRepository.findAllByActiveVersion();
-        Integer size=demands.size();
-        demand.setDemandCode(size+1);
+        List<Demand> demands = demandRepository.findAllByActiveVersion();
+        Integer size = demands.size();
+        demand.setDemandCode(size + 1);
         demand.setActiveVersion(true);
 
-        if(demandAttachment!=null){
-        demand.setDemandAttachment(demandAttachment);
+        if (demandAttachment != null) {
+            demand.setDemandAttachment(demandAttachment);
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
-        }
+    }
 
-@GetMapping("/{demandCode}")
-public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode)throws IOException{
-        List<Demand> demandOptional=demandService.findByDemandCode(demandCode);
+    @GetMapping("/{demandCode}")
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) throws IOException {
+        List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
 
-        for(Demand demand:demandOptional){
-        if(demand.getActiveVersion()==true){
-        savePdf(demand);
-        return ResponseEntity.status(HttpStatus.OK).body(demand);
-        }
+        for (Demand demand : demandOptional) {
+            if (demand.getActiveVersion() == true) {
+                savePdf(demand);
+                return ResponseEntity.status(HttpStatus.OK).body(demand);
+            }
         }
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
-        }
+    }
 
-@DeleteMapping("/{demandCode}")
-public ResponseEntity<Object> deleteById(@PathVariable(value = "demandCode") Integer demandCode){
-        Optional<Demand> demandOptional=demandService.findById(demandCode);
-        if(demandOptional.isEmpty()){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: "+demandCode);
+    @DeleteMapping("/{demandCode}")
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "demandCode") Integer demandCode) {
+        Optional<Demand> demandOptional = demandService.findById(demandCode);
+        if (demandOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code: " + demandCode);
         }
         demandService.deleteById(demandCode);
-        return ResponseEntity.status(HttpStatus.FOUND).body("Demand "+demandCode+" successfully deleted!");
-        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("Demand " + demandCode + " successfully deleted!");
+    }
 
-@Modifying
-@Transactional
-@PutMapping("/{demandCode}")
-public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
-@PathVariable(value = "demandCode") Integer demandCode,
-@RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment)throws
-        IOException{
-        DemandUtil demandUtil=new DemandUtil();
-        Demand demand=demandUtil.convertJsonToModel(demandJson);
-        if(demandAttachment!=null){
-        demand.setDemandAttachment(demandAttachment);
+    @Modifying
+    @Transactional
+    @PutMapping("/{demandCode}")
+    public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
+                                         @PathVariable(value = "demandCode") Integer demandCode,
+                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws
+            IOException {
+        DemandUtil demandUtil = new DemandUtil();
+        Demand demand = demandUtil.convertJsonToModel(demandJson);
+        if (demandAttachment != null) {
+            demand.setDemandAttachment(demandAttachment);
         }
 
         demand.setDemandCode(demandCode);
-        Integer maxVersion=0;
-        List<Demand> demandList=demandService.findAll();
-        for(int i=0;i<demandList.size();i++){
-        if(demandList.get(i).getDemandCode()==demandCode){
-        if(demandList.get(i).getDemandVersion()>maxVersion){
-        demandList.get(i).setActiveVersion(false);
-        maxVersion=demandList.get(i).getDemandVersion();
-        }
-        }
+        Integer maxVersion = 0;
+        List<Demand> demandList = demandService.findAll();
+        for (int i = 0; i < demandList.size(); i++) {
+            if (demandList.get(i).getDemandCode() == demandCode) {
+                if (demandList.get(i).getDemandVersion() > maxVersion) {
+                    demandList.get(i).setActiveVersion(false);
+                    maxVersion = demandList.get(i).getDemandVersion();
+                }
+            }
         }
         demand.setDemandHour(LocalTime.now());
-        LocalDate createDate=LocalDate.now();
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd/M/yyyy");
-        String formattedString=createDate.format(formatter);
+        LocalDate createDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        String formattedString = createDate.format(formatter);
         demand.setDemandDate(formattedString);
-        demand.setDemandVersion(maxVersion+1);
+        demand.setDemandVersion(maxVersion + 1);
         demand.setActiveVersion(true);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
-        }
+    }
 
-@Modifying
-@Transactional
-@PutMapping("/updateclassification/{demandCode}")
-public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer
-        demandCode,@RequestBody DemandDTO demandDTO){
-        List<Demand> demandList=demandService.findByDemandCode(demandCode);
+    @Modifying
+    @Transactional
+    @PutMapping("/updateclassification/{demandCode}")
+    public ResponseEntity<Object> updateClassification(@PathVariable(value = "demandCode") Integer
+                                                               demandCode, @RequestBody DemandDTO demandDTO) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
 
-        for(Demand demand:demandList){
-        if(demand.getActiveVersion()==true){
-        demand.setClassification(demandDTO.getClassification());
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
-        }
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body("OUT");
-        }
-
-@Modifying
-@Transactional
-@PutMapping("/updatestatus/{demandCode}")
-public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer
-        demandCode,@RequestBody DemandDTO demandDTO){
-        List<Demand> demandList=demandService.findByDemandCode(demandCode);
-
-        for(Demand demand:demandList){
-        if(demand.getActiveVersion()==true){
-        demand.setDemandStatus(demandDTO.getDemandStatus());
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
-        }
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setClassification(demandDTO.getClassification());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/updatestatus/{demandCode}")
+    public ResponseEntity<Object> updateStatus(@PathVariable(value = "demandCode") Integer
+                                                       demandCode, @RequestBody DemandDTO demandDTO) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setDemandStatus(demandDTO.getDemandStatus());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
 
-@GetMapping("/filter/{type}/{value}")
-public ResponseEntity<Object> filter(@PathVariable(value = "type") String
-        type,@PathVariable(value = "value") String value)throws IOException{
-        if(type.equals("status")){
-        List<Demand> demands=findByStatus(value);
-        saveExcel("demands("+demands.size()+").xlsx",demands);
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
+        return ResponseEntity.status(HttpStatus.OK).body("OUT");
+    }
+
+    @GetMapping("/filter/{type}/{value}")
+    public ResponseEntity<Object> filter(@PathVariable(value = "type") String
+                                                 type, @PathVariable(value = "value") String value) throws IOException {
+        if (type.equals("status")) {
+            List<Demand> demands = findByStatus(value);
+            saveExcel("demands(" + demands.size() + ").xlsx", demands);
+            return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
         }
 
         return ResponseEntity.status(HttpStatus.FOUND).body("No demands found");
-        }
+    }
 
-@GetMapping("/page")
-public ResponseEntity<Page<Demand>>findAll
-        (@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable){
-        int pageNumber=pageable.getPageNumber();
-        pageable=PageRequest.of(pageNumber>0?pageNumber-1:0,pageable.getPageSize(),pageable.getSort());
+    @GetMapping("/page")
+    public ResponseEntity<Page<Demand>> findAll
+            (@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
 
-        List<Demand> demandList=demandService.findAll();
-        for(Demand demand:demandList){
-        if(demand.getScore()!=null){
-        demand.setScore(score(demand));
-        demandRepository.saveAndFlush(demand);
-        }
+        List<Demand> demandList = demandService.findAll();
+        for (Demand demand : demandList) {
+            if (demand.getScore() != null) {
+                demand.setScore(score(demand));
+                demandRepository.saveAndFlush(demand);
+            }
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionOrderByScoreDesc(pageable));
-        }
+    }
 
-@Modifying
-@Transactional
-@PutMapping("/approve/{demandCode}")
-public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode){
-        List<Demand> demandList=demandService.findAllByDemandCode(demandCode);
+    @Modifying
+    @Transactional
+    @PutMapping("/approve/{demandCode}")
+    public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+        List<Demand> demandList = demandService.findAllByDemandCode(demandCode);
 
-        for(Demand demand:demandList){
-        if(demand.getActiveVersion()==true){
-        demand.setScore(score(demand));
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
-        }
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setScore(score(demand));
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
+    }
+
+    public Double score(Demand demand) {
+        Integer demandSize = 0;
+
+        List<Demand> demandList = demandService.findAllByDemandCode(demand.getDemandCode());
+        Demand demandDate = new Demand();
+
+        for (Demand demand1 : demandList) {
+            if (demand1.getDemandVersion() == 1) {
+                demandDate = demand1;
+            }
         }
 
-public Double score(Demand demand){
-        Integer demandSize=0;
+        LocalDate actualDate = LocalDate.now();
+        String createDate = demandDate.getDemandDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
 
-        List<Demand> demandList=demandService.findAllByDemandCode(demand.getDemandCode());
-        Demand demandDate=new Demand();
-
-        for(Demand demand1:demandList){
-        if(demand1.getDemandVersion()==1){
-        demandDate=demand1;
+        if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
+            demandSize = 1;
+        } else if (demand.getClassification().getClassificationSize().equals("Pequeno")) {
+            demandSize = 41;
+        } else if (demand.getClassification().getClassificationSize().equals("Médio")) {
+            demandSize = 301;
+        } else if (demand.getClassification().getClassificationSize().equals("Grande")) {
+            demandSize = 1001;
+        } else if (demand.getClassification().getClassificationSize().equals("Muito Grande")) {
+            demandSize = 3001;
         }
-        }
-
-        LocalDate actualDate=LocalDate.now();
-        String createDate=demandDate.getDemandDate();
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd/M/yyyy");
-        long days=ChronoUnit.DAYS.between(LocalDate.parse(createDate,formatter),actualDate);
-
-        if(demand.getClassification().getClassificationSize().equals("Muito Pequeno")){
-        demandSize=1;
-        }else if(demand.getClassification().getClassificationSize().equals("Pequeno")){
-        demandSize=41;
-        }else if(demand.getClassification().getClassificationSize().equals("Médio")){
-        demandSize=301;
-        }else if(demand.getClassification().getClassificationSize().equals("Grande")){
-        demandSize=1001;
-        }else if(demand.getClassification().getClassificationSize().equals("Muito Grande")){
-        demandSize=3001;
-        }
-        Double score=((2*demand.getRealBenefit().getRealMonthlyValue())+demand.getPotentialBenefit().getPotentialMonthlyValue()+days)/demandSize;
+        Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
         return score;
-        }
+    }
 
-@Modifying
-@Transactional
-@PutMapping("/costcenter/{demandCode}")
-public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "demandCode") Integer
-        demandCode,@RequestBody DemandDTO demandDTO){
-        List<Demand> demandList=demandService.findByDemandCode(demandCode);
+    @Modifying
+    @Transactional
+    @PutMapping("/costcenter/{demandCode}")
+    public ResponseEntity<Object> updateCostCenter(@PathVariable(value = "demandCode") Integer
+                                                           demandCode, @RequestBody DemandDTO demandDTO) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
 
-        for(Demand demand:demandList){
-        if(demand.getActiveVersion()==true){
-        demand.setCostCenter(demandDTO.getCostCenter());
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
-        }
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setCostCenter(demandDTO.getCostCenter());
+                return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
-        }
+    }
 
-@GetMapping("/demand/{demandCode}/{demandVersion}")
-public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer
-        demandCode,@PathVariable(value = "demandVersion") Integer demandVersion){
-        return ResponseEntity.status(HttpStatus.OK).body(demandService.findByDemandCodeAndDemandVersion(demandCode,demandVersion));
-        }
+    @GetMapping("/demand/{demandCode}/{demandVersion}")
+    public ResponseEntity<Object> findByDemandCodeAndDemandVersion(@PathVariable(value = "demandCode") Integer
+                                                                           demandCode, @PathVariable(value = "demandVersion") Integer demandVersion) {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findByDemandCodeAndDemandVersion(demandCode, demandVersion));
+    }
 
-@Modifying
-@Transactional
-@PutMapping("/setactive/{demandCode}/{nextDemandVersion}")
-public ResponseEntity<Object> setActiveVersion(@PathVariable(value = "demandCode") Integer
-        demandCode,@PathVariable(value = "nextDemandVersion") Integer nextDemandVersion){
-        List<Demand> demandList=demandService.findByDemandCode(demandCode);
-        Demand returnDemand=new Demand();
+    @Modifying
+    @Transactional
+    @PutMapping("/setactive/{demandCode}/{nextDemandVersion}")
+    public ResponseEntity<Object> setActiveVersion(@PathVariable(value = "demandCode") Integer
+                                                           demandCode, @PathVariable(value = "nextDemandVersion") Integer nextDemandVersion) {
+        List<Demand> demandList = demandService.findByDemandCode(demandCode);
+        Demand returnDemand = new Demand();
 
-        for(Demand demand:demandList){
-        if(demand.getActiveVersion()==true){
-        demand.setActiveVersion(false);
-        demandRepository.saveAndFlush(demand);
-        }
-        if(demand.getDemandVersion()==nextDemandVersion){
-        demand.setActiveVersion(true);
-        demandRepository.saveAndFlush(demand);
-        returnDemand=demand;
-        }
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                demand.setActiveVersion(false);
+                demandRepository.saveAndFlush(demand);
+            }
+            if (demand.getDemandVersion() == nextDemandVersion) {
+                demand.setActiveVersion(true);
+                demandRepository.saveAndFlush(demand);
+                returnDemand = demand;
+            }
         }
         return ResponseEntity.status(HttpStatus.OK).body(returnDemand);
-        }
-        }
+    }
+}

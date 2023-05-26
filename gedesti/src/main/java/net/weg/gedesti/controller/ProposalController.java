@@ -165,45 +165,44 @@ public class ProposalController {
             // Dados da demanda / proposta
             Demand demand = proposal.getDemand();
 
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             Color color = Color.decode("#00579D");
             contentStream.setNonStrokingColor(color);
-            contentStream.newLineAtOffset(50, 700);
+            contentStream.newLineAtOffset(60, 750);
             contentStream.showText(proposal.getProposalName() + " - " + proposal.getProposalCode());
 
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
             color = Color.decode("#000000");
             contentStream.setNonStrokingColor(color);
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Status: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 11);
-            contentStream.showText(proposal.getProposalStatus());
-
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Data: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             contentStream.showText(proposal.getProposalDate());
 
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Solicitante: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             contentStream.showText(demand.getRequesterRegistration().getWorkerName());
 
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.showText("Status: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(proposal.getProposalStatus());
+
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Analista responsável: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 11);
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             contentStream.showText(proposal.getResponsibleAnalyst().getWorkerName());
 
             contentStream.newLineAtOffset(0, -20);
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Situação atual: ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 11);
-
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
 
             String currentProblem = proposal.getDemand().getCurrentProblem();
             currentProblem = currentProblem.replaceAll("&nbsp;", " ");
