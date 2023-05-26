@@ -23,7 +23,7 @@ public class Expenses {
     private String expensesType;
 
     @ManyToOne
-//    @JsonIgnore
+    @JsonIgnore
     @JoinColumn(name = "proposal_code")
     private Proposal proposal;
 

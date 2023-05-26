@@ -81,12 +81,11 @@ public class ExpensesController {
     }
 
     @GetMapping("/proposal/{proposalCode}")
-    public ResponseEntity<Object> findAllByProposal(@PathVariable(value = "proposalCode") Proposal proposal) {
-        if (expensesService.findAllByProposal(proposal).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no expenses with code: " + proposal);
+    public ResponseEntity<Object> findAllByProposalProposalCode(@PathVariable(value = "proposalCode") Integer proposal_code) {
+        if (expensesService.findAllByProposalProposalCode(proposal_code).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no expenses with code: " + proposal_code);
         }
-
-        return ResponseEntity.status(HttpStatus.FOUND).body(expensesService.findAllByProposal(proposal));
+        return ResponseEntity.status(HttpStatus.FOUND).body(expensesService.findAllByProposalProposalCode(proposal_code));
     }
 
 //    @Modifying
@@ -106,14 +105,8 @@ public class ExpensesController {
 //
 //        expenses.setExpensesCostCenters(null);
 //
-//
-//
 //        List<ExpensesCostCenters> expensesCostCentersListRemove = expensesCostCentersRepository.findAllByExpenses(expensesOptional.get());
 //        expensesCostCentersRepository.deleteAllInBatch(expensesCostCentersListRemove);
-//
-//
-//
-//
 //
 //        Expenses finalExpenses = expensesService.save(expenses);
 //
@@ -138,7 +131,6 @@ public class ExpensesController {
 //        }
 //
 //        finalExpenses.setExpense(expenseListSave);
-//
 //
 //        return ResponseEntity.status(HttpStatus.OK).body(expensesService.saveAndFlush(finalExpenses));
 //    }

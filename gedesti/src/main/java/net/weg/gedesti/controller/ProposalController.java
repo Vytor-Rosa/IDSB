@@ -141,6 +141,18 @@ public class ProposalController {
         }
     }
 
+    @Modifying
+    @Transactional
+    @PutMapping("/{proposalCode}")
+    public ResponseEntity<Object> update(@PathVariable(value = "proposalCode") Integer proposalCode, @RequestBody ProposalDTO proposalDTO) {
+        if (!proposalService.existsById(proposalCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+        Proposal proposal = proposalRepository.findById(proposalCode).get();
+        BeanUtils.copyProperties(proposalDTO, proposal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
+    }
+
     public void savePdf(final Proposal proposal) throws IOException {
         try {
             PDDocument document = new PDDocument();
@@ -199,8 +211,6 @@ public class ProposalController {
             Document doc = Jsoup.parse(currentProblem);
             String currentProblemFinal = doc.text();
             contentStream.showText(currentProblemFinal);
-
-
 
             contentStream.newLineAtOffset(0, -20);
             contentStream.newLineAtOffset(0, -20);
@@ -309,12 +319,6 @@ public class ProposalController {
             contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
             contentStream.newLineAtOffset(0, -20);
 
-            PDRectangle mediaBox = page.getMediaBox();
-            float larguraPagina = mediaBox.getWidth() - 2 * 50;
-            float alturaPagina = mediaBox.getHeight() - 2 * 50;
-            float alturaConteudo = PDType1Font.HELVETICA.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * 11;
-            System.out.println("Altura do conteúdo: " + alturaConteudo);
-
             contentStream.showText("BUs Beneficiadas: ");
             List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
 
@@ -322,7 +326,6 @@ public class ProposalController {
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.showText("• " + bu.getBu());
             }
-
 
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
@@ -374,8 +377,33 @@ public class ProposalController {
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Custos de Execução: ");
 
-//            List<Expenses> expensesList = proposal.getExpensesList();
-//            System.out.println(expensesList);
+            List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposal.getProposalCode());
+
+            for (Expenses expenses : expensesList) {
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText(expenses.getExpensesType());
+                contentStream.newLineAtOffset(0, -20);
+
+                List<Expense> expenseList = expenses.getExpense();
+                List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
+
+                contentStream.showText("DESPESAS");
+                for (Expense expense : expenseList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Perfil da despesa: " + expense.getExpenseProfile());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Quantidade de horas: " + expense.getAmountOfHours() + "h");
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Valor hora: R$" + expense.getHourValue());
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Valor total: R$" + expense.getTotalValue());
+                }
+
+                for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText("Centro de custo: " + expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent() + "%");
+                }
+            }
 
             if (!proposal.getProposalStatus().equals("Pending")) {
                 contentStream.newLineAtOffset(0, -20);

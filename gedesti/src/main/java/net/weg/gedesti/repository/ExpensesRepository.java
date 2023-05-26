@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ExpensesRepository extends JpaRepository<Expenses, Integer> {
     List<Expenses> findAllByProposal(Proposal proposal);
+
+    List<Expenses> findAllByProposalProposalCode(Integer proposalCode);
 }

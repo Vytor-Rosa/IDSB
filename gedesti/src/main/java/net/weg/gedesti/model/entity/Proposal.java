@@ -74,8 +74,8 @@ public class Proposal {
     @Column(nullable = true)
     private Boolean published;
 
-//    @OneToMany(mappedBy = "proposal")
-//    @JsonIgnore
-//    private List<Expenses> expensesList;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Expenses> expensesList;
 
 }
