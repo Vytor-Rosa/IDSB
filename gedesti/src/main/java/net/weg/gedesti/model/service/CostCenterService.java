@@ -25,6 +25,11 @@ public class CostCenterService {
         return costCenterRepository.findById(integer);
     }
 
+    public Optional<CostCenter> findByCostCenter(String costCenter) {
+        return costCenterRepository.findByCostCenter(costCenter);
+    }
+
+
     public void deleteById(Integer integer) {
         costCenterRepository.deleteById(integer);
     }
@@ -32,4 +37,6 @@ public class CostCenterService {
     public Object saveAndFlush(CostCenter costCenter) {
         return costCenterRepository.saveAndFlush(costCenter);
     }
+
+
 }

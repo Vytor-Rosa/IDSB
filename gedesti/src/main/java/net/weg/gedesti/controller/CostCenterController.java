@@ -43,6 +43,18 @@ public class CostCenterController {
         return ResponseEntity.status(HttpStatus.FOUND).body(costCenterOptional);
     }
 
+
+    @GetMapping("/name/{CostCenter}")
+    public ResponseEntity<Object> findByCostCenter(@PathVariable (value = "CostCenter") String CostCenter){
+        Optional<CostCenter> costCenterOptional = costCenterService.findByCostCenter(CostCenter);
+
+        if(costCenterOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No cost center with name: " + CostCenter);
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(costCenterOptional);
+    }
+
     @DeleteMapping("/{CostCenterCode}")
     public ResponseEntity<Object> deleteById(@PathVariable(value = "CostCenterCode") Integer CostCenterCode) {
         Optional<CostCenter> costCenterOptional = costCenterService.findById(CostCenterCode);
@@ -65,4 +77,6 @@ public class CostCenterController {
         BeanUtils.copyProperties(costCenterDTO, costCenter);
         return ResponseEntity.status(HttpStatus.CREATED).body(costCenterService.save(costCenter));
     }
+
+
 }

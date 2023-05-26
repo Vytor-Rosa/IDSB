@@ -6,6 +6,7 @@ import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.repository.ExpensesRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +33,9 @@ public class ExpensesService {
 
     public Object saveAndFlush(Expenses finalExpenses) {
         return expensesRepository.saveAndFlush(finalExpenses);
+    }
+
+    public List<Expenses> findAllByProposalProposalCode(Integer proposalCode) {
+        return expensesRepository.findAllByProposalProposalCode(proposalCode);
     }
 }
