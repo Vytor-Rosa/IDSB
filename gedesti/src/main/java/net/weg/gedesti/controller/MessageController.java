@@ -131,4 +131,5 @@ public class MessageController {
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("OUT");
     }
+
 }

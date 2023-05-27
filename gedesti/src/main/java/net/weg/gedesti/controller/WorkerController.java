@@ -1,6 +1,7 @@
 package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.component.UserPresenceManager;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.WorkerDTO;
 import net.weg.gedesti.model.entity.Demand;
@@ -28,6 +29,8 @@ import java.util.Optional;
 public class WorkerController {
     private WorkerService workerSerivce;
     private WorkerRepository workerRepository;
+
+    private UserPresenceManager userPresenceManager;
 
     @GetMapping
     public ResponseEntity<List<Worker>> findAll() {
@@ -101,5 +104,12 @@ public class WorkerController {
         Worker worker = workerRepository.findById(workerCode).get();
         worker.setLanguage(workerDTO.getLanguage());
         return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @GetMapping("/user/{userId}/online")
+    public ResponseEntity<Boolean> isUserOnline(@PathVariable("userId") Integer userId) {
+        boolean isOnline = userPresenceManager.isUserOnline(workerSerivce.findById(userId).get().getCorporateEmail());
+        System.out.println("isOnline: " + isOnline);
+        return ResponseEntity.ok(isOnline);
     }
 }
