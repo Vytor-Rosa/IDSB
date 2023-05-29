@@ -359,29 +359,49 @@ public class ProposalController {
             }
 
             // Classificação
-            contentStream.newLineAtOffset(0, -40);
-            contentStream.showText("Analista: " + demand.getClassification().getAnalistRegistry().getWorkerName());
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.newLineAtOffset(0,0);
+            contentStream.showText("Classificação");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Tamanho: " + demand.getClassification().getClassificationSize());
+            contentStream.showText("Analista: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getClassification().getAnalistRegistry().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("Sessão de TI responsável: " + demand.getClassification().getItSection());
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Tamanho: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getClassification().getClassificationSize());
             contentStream.newLineAtOffset(0, -20);
-            contentStream.showText("BU Solicitante: " + demand.getClassification().getRequesterBu().getBu());
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Sessão de TI responsável: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getClassification().getItSection());
             contentStream.newLineAtOffset(0, -20);
-
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("BU Solicitante: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(demand.getClassification().getRequesterBu().getBu());
+            contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("BUs Beneficiadas: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
 
             for (Bu bu : requestersBUsList) {
-                contentStream.newLineAtOffset(0, -20);
                 contentStream.showText(bu.getBu());
             }
 
             if (demand.getDemandStatus().equals("BacklogComplement")) {
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Código PPM: " + demand.getClassification().getPpmCode());
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                contentStream.showText("Código PPM: " );
+                contentStream.setFont(PDType1Font.HELVETICA, 10);
+                contentStream.showText(demand.getClassification().getPpmCode());
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Link Epic do Jira: " + demand.getClassification().getEpicJiraLink());
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                contentStream.showText("Link Epic do Jira: " );
+                contentStream.setFont(PDType1Font.HELVETICA, 10);
+                contentStream.showText(demand.getClassification().getEpicJiraLink());
             }
 
             // Dados da proposta
@@ -390,22 +410,30 @@ public class ProposalController {
             contentStream.showText("Dados da Proposta");
 
             contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Payback: " );
             contentStream.setFont(PDType1Font.HELVETICA, 10);
-            contentStream.showText("Payback: " + proposal.getPayback() + " meses");
-
+            contentStream.showText(proposal.getPayback()+ "meses");
             contentStream.newLineAtOffset(0, -20);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date currentDate = proposal.getInitialRunPeriod();
             String formattedInitialDate = dateFormat.format(currentDate);
-            contentStream.showText("Período inicial de execução: " + formattedInitialDate);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Período inicial de execução: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(formattedInitialDate);
 
             contentStream.newLineAtOffset(0, -20);
             currentDate = proposal.getFinalExecutionPeriod();
             String formattedFinalDate = dateFormat.format(currentDate);
-            contentStream.showText("Perído final de execução: " + formattedFinalDate);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.showText("Perído final de execução: " );
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.showText(formattedFinalDate);
 
             contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Escopo do projeto: ");
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
 
             contentStream.newLineAtOffset(0, -20);
             String descriptive = proposal.getDescriptiveProposal();
@@ -416,8 +444,10 @@ public class ProposalController {
             contentStream.showText(descriptiveFinal);
 
             contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Responsáveis pelo negócio: ");
             List<Worker> responsibleForBusiness = proposal.getWorkers();
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
 
             for (Worker worker : responsibleForBusiness) {
                 contentStream.newLineAtOffset(0, -20);
@@ -425,8 +455,9 @@ public class ProposalController {
             }
 
             contentStream.newLineAtOffset(0, -20);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Custos de Execução: ");
-
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
             List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposal.getProposalCode());
 
             for (Expenses expenses : expensesList) {
@@ -437,29 +468,50 @@ public class ProposalController {
                 List<Expense> expenseList = expenses.getExpense();
                 List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
 
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
                 contentStream.showText("DESPESAS");
                 for (Expense expense : expenseList) {
                     contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Perfil da despesa: " + expense.getExpenseProfile());
+                    contentStream.showText("Perfil da despesa: " );
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    contentStream.showText(expense.getExpenseProfile());
                     contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Quantidade de horas: " + expense.getAmountOfHours() + "h");
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                    contentStream.showText("Quantidade de horas: " );
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    contentStream.showText(expense.getAmountOfHours() + "h");
                     contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Valor hora: R$" + expense.getHourValue());
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                    contentStream.showText("Valor hora: R$" );
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    contentStream.showText(String.valueOf(expense.getHourValue()));
                     contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Valor total: R$" + expense.getTotalValue());
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                    contentStream.showText("Valor total: R$" );
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    contentStream.showText(String.valueOf(expense.getTotalValue()));
                 }
 
                 for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
                     contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Centro de custo: " + expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent() + "%");
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                    contentStream.showText("Centro de custo: ");
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    contentStream.showText(expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent()+ "%");
                 }
             }
 
             if (!proposal.getProposalStatus().equals("Pending")) {
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Opinião da comissão: " + proposal.getCommissionOpinion());
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                contentStream.showText("Opinião da comissão: ");
+                contentStream.setFont(PDType1Font.HELVETICA, 10);
+                contentStream.showText(proposal.getCommissionOpinion());
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Proposta publicada: " + proposal.getPublished());
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                contentStream.showText("Proposta publicada: " );
+                contentStream.setFont(PDType1Font.HELVETICA, 10);
+                contentStream.showText(String.valueOf(proposal.getPublished()));
             }
 
             contentStream.endText();
