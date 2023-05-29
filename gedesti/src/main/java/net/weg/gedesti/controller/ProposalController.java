@@ -343,24 +343,42 @@ public class ProposalController {
             contentStream.showText(interalControlsRequirements);
 
             // Centros de custos
+            float marginCostCenter = 0;
+            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
+            System.out.println(yStartCostCenter);
+
+            List<CostCenter> ListCostCenter = demand.getCostCenter();
+
+            int textX = -60;
+            int textY = 0;
             contentStream.newLineAtOffset(0, -40);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-            contentStream.showText("Centros de custo");
-
-            contentStream.newLineAtOffset(0, -20);
+            contentStream.showText("Centro de Custo ");
+            contentStream.newLineAtOffset(300, textY);
+            contentStream.showText("Nome Centro de Custo ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
-            contentStream.showText("Centro de custo               Nome do centro de custo");
 
-            List<CostCenter> costCenterList = demand.getCostCenter();
+            for (int i2 = 0; i2 < ListCostCenter.size(); i2++) {
+                if (i2 == 0) {
+                    textX = (-270);
+                } else {
+                    textX = -120;
+                }
+                textY = 0;
+                CostCenter costCenter = ListCostCenter.get(i2);
 
-            for (CostCenter costCenter : costCenterList) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText(costCenter.getCostCenterCode() + "                                           " + costCenter.getCostCenter());
+                contentStream.newLineAtOffset(textX, -20);
+                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
+                textX = 120;
+                contentStream.newLineAtOffset(textX, textY);
+                contentStream.showText(costCenter.getCostCenter());
             }
 
             // Classificação
+            textX = -150;
+            textY = -40;
+            contentStream.newLineAtOffset(textX, textY);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-            contentStream.newLineAtOffset(0,0);
             contentStream.showText("Classificação");
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText("Analista: " );
