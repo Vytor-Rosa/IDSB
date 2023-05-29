@@ -262,9 +262,9 @@ public class DemandController {
 
 
             // Centros de custos
-            float margin = 0;
-            float yStart = page.getMediaBox().getHeight() - margin;
-            System.out.println(yStart);
+            float marginCostCenter = 0;
+            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
+            System.out.println(yStartCostCenter);
 
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
@@ -292,7 +292,90 @@ public class DemandController {
                 contentStream.newLineAtOffset(textX, textY);
                 contentStream.showText(costCenter.getCostCenter());
             }
-
+//            float margin = 50;
+//            float yStart = page.getMediaBox().getHeight() - margin;
+//            float yPosition = yStart;
+//            float lineHeight = 15;
+//            int linesPerPage = 30;
+//
+//            CostCenter costCenter = new CostCenter();
+//
+//            String[] textStrings = {
+//                    demand.getDemandTitle(),
+//                    String.valueOf(demand.getDemandCode()),
+//                    demand.getDemandDate(),
+//                    String.valueOf(demand.getDemandHour()),
+//                    demand.getRequesterRegistration().getWorkerName(),
+//                    demand.getCurrentProblem(),
+//                    demand.getDemandObjective(),
+//                    demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue(),
+//                    demand.getRealBenefit().getRealBenefitDescription(),
+//                    demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue(),
+//                    demand.getRealBenefit().getRealBenefitDescription(),
+//                    demand.getQualitativeBenefit().getQualitativeBenefitDescription(),
+//                    String.valueOf(costCenter.getCostCenterCode())
+//
+//            };
+//
+//            PDType1Font font = PDType1Font.HELVETICA;
+//            int numLines = 0;
+//
+//
+//            for (String text : textStrings) {
+//                String[] words = text.split(" ");
+//
+//                for (String word : words) {
+//                    float wordWidth = font.getStringWidth(word) / 1000 * 10;
+//                    float lineLength = 0;
+//
+//                    // Verifica se a palavra cabe na linha atual
+//                    if (lineLength + wordWidth < page.getMediaBox().getWidth() - 2 * margin) {
+//                        lineLength += wordWidth;
+//                        contentStream.showText(word + " ");
+//                    } else {
+//                        // Move a palavra para a próxima página
+//                        contentStream.endText();
+//                        contentStream.close();
+//
+//                        PDPage newPage = new PDPage();
+//                        document.addPage(newPage);
+//
+//                        contentStream = new PDPageContentStream(document, newPage);
+//                        page = newPage;
+//                        yStart = page.getMediaBox().getHeight() - margin;
+//                        yPosition = yStart;
+//                        contentStream.setFont(font, 10);
+//                        contentStream.beginText();
+//                        lineLength = wordWidth;
+//
+//                        contentStream.newLineAtOffset(margin, yPosition);
+//                        contentStream.showText(word + " ");
+//                        yPosition -= lineHeight;
+//                        numLines++;
+//                    }
+//
+//                    // Verifica se a linha atual atingiu o limite de linhas por página
+//                    if (numLines >= linesPerPage) {
+//                        contentStream.endText();
+//                        contentStream.close();
+//
+//                        PDPage newPage = new PDPage();
+//                        document.addPage(newPage);
+//
+//                        contentStream = new PDPageContentStream(document, newPage);
+//                        page = newPage;
+//                        yStart = page.getMediaBox().getHeight() - margin;
+//                        yPosition = yStart;
+//                        contentStream.setFont(font, 10);
+//                        contentStream.beginText();
+//                        numLines = 0;
+//                    }
+//
+//                    yPosition -= lineHeight;
+//                    numLines++;
+//                }
+//            }
+            
 
             // Classificação
             if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {

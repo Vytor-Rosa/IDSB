@@ -3,6 +3,7 @@ package net.weg.gedesti.model.entity;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.context.annotation.Bean;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
