@@ -20,11 +20,9 @@ public class UserPresenceManagerInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            System.out.println("acessor conn name: " + accessor.getUser().getName());
             String userId = accessor.getUser().getName();
             userPresenceManager.userConnected(userId);
         } else if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
-            System.out.println("acessor disc name: " + accessor.getUser().getName());
             String userId = accessor.getUser().getName();
             userPresenceManager.userDisconnected(userId);
         }

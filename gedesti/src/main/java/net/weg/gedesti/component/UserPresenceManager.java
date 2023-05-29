@@ -9,7 +9,6 @@ public class UserPresenceManager {
     private Set<String> onlineUsers = new HashSet<>();
 
     public void userConnected(String userId) {
-        System.out.println("user connected: " + onlineUsers);
         onlineUsers.add(userId);
     }
 
@@ -18,7 +17,6 @@ public class UserPresenceManager {
     }
 
     public boolean isUserOnline(String userId) {
-        System.out.println(userId);
         return onlineUsers.contains(userId);
     }
 }

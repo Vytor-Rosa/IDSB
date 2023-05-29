@@ -109,7 +109,6 @@ public class WorkerController {
     @GetMapping("/user/{userId}/online")
     public ResponseEntity<Boolean> isUserOnline(@PathVariable("userId") Integer userId) {
         boolean isOnline = userPresenceManager.isUserOnline(workerSerivce.findById(userId).get().getCorporateEmail());
-        System.out.println("isOnline: " + isOnline);
         return ResponseEntity.ok(isOnline);
     }
 }
