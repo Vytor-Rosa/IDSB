@@ -95,15 +95,15 @@ public class ProposalController {
         return ResponseEntity.status(HttpStatus.FOUND).body("Proposal " + proposalCode + " successfully deleted!");
     }
 
-    @GetMapping("/demand/{demand}")
-    public ResponseEntity<Object> findByDemand(@PathVariable(value = "demand") Demand demand) {
-        Optional<Proposal> proposalOptional = proposalService.findByDemand(demand);
-        if (proposalOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demand + " doesn't exists");
-        } else {
-            return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
-        }
-    }
+//    @GetMapping("/demand/{demand}")
+//    public ResponseEntity<Object> findByDemand(@PathVariable(value = "demand") Demand demand) {
+//        Optional<Proposal> proposalOptional = proposalService.findByDemand(demand);
+//        if (proposalOptional.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demand + " doesn't exists");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.FOUND).body(proposalOptional);
+//        }
+//    }
 
     @Modifying
     @Transactional
