@@ -8,8 +8,10 @@ import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.MessageService;
 import net.weg.gedesti.model.service.WorkerService;
+import net.weg.gedesti.repository.MessageRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,6 +20,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class MessageController {
     private MessageService messageService;
     private DemandService demandService;
     private WorkerService workerService;
+    private MessageRepository messageRepository;
 
     @GetMapping
     public ResponseEntity<List<Message>> findAll() {
@@ -130,6 +134,15 @@ public class MessageController {
             }
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("OUT");
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/viewed/{messageCode}")
+    public ResponseEntity<Object> update(@PathVariable(value = "messageCode") Integer messageCode) {
+        Message message = messageService.findById(messageCode).get();
+        message.setViewed(true);
+        return ResponseEntity.status(HttpStatus.OK).body(messageRepository.saveAndFlush(message));
     }
 
 }

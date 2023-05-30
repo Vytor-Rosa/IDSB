@@ -17,6 +17,7 @@ public class Message {
     @Column(nullable = false, unique = true)
     private Integer messageCode;
 
+    private Boolean viewed;
 
     @Column(nullable = false)
     private String dateMessage;
