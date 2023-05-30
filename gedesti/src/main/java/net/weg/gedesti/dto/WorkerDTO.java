@@ -22,4 +22,7 @@ public class WorkerDTO {
 
     private String department;
 
+    private Boolean voiceCommand;
+
+
 }

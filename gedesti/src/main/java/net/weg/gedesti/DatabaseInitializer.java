@@ -24,10 +24,10 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining");
-        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti");
-        Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh");
-        Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti");
+        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", true);
+        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", true);
+        Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", true);
+        Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false);
 
         Bu bu1 = new Bu(1, "WMO-I – WEG Motores Industrial");
         Bu bu2 = new Bu(2, "WMO-C – WEG Motores Comercial");
