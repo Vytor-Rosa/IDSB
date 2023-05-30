@@ -41,6 +41,9 @@ public class Worker {
     @Column(nullable = false)
     private String department;
 
+    @Column(nullable = false)
+    private Boolean voiceCommand;
+
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(new SimpleGrantedAuthority(cargoFuncionario));
