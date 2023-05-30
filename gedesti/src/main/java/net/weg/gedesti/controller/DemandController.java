@@ -75,29 +75,29 @@ public class DemandController {
             PDPage page = new PDPage();
             document.addPage(page);
 
-            String imagePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png";
-//            String pdfPath= "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
+//            String imagePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png";
+////            String pdfPath= "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
+//
+//            // Imagem ------> WEG
+//
+//            BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+//            PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ImageIOHelper.writeImageToByteArray(bufferedImage, "png"), "image");
 
-            // Imagem ------> WEG
+//            System.out.println(bufferedImage);
+//            float imageWidth = bufferedImage.getWidth();
+//            float imageHeight = bufferedImage.getHeight();
 
-            BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
-            PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ImageIOHelper.writeImageToByteArray(bufferedImage, "png"), "image");
+//            float x = 300;
+//            float y = 300;
+//            float width = 200;
+//            float height = imageHeight * (width / imageWidth);
 
-            System.out.println(bufferedImage);
-            float imageWidth = bufferedImage.getWidth();
-            float imageHeight = bufferedImage.getHeight();
-
-            float x = 300;
-            float y = 300;
-            float width = 200;
-            float height = imageHeight * (width / imageWidth);
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.drawImage(pdImage, x, y, width, height);
-            contentStream.close();
+//            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+//            contentStream.drawImage(pdImage, x, y, width, height);
+//            contentStream.close();
 
             // Dados gerais da demanda
-            contentStream = new PDPageContentStream(document, page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
             contentStream.newLineAtOffset(60, 750);
 
@@ -668,7 +668,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
-                savePdf(demand);
+//                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
