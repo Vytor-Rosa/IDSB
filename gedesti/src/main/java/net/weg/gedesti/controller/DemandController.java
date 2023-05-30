@@ -10,10 +10,14 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -74,50 +78,29 @@ public class DemandController {
             PDDocument document = new PDDocument();
             PDPage page = new PDPage();
             document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-//            String imagePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png";
-////            String pdfPath= "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
-//
-//            // Imagem ------> WEG
-//
-//            BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
-//            PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ImageIOHelper.writeImageToByteArray(bufferedImage, "png"), "image");
-
-//            System.out.println(bufferedImage);
-//            float imageWidth = bufferedImage.getWidth();
-//            float imageHeight = bufferedImage.getHeight();
-
-//            float x = 300;
-//            float y = 300;
-//            float width = 200;
-//            float height = imageHeight * (width / imageWidth);
-
-//            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-//            contentStream.drawImage(pdImage, x, y, width, height);
-//            contentStream.close();
+            PDImageXObject weg = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\weg.png", document);
+            contentStream.drawImage(weg, 500, 730, 45, 30);
 
             // Dados gerais da demanda
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
             contentStream.newLineAtOffset(60, 750);
 
             //Titulo
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            String blueWeg = "#00579D";
-            Color color = Color.decode(blueWeg);
+            Color color = Color.decode("#00579D");
             contentStream.setNonStrokingColor(color);
-            String input = demand.getDemandTitle() + " - " + demand.getDemandCode();
-            contentStream.showText(input);
+            contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
             contentStream.newLineAtOffset(0, -30);
 
-            //Data/hora
-            String black = "#000000";
-            Color color1 = Color.decode(black);
+            //Data e hora
+            Color color1 = Color.decode("#000000");
             contentStream.setNonStrokingColor(color1);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Data/Hora: ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
-            contentStream.showText(String.valueOf(demand.getDemandDate() + " - " + demand.getDemandHour() + "h"));
+            contentStream.showText(demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
             contentStream.newLineAtOffset(0, -20);
 
             //Solicitante
@@ -127,7 +110,6 @@ public class DemandController {
             contentStream.showText(demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
 
-
             //Status
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Status: ");
@@ -135,19 +117,21 @@ public class DemandController {
             contentStream.showText(demand.getDemandStatus());
             contentStream.newLineAtOffset(0, -40);
 
-
             //Situação Atual
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Situação Atual ");
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA, 10);
+
             float maxWidth = 500;
+            float currentWidth = 0;
+
             String currentProblem = demand.getCurrentProblem();
             currentProblem = currentProblem.replaceAll("&nbsp;", " ");
             Document doc = Jsoup.parse(currentProblem);
             String currentProblemFinal = doc.text();
             StringBuilder lineBuilder = new StringBuilder();
-            float currentWidth = 0;
+
             for (String word : currentProblemFinal.split(" ")) {
                 float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
                 if (currentWidth + wordWidth > maxWidth) {
@@ -164,21 +148,21 @@ public class DemandController {
             contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -40);
 
-
             //Objetivo
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Objetivo ");
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA, 10);
+
             maxWidth = 500;
+            currentWidth = 0;
+
             String objective = demand.getDemandObjective();
             objective = objective.replaceAll("&nbsp;", " ");
-
             doc = Jsoup.parse(objective);
             String objectiveFinal = doc.text();
-
             lineBuilder = new StringBuilder();
-            currentWidth = 0;
+
             for (String word : objectiveFinal.split(" ")) {
                 float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
 
@@ -195,7 +179,6 @@ public class DemandController {
             contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -20);
 
-
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
@@ -205,7 +188,6 @@ public class DemandController {
             contentStream.showText(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
-
 
             // Benefício Potencial
             contentStream.newLineAtOffset(0, -40);
@@ -226,22 +208,22 @@ public class DemandController {
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getPotentialBenefit().getPotentialBenefitDescription());
 
-
             // Benefício Qualitativo
             contentStream.newLineAtOffset(0, -40);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA, 10);
+
             maxWidth = 500;
+            currentWidth = 0;
+
             String qualitativeBenefit = demand.getQualitativeBenefit().getQualitativeBenefitDescription();
             qualitativeBenefit = qualitativeBenefit.replaceAll("&nbsp;", " ");
-
             doc = Jsoup.parse(qualitativeBenefit);
             String qualitativeBenefitFinal = doc.text();
-
             lineBuilder = new StringBuilder();
-            currentWidth = 0;
+
             for (String word : qualitativeBenefitFinal.split(" ")) {
                 float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
 
@@ -262,21 +244,20 @@ public class DemandController {
             if (demand.getQualitativeBenefit().isInteralControlsRequirements() == true) {
                 interalControlsRequirements = "Sim";
             }
+
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Requisitos de controle interno: ");
             contentStream.setFont(PDType1Font.HELVETICA, 10);
             contentStream.showText(interalControlsRequirements);
 
-
             // Centros de custos
             float marginCostCenter = 0;
             float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
-            System.out.println(yStartCostCenter);
+            int textX = -60;
+            int textY = 0;
 
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
-            int textX = -60;
-            int textY = 0;
             contentStream.newLineAtOffset(0, -40);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
             contentStream.showText("Centro de Custo ");
@@ -290,6 +271,7 @@ public class DemandController {
                 } else {
                     textX = -120;
                 }
+
                 textY = 0;
                 CostCenter costCenter = ListCostCenter.get(i2);
 
@@ -300,93 +282,93 @@ public class DemandController {
                 contentStream.showText(costCenter.getCostCenter());
             }
 
-            //Pular Pagina----> não esta funcionando corretamente
+            // Quebra de página
 
-//            float margin = 50;
-//            float yStart = page.getMediaBox().getHeight() - margin;
-//            float yPosition = yStart;
-//            float lineHeight = 15;
-//            int linesPerPage = 30;
-//
-//            CostCenter costCenter = new CostCenter();
-//
-//            String[] textStrings = {
-//                    demand.getDemandTitle(),
-//                    String.valueOf(demand.getDemandCode()),
-//                    demand.getDemandDate(),
-//                    String.valueOf(demand.getDemandHour()),
-//                    demand.getRequesterRegistration().getWorkerName(),
-//                    demand.getCurrentProblem(),
-//                    demand.getDemandObjective(),
-//                    demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue(),
-//                    demand.getRealBenefit().getRealBenefitDescription(),
-//                    demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue(),
-//                    demand.getRealBenefit().getRealBenefitDescription(),
-//                    demand.getQualitativeBenefit().getQualitativeBenefitDescription(),
-//                    String.valueOf(costCenter.getCostCenterCode())
-//            };
-//            PDType1Font font = PDType1Font.HELVETICA;
-//            int numLines = 0;
-//
-//            for (String text : textStrings) {
-//                String[] words = text.split(" ");
-//
-//                for (String word : words) {
-//                    float wordWidth = font.getStringWidth(word) / 1000 * 10;
-//                    float lineLength = 0;
-//
-//                    // Verifica se a palavra cabe na linha atual
-//                    if (lineLength + wordWidth < page.getMediaBox().getWidth() - 2 * margin) {
-//                        lineLength += wordWidth;
-//                        contentStream.showText(word + " ");
-//                    } else {
-//                        // Move a palavra para a próxima página
-//                        contentStream.endText();
-//                        contentStream.close();
-//
-//                        PDPage newPage = new PDPage();
-//                        document.addPage(newPage);
-//
-//                        contentStream = new PDPageContentStream(document, newPage);
-//                        page = newPage;
-//                        yStart = page.getMediaBox().getHeight() - margin;
-//                        yPosition = yStart;
-//                        contentStream.setFont(font, 10);
-//                        contentStream.beginText();
-//                        lineLength = wordWidth;
-//
-//                        contentStream.newLineAtOffset(margin, yPosition);
-//                        contentStream.showText(word + " ");
-//                        yPosition -= lineHeight;
-//                        numLines++;
-//                    }
-//
-//                    // Verifica se a linha atual atingiu o limite de linhas por página
-//                    if (numLines >= linesPerPage) {
-//                        contentStream.endText();
-//                        contentStream.close();
-//
-//                        PDPage newPage = new PDPage();
-//                        document.addPage(newPage);
-//
-//                        contentStream = new PDPageContentStream(document, newPage);
-//                        page = newPage;
-//                        yStart = page.getMediaBox().getHeight() - margin;
-//                        yPosition = yStart;
-//                        contentStream.setFont(font, 10);
-//                        contentStream.beginText();
-//                        numLines = 0;
-//                    }
-//
-//                    yPosition -= lineHeight;
-//                    numLines++;
-//                }
-//            }
-
+////            float margin = 50;
+////            float yStart = page.getMediaBox().getHeight() - margin;
+////            float yPosition = yStart;
+////            float lineHeight = 15;
+////            int linesPerPage = 30;
+////
+////            CostCenter costCenter = new CostCenter();
+////
+////            String[] textStrings = {
+////                    demand.getDemandTitle(),
+////                    String.valueOf(demand.getDemandCode()),
+////                    demand.getDemandDate(),
+////                    String.valueOf(demand.getDemandHour()),
+////                    demand.getRequesterRegistration().getWorkerName(),
+////                    demand.getCurrentProblem(),
+////                    demand.getDemandObjective(),
+////                    demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue(),
+////                    demand.getRealBenefit().getRealBenefitDescription(),
+////                    demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue(),
+////                    demand.getRealBenefit().getRealBenefitDescription(),
+////                    demand.getQualitativeBenefit().getQualitativeBenefitDescription(),
+////                    String.valueOf(costCenter.getCostCenterCode())
+////            };
+////            PDType1Font font = PDType1Font.HELVETICA;
+////            int numLines = 0;
+////
+////            for (String text : textStrings) {
+////                String[] words = text.split(" ");
+////
+////                for (String word : words) {
+////                    float wordWidth = font.getStringWidth(word) / 1000 * 10;
+////                    float lineLength = 0;
+////
+////                    // Verifica se a palavra cabe na linha atual
+////                    if (lineLength + wordWidth < page.getMediaBox().getWidth() - 2 * margin) {
+////                        lineLength += wordWidth;
+////                        contentStream.showText(word + " ");
+////                    } else {
+////                        // Move a palavra para a próxima página
+////                        contentStream.endText();
+////                        contentStream.close();
+////
+////                        PDPage newPage = new PDPage();
+////                        document.addPage(newPage);
+////
+////                        contentStream = new PDPageContentStream(document, newPage);
+////                        page = newPage;
+////                        yStart = page.getMediaBox().getHeight() - margin;
+////                        yPosition = yStart;
+////                        contentStream.setFont(font, 10);
+////                        contentStream.beginText();
+////                        lineLength = wordWidth;
+////
+////                        contentStream.newLineAtOffset(margin, yPosition);
+////                        contentStream.showText(word + " ");
+////                        yPosition -= lineHeight;
+////                        numLines++;
+////                    }
+////
+////                    // Verifica se a linha atual atingiu o limite de linhas por página
+////                    if (numLines >= linesPerPage) {
+////                        contentStream.endText();
+////                        contentStream.close();
+////
+////                        PDPage newPage = new PDPage();
+////                        document.addPage(newPage);
+////
+////                        contentStream = new PDPageContentStream(document, newPage);
+////                        page = newPage;
+////                        yStart = page.getMediaBox().getHeight() - margin;
+////                        yPosition = yStart;
+////                        contentStream.setFont(font, 10);
+////                        contentStream.beginText();
+////                        numLines = 0;
+////                    }
+////
+////                    yPosition -= lineHeight;
+////                    numLines++;
+////                }
+////            }
 
             // Classificação
             textX = -150;
             textY = -40;
+
             if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
                 contentStream.newLineAtOffset(textX, textY);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
@@ -435,7 +417,6 @@ public class DemandController {
                 }
             }
 
-            contentStream.endText();
             contentStream.close();
 
             document.save("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
@@ -668,7 +649,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
-//                savePdf(demand);
+                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }

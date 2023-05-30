@@ -345,7 +345,6 @@ public class ProposalController {
             // Centros de custos
             float marginCostCenter = 0;
             float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
-            System.out.println(yStartCostCenter);
 
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
