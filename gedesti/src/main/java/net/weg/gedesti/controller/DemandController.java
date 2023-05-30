@@ -33,8 +33,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.Color;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -73,24 +75,30 @@ public class DemandController {
             PDPage page = new PDPage();
             document.addPage(page);
 
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-
+            String imagePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png";
+//            String pdfPath= "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf";
 
             // Imagem ------> WEG
 
-//            PDImageXObject pdImage = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\img.png", document);
-//
-//            System.out.println("Imagem:"+ pdImage);
-//            contentStream.drawImage(pdImage, 200, 250,20,20);
-//
-//            document.save(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf"));
-//            document.close();
+            BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+            PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ImageIOHelper.writeImageToByteArray(bufferedImage, "png"), "image");
 
+            System.out.println(bufferedImage);
+            float imageWidth = bufferedImage.getWidth();
+            float imageHeight = bufferedImage.getHeight();
+
+            float x = 300;
+            float y = 300;
+            float width = 200;
+            float height = imageHeight * (width / imageWidth);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.drawImage(pdImage, x, y, width, height);
+            contentStream.close();
 
             // Dados gerais da demanda
+            contentStream = new PDPageContentStream(document, page);
+            contentStream.beginText();
             contentStream.newLineAtOffset(60, 750);
 
             //Titulo
@@ -98,7 +106,7 @@ public class DemandController {
             String blueWeg = "#00579D";
             Color color = Color.decode(blueWeg);
             contentStream.setNonStrokingColor(color);
-            String input = demand.getDemandTitle() + " -  " + demand.getDemandCode();
+            String input = demand.getDemandTitle() + " - " + demand.getDemandCode();
             contentStream.showText(input);
             contentStream.newLineAtOffset(0, -30);
 
@@ -142,7 +150,6 @@ public class DemandController {
             float currentWidth = 0;
             for (String word : currentProblemFinal.split(" ")) {
                 float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
-
                 if (currentWidth + wordWidth > maxWidth) {
                     contentStream.showText(lineBuilder.toString());
                     contentStream.newLineAtOffset(0, -20);
@@ -292,6 +299,9 @@ public class DemandController {
                 contentStream.newLineAtOffset(textX, textY);
                 contentStream.showText(costCenter.getCostCenter());
             }
+
+            //Pular Pagina----> não esta funcionando corretamente
+
 //            float margin = 50;
 //            float yStart = page.getMediaBox().getHeight() - margin;
 //            float yPosition = yStart;
@@ -314,12 +324,9 @@ public class DemandController {
 //                    demand.getRealBenefit().getRealBenefitDescription(),
 //                    demand.getQualitativeBenefit().getQualitativeBenefitDescription(),
 //                    String.valueOf(costCenter.getCostCenterCode())
-//
 //            };
-//
 //            PDType1Font font = PDType1Font.HELVETICA;
 //            int numLines = 0;
-//
 //
 //            for (String text : textStrings) {
 //                String[] words = text.split(" ");
@@ -375,7 +382,7 @@ public class DemandController {
 //                    numLines++;
 //                }
 //            }
-            
+
 
             // Classificação
             textX = -150;
@@ -383,15 +390,15 @@ public class DemandController {
             if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
                 contentStream.newLineAtOffset(textX, textY);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.newLineAtOffset(0,0);
+                contentStream.newLineAtOffset(0, 0);
                 contentStream.showText("Classificação");
                 contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Analista: " );
+                contentStream.showText("Analista: ");
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
                 contentStream.showText(demand.getClassification().getAnalistRegistry().getWorkerName());
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Tamanho: " );
+                contentStream.showText("Tamanho: ");
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
                 contentStream.showText(demand.getClassification().getClassificationSize());
                 contentStream.newLineAtOffset(0, -20);
@@ -401,7 +408,7 @@ public class DemandController {
                 contentStream.showText(demand.getClassification().getItSection());
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("BU Solicitante: " );
+                contentStream.showText("BU Solicitante: ");
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
                 contentStream.showText(demand.getClassification().getRequesterBu().getBu());
                 contentStream.newLineAtOffset(0, -20);
@@ -417,12 +424,12 @@ public class DemandController {
                 if (demand.getDemandStatus().equals("BacklogComplement")) {
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Código PPM: " );
+                    contentStream.showText("Código PPM: ");
                     contentStream.setFont(PDType1Font.HELVETICA, 10);
                     contentStream.showText(demand.getClassification().getPpmCode());
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Link Epic do Jira: " );
+                    contentStream.showText("Link Epic do Jira: ");
                     contentStream.setFont(PDType1Font.HELVETICA, 10);
                     contentStream.showText(demand.getClassification().getEpicJiraLink());
                 }
@@ -436,6 +443,15 @@ public class DemandController {
         } catch (
                 FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private static class ImageIOHelper {
+        static byte[] writeImageToByteArray(BufferedImage image, String format) throws IOException {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, format, baos);
+            return baos.toByteArray();
         }
     }
 
@@ -646,7 +662,8 @@ public class DemandController {
     }
 
     @GetMapping("/{demandCode}")
-    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) throws IOException {
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) throws
+            IOException {
         List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
 
         for (Demand demand : demandOptional) {
