@@ -132,7 +132,7 @@ public class ProposalController {
     }
 
     @GetMapping("/demand/{demandCode}")
-    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Demand demandCode) {
+    public ResponseEntity<Object> findByDemandCode(@PathVariable(value = "demandCode") Integer demandCode) {
         Optional<Proposal> proposalOptional = proposalService.findByDemandDemandCode(demandCode);
         if (proposalOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Demand " + demandCode + " doesn't exists");

@@ -45,7 +45,7 @@ public class ProposalService {
         proposalRepository.deleteById(integer);
     }
 
-    public Optional<Proposal> findByDemandDemandCode(Demand demandCode){
+    public Optional<Proposal> findByDemandDemandCode(Integer demandCode){
         return proposalRepository.findByDemandDemandCode(demandCode);
     }
 }

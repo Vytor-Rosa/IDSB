@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ProposalRepository extends JpaRepository<Proposal, Integer> {
     Optional<Proposal> findByDemand(Demand demand);
-    Optional<Proposal> findByDemandDemandCode(Demand demandCode);
+    Optional<Proposal> findByDemandDemandCode(Integer demandCode);
 }
