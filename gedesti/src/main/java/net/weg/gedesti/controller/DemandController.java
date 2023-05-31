@@ -2,8 +2,6 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
-import net.weg.gedesti.model.entity.Bu;
-import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
@@ -78,6 +76,16 @@ public class DemandController {
 
 //            String urlImage = "\\pdf\\img.png";
 //            PDImageXObject weg = PDImageXObject.createFromFile(urlImage, document);
+            float pageHeight = page.getMediaBox().getHeight();
+            float margin = 50;
+            float fontTitle = 12;
+            float fontInformations = 10;
+            float currentHeight = pageHeight - margin - 42; // Subtrai as margens superiores
+
+//            String imagePath = "img.png";
+//            Resource resource = new ClassPathResource(imagePath);
+//            String absolutePath = resource.getFile().getAbsolutePath();
+
             PDImageXObject weg = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\weg.png", document);
             contentStream.drawImage(weg, 500, 730, 55, 40);
 
@@ -86,40 +94,115 @@ public class DemandController {
             contentStream.newLineAtOffset(60, 750);
 
             //Titulo
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
             Color color = Color.decode("#00579D");
             contentStream.setNonStrokingColor(color);
             contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
             contentStream.newLineAtOffset(0, -30);
 
+            currentHeight -= fontTitle;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             //Data e hora
             Color color1 = Color.decode("#000000");
             contentStream.setNonStrokingColor(color1);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Data/Hora: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
             contentStream.newLineAtOffset(0, -20);
 
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             //Solicitante
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Solicitante: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
 
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             //Status
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Status: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getDemandStatus());
             contentStream.newLineAtOffset(0, -40);
 
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             //Situação Atual
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Situação Atual ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
 
             float maxWidth = 500;
             float currentWidth = 0;
@@ -131,8 +214,23 @@ public class DemandController {
             StringBuilder lineBuilder = new StringBuilder();
 
             for (String word : currentProblemFinal.split(" ")) {
-                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
+                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
                 if (currentWidth + wordWidth > maxWidth) {
+                    currentHeight -= fontInformations;
+
+                    if (currentHeight <= 0) {
+                        contentStream.endText();
+                        contentStream.close();
+
+                        page = new PDPage();
+                        document.addPage(page);
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                        contentStream.newLineAtOffset(60, 750);
+                        currentHeight = pageHeight - margin;
+                    }
+
                     contentStream.showText(lineBuilder.toString());
                     contentStream.newLineAtOffset(0, -20);
                     lineBuilder.setLength(0);
@@ -140,17 +238,31 @@ public class DemandController {
                 }
 
                 lineBuilder.append(word).append(" ");
-                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * 10;
+                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
             }
 
-            contentStream.showText(lineBuilder.toString());
-            contentStream.newLineAtOffset(0, -40);
+            contentStream.newLineAtOffset(0, -20);
 
             //Objetivo
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Objetivo ");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
 
             maxWidth = 500;
             currentWidth = 0;
@@ -162,9 +274,24 @@ public class DemandController {
             lineBuilder = new StringBuilder();
 
             for (String word : objectiveFinal.split(" ")) {
-                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
+                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
 
                 if (currentWidth + wordWidth > maxWidth) {
+                    currentHeight -= fontInformations;
+
+                    if (currentHeight <= 0) {
+                        contentStream.endText();
+                        contentStream.close();
+
+                        page = new PDPage();
+                        document.addPage(page);
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                        contentStream.newLineAtOffset(60, 750);
+                        currentHeight = pageHeight - margin;
+                    }
+
                     contentStream.showText(lineBuilder.toString());
                     contentStream.newLineAtOffset(0, -20);
                     lineBuilder.setLength(0);
@@ -172,46 +299,89 @@ public class DemandController {
                 }
 
                 lineBuilder.append(word).append(" ");
-                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * 10;
+                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
             }
-            contentStream.showText(lineBuilder.toString());
-            contentStream.newLineAtOffset(0, -20);
+
+            currentHeight -= fontInformations * 3;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
 
             // Benefício Real
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Real");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getRealBenefit().getRealCurrency() + " " + demand.getRealBenefit().getRealMonthlyValue());
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getRealBenefit().getRealBenefitDescription());
 
+            currentHeight -= fontInformations * 3;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             // Benefício Potencial
             contentStream.newLineAtOffset(0, -40);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Potencial");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getPotentialBenefit().getPotentialCurrency() + " " + demand.getPotentialBenefit().getPotentialMonthlyValue());
 
             String legalObrigation = "Não";
             if (demand.getPotentialBenefit().getLegalObrigation() == true) {
                 legalObrigation = "Sim";
             }
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("                  Obrigação legal: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(legalObrigation);
             contentStream.newLineAtOffset(0, -20);
             contentStream.showText(demand.getPotentialBenefit().getPotentialBenefitDescription());
 
+            currentHeight -= fontInformations;
+
+            if (currentHeight <= 0) {
+                contentStream.endText();
+                contentStream.close();
+
+                page = new PDPage();
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                contentStream.newLineAtOffset(60, 750);
+                currentHeight = pageHeight - margin;
+            }
+
             // Benefício Qualitativo
             contentStream.newLineAtOffset(0, -40);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
 
             maxWidth = 500;
             currentWidth = 0;
@@ -223,9 +393,24 @@ public class DemandController {
             lineBuilder = new StringBuilder();
 
             for (String word : qualitativeBenefitFinal.split(" ")) {
-                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * 10;
+                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
 
                 if (currentWidth + wordWidth > maxWidth) {
+                    currentHeight -= fontInformations;
+
+                    if (currentHeight <= 0) {
+                        contentStream.endText();
+                        contentStream.close();
+
+                        page = new PDPage();
+                        document.addPage(page);
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                        contentStream.newLineAtOffset(60, 750);
+                        currentHeight = pageHeight - margin;
+                    }
+
                     contentStream.showText(lineBuilder.toString());
                     contentStream.newLineAtOffset(0, -20);
                     lineBuilder.setLength(0);
@@ -233,7 +418,7 @@ public class DemandController {
                 }
 
                 lineBuilder.append(word).append(" ");
-                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * 10;
+                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
             }
             contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -20);
@@ -243,42 +428,42 @@ public class DemandController {
                 interalControlsRequirements = "Sim";
             }
 
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Requisitos de controle interno: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
+            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(interalControlsRequirements);
 
-            // Centros de custos
-            float marginCostCenter = 0;
-            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
-            int textX = -60;
-            int textY = 0;
-
-            List<CostCenter> ListCostCenter = demand.getCostCenter();
-
-            contentStream.newLineAtOffset(0, -40);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-            contentStream.showText("Centro de Custo ");
-            contentStream.newLineAtOffset(300, textY);
-            contentStream.showText("Nome Centro de Custo ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
-
-            for (int i2 = 0; i2 < ListCostCenter.size(); i2++) {
-                if (i2 == 0) {
-                    textX = (-270);
-                } else {
-                    textX = -120;
-                }
-
-                textY = 0;
-                CostCenter costCenter = ListCostCenter.get(i2);
-
-                contentStream.newLineAtOffset(textX, -20);
-                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
-                textX = 120;
-                contentStream.newLineAtOffset(textX, textY);
-                contentStream.showText(costCenter.getCostCenter());
-            }
+//            // Centros de custos
+//            float marginCostCenter = 0;
+//            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
+//            int textX = -60;
+//            int textY = 0;
+//
+//            List<CostCenter> ListCostCenter = demand.getCostCenter();
+//
+//            contentStream.newLineAtOffset(0, -40);
+//            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+//            contentStream.showText("Centro de Custo ");
+//            contentStream.newLineAtOffset(300, textY);
+//            contentStream.showText("Nome Centro de Custo ");
+//            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+//
+//            for (int i2 = 0; i2 < ListCostCenter.size(); i2++) {
+//                if (i2 == 0) {
+//                    textX = (-270);
+//                } else {
+//                    textX = -120;
+//                }
+//
+//                textY = 0;
+//                CostCenter costCenter = ListCostCenter.get(i2);
+//
+//                contentStream.newLineAtOffset(textX, -20);
+//                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
+//                textX = 120;
+//                contentStream.newLineAtOffset(textX, textY);
+//                contentStream.showText(costCenter.getCostCenter());
+//            }
 
 
 
@@ -369,6 +554,8 @@ public class DemandController {
             // Classificação
 //            int textX = -150;
 //            int textY = -40;
+//            textX = -150;
+//            textY = -40;
 //
 //            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
 //                contentStream.newLineAtOffset(textX, textY);
@@ -650,6 +837,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
+//                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
