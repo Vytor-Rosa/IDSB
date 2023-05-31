@@ -20,7 +20,7 @@ public class QualitativeBenefit {
     @Column(nullable = false)
     private String frequencyOfUse;
 
-    @Size(max = 5000)
+    @Size(max = 9999)
     @Column(nullable = false)
     private String qualitativeBenefitDescription;
 

@@ -35,10 +35,10 @@ public class Demand {
 
     private String demandTitle;
 
-    @Size(max = 5000)
+    @Size(max = 9999)
     private String currentProblem;
 
-    @Size(max = 5000)
+    @Size(max = 9999)
     private String demandObjective;
 
     private String demandStatus;

@@ -20,7 +20,7 @@ public class RealBenefit {
     @Column(nullable = false)
     private Double realMonthlyValue;
 
-    @Size(max = 5000)
+    @Size(max = 9999)
     @Column(nullable = false)
     private String realBenefitDescription;
 

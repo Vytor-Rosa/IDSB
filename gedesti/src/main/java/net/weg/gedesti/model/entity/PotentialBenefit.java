@@ -23,7 +23,7 @@ public class PotentialBenefit {
     @Column()
     private Boolean legalObrigation;
 
-    @Size(max = 5000)
+    @Size(max = 9999)
     @Column(nullable = false)
     private String potentialBenefitDescription;
 
