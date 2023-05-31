@@ -10,14 +10,10 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.PDResources;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -80,8 +76,10 @@ public class DemandController {
             document.addPage(page);
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+//            String urlImage = "\\pdf\\img.png";
+//            PDImageXObject weg = PDImageXObject.createFromFile(urlImage, document);
             PDImageXObject weg = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\weg.png", document);
-            contentStream.drawImage(weg, 500, 730, 45, 30);
+            contentStream.drawImage(weg, 500, 730, 55, 40);
 
             // Dados gerais da demanda
             contentStream.beginText();
@@ -282,6 +280,9 @@ public class DemandController {
                 contentStream.showText(costCenter.getCostCenter());
             }
 
+
+
+
             // Quebra de página
 
 ////            float margin = 50;
@@ -366,56 +367,56 @@ public class DemandController {
 ////            }
 
             // Classificação
-            textX = -150;
-            textY = -40;
-
-            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
-                contentStream.newLineAtOffset(textX, textY);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.newLineAtOffset(0, 0);
-                contentStream.showText("Classificação");
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Analista: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(demand.getClassification().getAnalistRegistry().getWorkerName());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Tamanho: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(demand.getClassification().getClassificationSize());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Sessão de TI responsável: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(demand.getClassification().getItSection());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("BU Solicitante: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(demand.getClassification().getRequesterBu().getBu());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("BUs Beneficiadas: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
-
-                for (Bu bu : requestersBUsList) {
-                    contentStream.showText(bu.getBu());
-                }
-
-                if (demand.getDemandStatus().equals("BacklogComplement")) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Código PPM: ");
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(demand.getClassification().getPpmCode());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Link Epic do Jira: ");
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(demand.getClassification().getEpicJiraLink());
-                }
-            }
+//            int textX = -150;
+//            int textY = -40;
+//
+//            if (demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogComplement") || demand.getDemandStatus().equals("Approve")) {
+//                contentStream.newLineAtOffset(textX, textY);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.newLineAtOffset(0, 0);
+//                contentStream.showText("Classificação");
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.showText("Analista: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(demand.getClassification().getAnalistRegistry().getWorkerName());
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("Tamanho: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(demand.getClassification().getClassificationSize());
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("Sessão de TI responsável: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(demand.getClassification().getItSection());
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("BU Solicitante: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(demand.getClassification().getRequesterBu().getBu());
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("BUs Beneficiadas: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+//
+//                for (Bu bu : requestersBUsList) {
+//                    contentStream.showText(bu.getBu());
+//                }
+//
+//                if (demand.getDemandStatus().equals("BacklogComplement")) {
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Código PPM: ");
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(demand.getClassification().getPpmCode());
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Link Epic do Jira: ");
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(demand.getClassification().getEpicJiraLink());
+//                }
+//            }
 
             contentStream.close();
 
