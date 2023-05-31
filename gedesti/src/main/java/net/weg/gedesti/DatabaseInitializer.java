@@ -24,8 +24,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", true);
-        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", true);
+        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", false);
+        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", false);
         Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", true);
         Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false);
 
