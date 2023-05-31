@@ -82,11 +82,9 @@ public class DemandController {
             float fontInformations = 10;
             float currentHeight = pageHeight - margin * 2; // Subtrai as margens superiores
 
-//            String imagePath = "img.png";
-//            Resource resource = new ClassPathResource(imagePath);
-//            String absolutePath = resource.getFile().getAbsolutePath();
 
-            PDImageXObject weg = PDImageXObject.createFromFile("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\weg.png", document);
+            String path = new File(".").getCanonicalPath();
+            PDImageXObject weg = PDImageXObject.createFromFile(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\pdf\\img.png", document);
             contentStream.drawImage(weg, 500, 730, 55, 40);
 
             // Dados gerais da demanda
@@ -434,6 +432,8 @@ public class DemandController {
             contentStream.showText(interalControlsRequirements);
 
             // Centros de custos
+            float marginCostCenter = 0;
+            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
             int textX = -60;
             int textY = 0;
 
@@ -468,6 +468,11 @@ public class DemandController {
                     textX = -120;
                 }
 
+                // linhas
+                contentStream.moveTo(-270, yStartCostCenter - 60);
+                contentStream.lineTo(300, yStartCostCenter - 60);
+                contentStream.stroke();
+
                 currentHeight -= (fontInformations);
 
                 if (currentHeight <= 0) {
@@ -481,6 +486,17 @@ public class DemandController {
                     contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
                     contentStream.newLineAtOffset(60, 750);
                     currentHeight = pageHeight - margin;
+
+                    // linhas horizontais
+                    contentStream.moveTo(200, yStartCostCenter);
+                    contentStream.lineTo(200, yStartCostCenter - 60);
+                    contentStream.stroke();
+
+                    //linhas verticais
+                    contentStream.moveTo(-270, yStartCostCenter - 60);
+                    contentStream.lineTo(300, yStartCostCenter - 60);
+                    contentStream.stroke();
+
                 }
 
                 textY = 0;
@@ -822,7 +838,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
-                savePdf(demand);
+//                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
