@@ -95,6 +95,19 @@ public class WorkerController {
 
     @Modifying
     @Transactional
+    @PutMapping("/voiceCommand/{workerCode}")
+    public ResponseEntity<Object> updateVoiceCommand(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setVoiceCommand(workerDTO.getVoiceCommand());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @Modifying
+    @Transactional
     @PutMapping("/language/{workerCode}")
     public ResponseEntity<Object> updateClassification(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
         if (!workerSerivce.existsById(workerCode)) {
