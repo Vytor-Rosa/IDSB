@@ -24,5 +24,5 @@ public class WorkerDTO {
 
     private Boolean voiceCommand;
 
-
+    private Boolean pounds;
 }

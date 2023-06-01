@@ -119,6 +119,20 @@ public class WorkerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
     }
 
+    @Modifying
+    @Transactional
+    @PutMapping("/pounds/{workerCode}")
+    public ResponseEntity<Object> updatePounds(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setPounds(workerDTO.getPounds());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+
     @GetMapping("/user/{userId}/online")
     public ResponseEntity<Boolean> isUserOnline(@PathVariable("userId") Integer userId) {
         boolean isOnline = userPresenceManager.isUserOnline(workerSerivce.findById(userId).get().getCorporateEmail());
