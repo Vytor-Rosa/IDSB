@@ -21,7 +21,7 @@ public class DemandService {
     private DemandRepository demandRepository;
 
     public List<Demand> findAll() {
-        return demandRepository.findAll();
+        return demandRepository.findAllByActiveVersionOrderByScoreDesc();
     }
 
     public Page<Demand> findAll(Pageable pageable) {
