@@ -45,9 +45,7 @@ public class Demand {
 
     @Column(nullable = true)
     private Double score;
-
-    private String executionPeriod;
-
+    
     @ManyToOne
     private Worker requesterRegistration;
 

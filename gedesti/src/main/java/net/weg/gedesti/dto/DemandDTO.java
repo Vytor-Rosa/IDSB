@@ -23,8 +23,6 @@ public class DemandDTO {
 
     private Double score;
 
-    private String executionPeriod;
-
     private Worker requesterRegistration;
 
     private RealBenefit realBenefit;
@@ -37,5 +35,4 @@ public class DemandDTO {
 
     private Classification classification;
 
-//    private Proposal proposal;
 }
