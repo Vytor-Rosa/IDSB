@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.Color;
 
 import javax.imageio.ImageIO;
+import javax.swing.table.TableColumn;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
@@ -84,7 +85,7 @@ public class DemandController {
 
 
             String path = new File(".").getCanonicalPath();
-            PDImageXObject weg = PDImageXObject.createFromFile(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\pdf\\img.png", document);
+            PDImageXObject weg = PDImageXObject.createFromFile(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png", document);
             contentStream.drawImage(weg, 500, 730, 55, 40);
 
             // Dados gerais da demanda
@@ -426,52 +427,62 @@ public class DemandController {
                 interalControlsRequirements = "Sim";
             }
 
-            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Requisitos de controle interno: ");
             contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(interalControlsRequirements);
 
             // Centros de custos
-            float marginCostCenter = 0;
-            float yStartCostCenter = page.getMediaBox().getHeight() - marginCostCenter;
             int textX = -60;
             int textY = 0;
 
-            currentHeight -= ((fontInformations + 20) * 2);
-
-            if (currentHeight <= 0) {
-                contentStream.endText();
-                contentStream.close();
-
-                page = new PDPage();
-                document.addPage(page);
-                contentStream = new PDPageContentStream(document, page);
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                contentStream.newLineAtOffset(60, 750);
-                currentHeight = pageHeight - margin;
-            }
+            // Tabela
+            contentStream.endText();
+            contentStream.setStrokingColor(Color.BLACK);
+            contentStream.setLineWidth(1);
 
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
-            contentStream.newLineAtOffset(0, -40);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
-            contentStream.showText("Centro de Custo ");
-            contentStream.newLineAtOffset(300, textY);
-            contentStream.showText("Nome Centro de Custo ");
-            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+            int initX = 60;
+            int initY = (int) (currentHeight - 100);
+            int sizeHeight = 20;
+            int sizeWidth = 246;
+            int columns = 2;
+            int lines = ListCostCenter.size();
 
-            for (int j = 0; j < ListCostCenter.size(); j++) {
-                if (j == 0) {
-                    textX = (-270);
-                } else {
-                    textX = -120;
+            contentStream.addRect(initX, initY, sizeWidth, sizeHeight);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX + 5, initY + 5);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+            contentStream.showText("Centro de custo");
+            contentStream.endText();
+
+            contentStream.addRect(initX + 246, initY, sizeWidth, sizeHeight);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX + 246 + 5, initY + 5);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+            contentStream.showText("Nome do centro de custo");
+            contentStream.endText();
+
+
+            for (int i = 0; i < lines; i++) {
+                initX = 60;
+                initY -= sizeHeight;
+                for (int j = 0; j < columns; j++) {
+                    contentStream.addRect(initX, initY, sizeWidth, sizeHeight);
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(initX + 5, initY + 5);
+                    contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+
+                    if (j == 0) {
+                        contentStream.showText(ListCostCenter.get(i).getCostCenterCode().toString());
+                    } else {
+                        contentStream.showText(ListCostCenter.get(i).getCostCenter().toString());
+                    }
+                    contentStream.endText();
+                    initX += sizeWidth;
                 }
 
-                // linhas
-                contentStream.moveTo(-270, yStartCostCenter - 60);
-                contentStream.lineTo(300, yStartCostCenter - 60);
-                contentStream.stroke();
 
                 currentHeight -= (fontInformations);
 
@@ -486,33 +497,16 @@ public class DemandController {
                     contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
                     contentStream.newLineAtOffset(60, 750);
                     currentHeight = pageHeight - margin;
-
-                    // linhas horizontais
-                    contentStream.moveTo(200, yStartCostCenter);
-                    contentStream.lineTo(200, yStartCostCenter - 60);
-                    contentStream.stroke();
-
-                    //linhas verticais
-                    contentStream.moveTo(-270, yStartCostCenter - 60);
-                    contentStream.lineTo(300, yStartCostCenter - 60);
-                    contentStream.stroke();
-
                 }
 
-                textY = 0;
-                CostCenter costCenter = ListCostCenter.get(j);
-
-                contentStream.newLineAtOffset(textX, -20);
-                contentStream.showText(String.valueOf(costCenter.getCostCenterCode()));
-                textX = 120;
-                contentStream.newLineAtOffset(textX, textY);
-                contentStream.showText(costCenter.getCostCenter());
             }
+            contentStream.stroke();
 
-            // Classificação
+            //Classificação
             textX = -150;
             textY = -40;
 
+            contentStream.beginText();
             if (!demand.getDemandStatus().equals("Backlog")) {
                 currentHeight -= ((fontInformations + 20));
 
@@ -528,7 +522,6 @@ public class DemandController {
                     contentStream.newLineAtOffset(60, 750);
                     currentHeight = pageHeight - margin;
                 }
-
                 contentStream.newLineAtOffset(textX, textY);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
                 contentStream.newLineAtOffset(0, 0);
@@ -838,7 +831,7 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
-//                savePdf(demand);
+                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
