@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -33,7 +36,7 @@ public class AutenticacaoController {
 
     @PostMapping("/auth")
     public ResponseEntity<Object> autenticacao(
-            @RequestBody @Valid UsuarioDTO usuarioDTO, HttpServletResponse response) {
+            @RequestBody @Valid UsuarioDTO usuarioDTO, HttpServletResponse response, HttpServletRequest request) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
@@ -53,4 +56,41 @@ public class AutenticacaoController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @GetMapping("/cookies")
+    public ResponseEntity<Object> findCookies(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        return ResponseEntity.status(HttpStatus.OK).body(cookies);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Excluir o cookie de autenticação
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("user")) {
+                    cookie.setValue(null);
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jwt")) {
+                    cookie.setValue(null);
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+        // Redirecionar para a página de login ou qualquer outra página desejada
+        return ResponseEntity.status(HttpStatus.OK).body("Logout realizado com sucesso!");
+    }
+
 }
