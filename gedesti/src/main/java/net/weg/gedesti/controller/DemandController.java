@@ -10,9 +10,11 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
@@ -20,21 +22,25 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.Color;
 
 import javax.imageio.ImageIO;
-import javax.swing.table.TableColumn;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
@@ -70,8 +76,18 @@ public class DemandController {
         return demandsStatus;
     }
 
-    public void savePdf(final Demand demand) throws IOException {
+    @GetMapping("/pdf/{demandCode}")
+    public ResponseEntity<Object> savePdf(@PathVariable(value = "demandCode") Integer demandCode, HttpServletResponse response) throws IOException {
         try {
+            List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
+            Demand demand = new Demand();
+
+            for (Demand demands : demandOptional) {
+                if (demands.getActiveVersion() == true) {
+                    demand = demands;
+                }
+            }
+
             PDDocument document = new PDDocument();
             PDPage page = new PDPage();
             document.addPage(page);
@@ -599,14 +615,33 @@ public class DemandController {
                 }
             }
 
+            contentStream.endText();
+
             contentStream.close();
 
-            document.save("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\" + demand.getDemandCode() + " - " + demand.getDemandTitle() + ".pdf");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            document.save(byteArrayOutputStream);
             document.close();
+
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=file.pdf");
+            response.setHeader("Content-Length", String.valueOf(byteArray.length));
+            response.setHeader("Content-Transfer-Encoding", "binary");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            response.setDateHeader("Expires", 0);
+            response.getOutputStream().write(byteArray);
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+
+            return ResponseEntity.ok().build();
         } catch (
                 FileNotFoundException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -831,7 +866,6 @@ public class DemandController {
 
         for (Demand demand : demandOptional) {
             if (demand.getActiveVersion() == true) {
-                savePdf(demand);
                 return ResponseEntity.status(HttpStatus.OK).body(demand);
             }
         }
