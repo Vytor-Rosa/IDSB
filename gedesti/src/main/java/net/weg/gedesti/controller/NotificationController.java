@@ -59,7 +59,7 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{notificationCode}")
-    public void deleteById(Integer integer) {
+    public void deleteById(@PathVariable(value = "notificationCode") Integer integer) {
         notificationService.deleteById(integer);
     }
 
