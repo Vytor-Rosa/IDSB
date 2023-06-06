@@ -43,4 +43,6 @@ public class Agenda {
             inverseJoinColumns = @JoinColumn(name = "proposalCode"))
     List<Proposal> proposals;
 
+    @ManyToOne
+    private Worker analistRegistry;
 }

@@ -26,4 +26,6 @@ public class AgendaDTO {
     private String agendaDate;
     @NotNull
     List<Proposal> proposals;
+
+    private Worker analistRegistry;
 }

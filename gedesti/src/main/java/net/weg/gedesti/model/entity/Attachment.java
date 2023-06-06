@@ -25,4 +25,6 @@ public class Attachment {
     @Lob
     @NonNull
     private byte[] dice;
+
+
 }
