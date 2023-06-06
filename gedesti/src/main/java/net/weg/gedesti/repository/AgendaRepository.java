@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Integer> {
-    Optional<Agenda> findByProposals(Proposal proposal);
 }

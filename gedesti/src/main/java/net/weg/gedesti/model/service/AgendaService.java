@@ -40,7 +40,4 @@ public class AgendaService {
         agendaRepository.deleteById(integer);
     }
 
-    public Optional<Agenda> findByProposals(Proposal proposal) {
-        return agendaRepository.findByProposals(proposal);
-    }
 }
