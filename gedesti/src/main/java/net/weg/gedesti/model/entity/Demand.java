@@ -49,6 +49,9 @@ public class Demand {
     @ManyToOne
     private Worker requesterRegistration;
 
+    @ManyToOne
+    private Worker approver;
+
     @OneToOne
     private RealBenefit realBenefit;
 

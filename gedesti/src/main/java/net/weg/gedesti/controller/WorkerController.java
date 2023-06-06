@@ -2,20 +2,19 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.component.UserPresenceManager;
-import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.WorkerDTO;
-import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCrypt;
 //import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -31,6 +30,9 @@ public class WorkerController {
     private WorkerRepository workerRepository;
 
     private UserPresenceManager userPresenceManager;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
     public ResponseEntity<List<Worker>> findAll() {

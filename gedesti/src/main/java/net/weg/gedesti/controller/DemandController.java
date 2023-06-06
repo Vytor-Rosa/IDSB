@@ -5,6 +5,7 @@ import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.Bu;
 import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.Worker;
 import net.weg.gedesti.model.service.ClassificationService;
 import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
@@ -981,17 +982,18 @@ public class DemandController {
 
     @Modifying
     @Transactional
-    @PutMapping("/approve/{demandCode}")
-    public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode) {
+    @PutMapping("/approve/{demandCode}/{approver}")
+    public ResponseEntity<Object> approve(@PathVariable(value = "demandCode") Integer demandCode, @PathVariable(value = "approver") Worker approver) {
         List<Demand> demandList = demandService.findAllByDemandCode(demandCode);
 
         for (Demand demand : demandList) {
             if (demand.getActiveVersion() == true) {
                 demand.setScore(score(demand));
+                demand.setApprover(approver);
                 return ResponseEntity.status(HttpStatus.CREATED).body(demandRepository.saveAndFlush(demand));
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body("OUT");
+        return ResponseEntity.status(HttpStatus.CREATED).body("OUT");
     }
 
     public Double score(Demand demand) {
