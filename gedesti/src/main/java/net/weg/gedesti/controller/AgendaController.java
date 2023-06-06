@@ -73,7 +73,13 @@ public class AgendaController {
 
     @GetMapping("/proposal/{proposalCode}")
     public ResponseEntity<Object> findByProposalCode(@PathVariable(value = "proposalCode") Proposal proposalCode) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(agendaService.findByProposals(proposalCode));
+        List<Agenda> listAgenda = agendaService.findAll();
+        for (Agenda agenda : listAgenda) {
+            if (agenda.getProposals().contains(proposalCode)) {
+                return ResponseEntity.status(HttpStatus.FOUND).body(agenda);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("Error! No agenda with proposal code: " + proposalCode);
     }
 
 }
