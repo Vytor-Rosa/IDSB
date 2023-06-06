@@ -1,6 +1,8 @@
 package net.weg.gedesti.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import net.weg.gedesti.model.entity.Attachment;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
 

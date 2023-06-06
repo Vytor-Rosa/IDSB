@@ -2,6 +2,7 @@ package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.model.entity.Agenda;
+import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.repository.AgendaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +38,9 @@ public class AgendaService {
 
     public void deleteById(Integer integer) {
         agendaRepository.deleteById(integer);
+    }
+
+    public Optional<Agenda> findByProposals(Proposal proposal) {
+        return agendaRepository.findByProposals(proposal);
     }
 }

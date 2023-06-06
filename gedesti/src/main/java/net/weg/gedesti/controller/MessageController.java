@@ -9,28 +9,19 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.MessageService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.MessageRepository;
-import net.weg.gedesti.util.DemandUtil;
-import net.weg.gedesti.util.MessageUtil;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -74,16 +65,17 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandCode);
     }
 
-    @MessageMapping("/demand/{id}") // Mandando a requisição
-    @SendTo("/{id}/chat") // Buscando a requisição toda hora pra ver se tem mensagem nova
-    public Message save(@Payload MessageDTO messageDTO, @RequestParam("file") MultipartFile file) {
-        String messageJson = messageDTO.toString();
-        MessageUtil messageUtil = new MessageUtil();
-        Message message = messageUtil.convertJsonToModel(messageJson);
+    @MessageMapping("/demand/{id}")
+    @SendTo("/{id}/chat")
+    public Message save(@Payload MessageDTO messageDTO
+                        ,@PathVariable(value = "file", required = false) MultipartFile messageAttachment
+    ) {
+        Message message = new Message();
+        BeanUtils.copyProperties(messageDTO, message);
 
-        if (file != null) {
-            message.setDemandAttachment(file);
-        }
+//        if (file != null) {
+//            message.setAttachment(file);
+//        }
 
         return messageService.save(message);
     }

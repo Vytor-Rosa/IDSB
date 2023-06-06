@@ -33,15 +33,15 @@ public class Message {
     private String message;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Attachment attachment;
+    private Attachment messageAttachment;
 
     @Bean
-    public void setDemandAttachment(MultipartFile attachment) {
+    public void setAttachment(MultipartFile messageAttachment) {
         try {
-            this.attachment = new Attachment(
-                    attachment.getOriginalFilename(),
-                    attachment.getContentType(),
-                    attachment.getBytes()
+            this.messageAttachment = new Attachment(
+                    messageAttachment.getOriginalFilename(),
+                    messageAttachment.getContentType(),
+                    messageAttachment.getBytes()
             );
         } catch (Exception exception) {
             throw new RuntimeException(exception);

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.model.entity.Agenda;
+import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.AgendaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -70,5 +71,9 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.FOUND).body("Agenda " + agendaCode + " successfully deleted!");
     }
 
+    @GetMapping("/proposal/{proposalCode}")
+    public ResponseEntity<Object> findByProposalCode(@PathVariable(value = "proposalCode") Proposal proposalCode) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(agendaService.findByProposals(proposalCode));
+    }
 
 }
