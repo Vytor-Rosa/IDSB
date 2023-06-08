@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,19 +62,24 @@ public class Demand {
     @OneToOne
     private PotentialBenefit potentialBenefit;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private DemandAttachment demandAttachment;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<DemandAttachment> demandAttachments;
 
     @Bean
-    public void setDemandAttachment(MultipartFile demandAttachment) {
-        try {
-            this.demandAttachment = new DemandAttachment(
-                    demandAttachment.getOriginalFilename(),
-                    demandAttachment.getContentType(),
-                    demandAttachment.getBytes()
-            );
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
+    public void setDemandAttachment(List<MultipartFile> demandAttachments) {
+        this.demandAttachments = new ArrayList<>();
+
+        for (MultipartFile file : demandAttachments) {
+            try {
+                DemandAttachment attachment = new DemandAttachment(
+                        file.getOriginalFilename(),
+                        file.getContentType(),
+                        file.getBytes()
+                );
+                this.demandAttachments.add(attachment);
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
         }
     }
 

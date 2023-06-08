@@ -836,7 +836,7 @@ public class DemandController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String
-                                               demandJson, @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) {
+                                               demandJson, @RequestParam(value = "demandAttachments", required = false) List<MultipartFile> demandAttachment) {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
@@ -847,6 +847,8 @@ public class DemandController {
         String formattedString = createDate.format(formatter);
 
         demand.setDemandDate(formattedString);
+
+        System.out.println(demandAttachment);
 
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
@@ -888,7 +890,7 @@ public class DemandController {
     @PutMapping("/{demandCode}")
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
-                                         @RequestParam(value = "demandAttachment", required = false) MultipartFile demandAttachment) throws
+                                         @RequestParam(value = "demandAttachment", required = false) List<MultipartFile> demandAttachment) throws
             IOException {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
