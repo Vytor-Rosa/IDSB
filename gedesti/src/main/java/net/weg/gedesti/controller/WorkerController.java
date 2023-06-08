@@ -134,6 +134,57 @@ public class WorkerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
     }
 
+    @Modifying
+    @Transactional
+    @PutMapping("/screenReader/{workerCode}")
+    public ResponseEntity<Object> updateScreenReader(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setScreenReader(workerDTO.getScreenReader());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/darkmode/{workerCode}")
+    public ResponseEntity<Object> updateDarkmode(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setDarkmode(workerDTO.getDarkmode());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/square/{workerCode}")
+    public ResponseEntity<Object> updateSquare(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setSquare(workerDTO.getSquare());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/fontSize/{workerCode}")
+    public ResponseEntity<Object> updateFontSize(@PathVariable(value = "workerCode") Integer workerCode, @RequestBody WorkerDTO workerDTO) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setFontSize(workerDTO.getFontSize());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
 
     @GetMapping("/user/{userId}/online")
     public ResponseEntity<Boolean> isUserOnline(@PathVariable("userId") Integer userId) {

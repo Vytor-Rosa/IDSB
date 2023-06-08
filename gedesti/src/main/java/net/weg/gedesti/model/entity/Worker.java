@@ -47,4 +47,16 @@ public class Worker {
     @Column(nullable = false)
     private Boolean pounds;
 
+    @Column(nullable = false)
+    private Boolean screenReader;
+
+    @Column(nullable = false)
+    private Boolean darkmode;
+
+    @Column(nullable = false)
+    private Boolean square;
+
+    @Column(nullable = false)
+    private Integer fontSize;
+
 }

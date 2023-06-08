@@ -2,6 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 @Data
@@ -25,4 +26,13 @@ public class WorkerDTO {
     private Boolean voiceCommand;
 
     private Boolean pounds;
+
+    private Boolean screenReader;
+
+    private Boolean darkmode;
+
+    private Boolean square;
+
+    private Integer fontSize;
+
 }
