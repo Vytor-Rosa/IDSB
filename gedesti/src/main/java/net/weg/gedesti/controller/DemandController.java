@@ -847,9 +847,7 @@ public class DemandController {
         String formattedString = createDate.format(formatter);
 
         demand.setDemandDate(formattedString);
-
-        System.out.println(demandAttachment);
-
+        
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
         demand.setDemandCode(size + 1);

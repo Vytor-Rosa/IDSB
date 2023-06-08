@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,19 +36,24 @@ public class Classification {
     @OneToOne
     private Bu requesterBu;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Attachment classificationAttachment;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Attachment> classificationAttachment;
 
     @Bean
-    public void setAttachment(MultipartFile classificationAttachment) {
-        try {
-            this.classificationAttachment = new Attachment(
-                    classificationAttachment.getOriginalFilename(),
-                    classificationAttachment.getContentType(),
-                    classificationAttachment.getBytes()
-            );
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
+    public void setAttachment(List<MultipartFile> classificationAttachment) {
+        this.classificationAttachment = new ArrayList<>();
+
+        for(MultipartFile file : classificationAttachment) {
+            try {
+                 Attachment attachment = new Attachment(
+                         file.getOriginalFilename(),
+                         file.getContentType(),
+                         file.getBytes()
+                );
+                 this.classificationAttachment.add(attachment);
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
         }
     }
 

@@ -41,7 +41,7 @@ public class ClassificationController {
 //    }
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestParam(value = "classification") @Valid String classificationJson, @RequestParam(value = "classificationAttachment", required = false) MultipartFile classificationAttachment) {
+    public ResponseEntity<Object> save(@RequestParam(value = "classification") @Valid String classificationJson, @RequestParam(value = "classificationAttachment", required = false) List<MultipartFile> classificationAttachment) {
         ClassificationUtil classficationUtil = new ClassificationUtil();
         Classification classification = classficationUtil.convertJsonToModel(classificationJson);
         if (classificationAttachment != null) {
