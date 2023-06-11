@@ -2,19 +2,22 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.MinuteDTO;
-import net.weg.gedesti.model.entity.Agenda;
-import net.weg.gedesti.model.entity.Commission;
-import net.weg.gedesti.model.entity.Minute;
-import net.weg.gedesti.model.entity.Proposal;
+import net.weg.gedesti.model.entity.*;
+import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.MinuteService;
-import net.weg.gedesti.util.MinuteUtil;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.safety.Whitelist;
+import org.jsoup.select.Elements;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.NodeTraversor;
+import org.jsoup.select.NodeVisitor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,16 +26,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,7 @@ import java.util.Optional;
 public class MinuteController {
 
     private MinuteService minuteService;
+    private ExpensesService expensesService;
 
     @GetMapping
     public ResponseEntity<List<Minute>> findAll() {
@@ -140,8 +142,8 @@ public class MinuteController {
             List<Commission> commissionList = minute.getAgenda().getCommission();
             String comission = "";
 
-            for(int i = 0; i < commissionList.size(); i++){
-                if(i + 1 == commissionList.size()){
+            for (int i = 0; i < commissionList.size(); i++) {
+                if (i + 1 == commissionList.size()) {
                     comission += commissionList.get(i).getCommissionName().split("–")[1];
                 } else {
                     comission += commissionList.get(i).getCommissionName().split("–")[1] + " , ";
@@ -179,7 +181,7 @@ public class MinuteController {
             float currentWidth = 0;
             float maxWidth = 500;
 
-            for(int i = 0; i < proposalsList.size(); i++){
+            for (int i = 0; i < proposalsList.size(); i++) {
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
                 contentStream.setNonStrokingColor(color);
                 contentStream.showText(proposalsList.get(i).getProposalName() + " – " + proposalsList.get(i).getProposalCode());
@@ -187,12 +189,108 @@ public class MinuteController {
 
                 contentStream.setNonStrokingColor(color2);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
-                contentStream.showText("Objetivo:  ");
+                contentStream.showText("Objetivo: ");
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                Document objective = Jsoup.parse(proposalsList.get(i).getDemand().getDemandObjective());
+                showText(objective, contentStream);
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Escopo do Projeto: ");
+                contentStream.newLineAtOffset(0, -20);
+
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                Document escope = Jsoup.parse(proposalsList.get(i).getDescriptiveProposal());
+                showText(escope, contentStream);
+
+                contentStream.newLineAtOffset(0, -20);
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+                contentStream.showText("Resultados Esperados (Qualitativos): ");
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                Document benefitsQualitative = Jsoup.parse(proposalsList.get(i).getDemand().getQualitativeBenefit().getQualitativeBenefitDescription());
+                showText(benefitsQualitative, contentStream);
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.showText("Benefícios potencias: ");
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                Document benefitsPotential = Jsoup.parse(proposalsList.get(i).getDemand().getPotentialBenefit().getPotentialBenefitDescription());
+                showText(benefitsPotential, contentStream);
+                contentStream.newLineAtOffset(0, -20);
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+                contentStream.showText("Periodo de execução: ");
+                contentStream.newLineAtOffset(130, 0);
+                contentStream.setFont(PDType1Font.HELVETICA, fontTitle);
+                contentStream.showText(proposalsList.get(i).getInitialRunPeriod().getDay() + "/" + proposalsList.get(i).getInitialRunPeriod().getMonth() + "/" + proposalsList.get(i).getInitialRunPeriod().getYear() + " à " + proposalsList.get(i).getFinalExecutionPeriod().getDay() + "/" + proposalsList.get(i).getFinalExecutionPeriod().getMonth()  + "/" + proposalsList.get(i).getFinalExecutionPeriod().getYear());
+
+
+                contentStream.newLineAtOffset(-130, -20);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+
+                contentStream.showText("Responsável pelo negócio: ");
+                contentStream.setFont(PDType1Font.HELVETICA, fontTitle);
+                contentStream.newLineAtOffset(160, 0);
+                contentStream.showText(proposalsList.get(i).getWorkers().get(0).getWorkerName());
+                contentStream.newLineAtOffset(-160, -20);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
+                contentStream.showText("Parecer da comissão: " + proposalsList.get(i).getProposalStatus());
+
+
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                contentStream.showText("Custos de Execução: ");
+                contentStream.setFont(PDType1Font.HELVETICA, 10);
+                List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposalsList.get(i).getProposalCode());
+
+                for (Expenses expenses : expensesList) {
+                    contentStream.newLineAtOffset(0, -20);
+                    contentStream.showText(expenses.getExpensesType());
+                    contentStream.newLineAtOffset(0, -20);
+
+                    List<Expense> expenseList = expenses.getExpense();
+                    List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
+
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                    contentStream.showText("DESPESAS");
+                    for (Expense expense : expenseList) {
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.showText("Perfil da despesa: " );
+                        contentStream.setFont(PDType1Font.HELVETICA, 10);
+                        contentStream.showText(expense.getExpenseProfile());
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                        contentStream.showText("Quantidade de horas: " );
+                        contentStream.setFont(PDType1Font.HELVETICA, 10);
+                        contentStream.showText(expense.getAmountOfHours() + "h");
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                        contentStream.showText("Valor hora: R$" );
+                        contentStream.setFont(PDType1Font.HELVETICA, 10);
+                        contentStream.showText(String.valueOf(expense.getHourValue()));
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                        contentStream.showText("Valor total: R$" );
+                        contentStream.setFont(PDType1Font.HELVETICA, 10);
+                        contentStream.showText(String.valueOf(expense.getTotalValue()));
+                    }
+
+                    for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
+                        contentStream.newLineAtOffset(0, -20);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+                        contentStream.showText("Centro de custo: ");
+                        contentStream.setFont(PDType1Font.HELVETICA, 10);
+                        contentStream.showText(expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent()+ "%");
+                    }
+                }
 
             }
-            
 
             contentStream.endText();
             contentStream.close();
@@ -219,4 +317,32 @@ public class MinuteController {
             e.printStackTrace();
         }
     }
+
+    public void showText(Document document, PDPageContentStream contentStream) throws IOException {
+        document.outputSettings(new Document.OutputSettings().prettyPrint(false));
+        document.select("br").append("\\n");
+
+        for(int j = 0; j < document.text().length(); j++) {
+            if(j+1 == document.text().length()) {
+                contentStream.showText(String.valueOf(document.text().charAt(j)));
+                break;
+            }
+            if(j == 0){
+                contentStream.showText(String.valueOf(document.text().charAt(j)));
+            } else {
+                String n = document.text().charAt(j) + "" + document.text().charAt(j + 1);
+                String n2 = document.text().charAt(j - 1) + "" + document.text().charAt(j);
+
+                if(!n2.equals("\\n")){
+                    if (n.equals("\\n")) {
+                        contentStream.newLineAtOffset(0, -20);
+                    } else {
+                        contentStream.showText(String.valueOf(document.text().charAt(j)));
+                    }
+                }
+            }
+        }
+    }
+
+
 }
