@@ -67,9 +67,7 @@ public class MessageController {
 
     @MessageMapping("/demand/{id}")
     @SendTo("/{id}/chat")
-    public Message save(@Payload MessageDTO messageDTO
-                        ,@PathVariable(value = "file", required = false) MultipartFile messageAttachment
-    ) {
+    public Message save(@Payload MessageDTO messageDTO) {
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
 

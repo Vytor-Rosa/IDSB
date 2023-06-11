@@ -32,20 +32,20 @@ public class Message {
     @Column(nullable = false)
     private String message;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Attachment messageAttachment;
-
-    @Bean
-    public void setAttachment(MultipartFile messageAttachment) {
-        try {
-            this.messageAttachment = new Attachment(
-                    messageAttachment.getOriginalFilename(),
-                    messageAttachment.getContentType(),
-                    messageAttachment.getBytes()
-            );
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Attachment messageAttachment;
+//
+//    @Bean
+//    public void setAttachment(MultipartFile messageAttachment) {
+//        try {
+//            this.messageAttachment = new Attachment(
+//                    messageAttachment.getOriginalFilename(),
+//                    messageAttachment.getContentType(),
+//                    messageAttachment.getBytes()
+//            );
+//        } catch (Exception exception) {
+//            throw new RuntimeException(exception);
+//        }
+//    }
 
 }
