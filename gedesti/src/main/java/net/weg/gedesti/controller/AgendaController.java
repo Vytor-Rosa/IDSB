@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.model.entity.Agenda;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.AgendaService;
 import org.springframework.beans.BeanUtils;
@@ -16,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,5 +84,4 @@ public class AgendaController {
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("Error! No agenda with proposal code: " + proposalCode);
     }
-
 }
