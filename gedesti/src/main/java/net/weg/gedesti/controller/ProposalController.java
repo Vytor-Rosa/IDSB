@@ -542,8 +542,8 @@ public class ProposalController {
             // Centros de custos
             int textX = -60;
             int textY = 0;
-
-            // Tabela
+//
+//             Tabela
 //            contentStream.setStrokingColor(Color.BLACK);
 //            contentStream.setLineWidth(1);
 //
@@ -871,67 +871,175 @@ public class ProposalController {
                 contentStream.showText(worker.getWorkerCode() + " - " + worker.getWorkerName());
             }
 
-            contentStream.newLineAtOffset(0, -20);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-            contentStream.showText("Custos de Execução: ");
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
-            List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposal.getProposalCode());
+//            contentStream.newLineAtOffset(0, -20);
+//            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//            contentStream.showText("Custos de Execução: ");
+//            contentStream.setFont(PDType1Font.HELVETICA, 10);
+//            List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposal.getProposalCode());
+//
+//            for (Expenses expenses : expensesList) {
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.showText(expenses.getExpensesType());
+//                contentStream.newLineAtOffset(0, -20);
+//
+//                List<Expense> expenseList = expenses.getExpense();
+//                List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
+//
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("DESPESAS");
+//                for (Expense expense : expenseList) {
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.showText("Perfil da despesa: " );
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(expense.getExpenseProfile());
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Quantidade de horas: " );
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(expense.getAmountOfHours() + "h");
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Valor hora: R$" );
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(String.valueOf(expense.getHourValue()));
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Valor total: R$" );
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(String.valueOf(expense.getTotalValue()));
+//                }
+//
+//                for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
+//                    contentStream.newLineAtOffset(0, -20);
+//                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                    contentStream.showText("Centro de custo: ");
+//                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                    contentStream.showText(expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent()+ "%");
+//                }
+//            }
+//
+//            if (!proposal.getProposalStatus().equals("Pending")) {
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("Opinião da comissão: ");
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(proposal.getCommissionOpinion());
+//                contentStream.newLineAtOffset(0, -20);
+//                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
+//                contentStream.showText("Proposta publicada: " );
+//                contentStream.setFont(PDType1Font.HELVETICA, 10);
+//                contentStream.showText(String.valueOf(proposal.getPublished()));
+//            }
 
-            for (Expenses expenses : expensesList) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText(expenses.getExpensesType());
-                contentStream.newLineAtOffset(0, -20);
-
-                List<Expense> expenseList = expenses.getExpense();
-                List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
-
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("DESPESAS");
-                for (Expense expense : expenseList) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText("Perfil da despesa: " );
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(expense.getExpenseProfile());
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Quantidade de horas: " );
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(expense.getAmountOfHours() + "h");
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Valor hora: R$" );
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(String.valueOf(expense.getHourValue()));
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Valor total: R$" );
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(String.valueOf(expense.getTotalValue()));
-                }
-
-                for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("Centro de custo: ");
-                    contentStream.setFont(PDType1Font.HELVETICA, 10);
-                    contentStream.showText(expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent()+ "%");
-                }
-            }
-
-            if (!proposal.getProposalStatus().equals("Pending")) {
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Opinião da comissão: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(proposal.getCommissionOpinion());
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Proposta publicada: " );
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                contentStream.showText(String.valueOf(proposal.getPublished()));
-            }
 
             contentStream.endText();
+            contentStream.setStrokingColor(Color.BLACK);
+            contentStream.setLineWidth(1);
+
+            List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposal.getProposalCode());
+
+            int initX = 60;
+            int initY = (int) (currentHeight - 180);
+            int sizeHeight = 20;
+            int sizeWidth = 246;
+            int columns = 2;
+
+            for (Expenses expenses : expensesList) {
+                // Cabeçalho da tabela
+                contentStream.beginText();
+                if(expenses.getExpensesType().equals("expenses")){
+                    contentStream.newLineAtOffset(initX + 5, initY + 5);
+                } else {
+                    contentStream.newLineAtOffset(65, initY + 15);
+                }
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+                contentStream.showText(expenses.getExpensesType());
+                contentStream.newLineAtOffset(initX, 50);
+                contentStream.endText();
+
+
+
+                contentStream.addRect(initX, initY, sizeWidth, sizeHeight);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(initX + 5, initY + 50);
+
+                if(expenses.getExpensesType().equals("expenses")){
+                    contentStream.newLineAtOffset(initX + 5, initY + 50);
+                } else {
+                    contentStream.newLineAtOffset(65, initY + 50);
+                }
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+                contentStream.showText("Nome da despesa");
+                contentStream.endText();
+
+                contentStream.addRect(initX + 246, initY, sizeWidth, sizeHeight);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(initX + 246, initY + 5);
+
+                if(expenses.getExpensesType().equals("expenses")){
+                    contentStream.newLineAtOffset(initX + 246, initY + 5);
+                } else {
+                    contentStream.newLineAtOffset(initX + 246, initY + 5);
+                }
+
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+                contentStream.showText("Esforço");
+                contentStream.endText();
+
+                contentStream.addRect(initX + 280, initY, sizeWidth, sizeHeight);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(initX + 280 + 5, initY + 5);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+                contentStream.showText("Valor Total");
+                contentStream.endText();
+
+                // Preencher a tabela com as despesas
+                List<Expense> expenseList = expenses.getExpense();
+                int lines = expenseList.size();
+                initY -= sizeHeight;
+
+                for (int i = 0; i < lines; i++) {
+                    initX = 60;
+                    initY -= sizeHeight;
+
+                    for (int j = 0; j < columns; j++) {
+                        contentStream.addRect(initX, initY, sizeWidth, sizeHeight);
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(initX + 5, initY + 5);
+                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+
+                        if (j == 0) {
+                            contentStream.showText(expenses.getExpensesType());
+                        } else {
+                            contentStream.showText(expenseList.get(i).getExpenseProfile());
+                        }
+                        contentStream.endText();
+                        initX += sizeWidth;
+                    }
+
+                    currentHeight -= (fontInformations);
+
+                    if (currentHeight <= 0) {
+                        contentStream.endText();
+                        contentStream.close();
+
+                        page = new PDPage();
+                        document.addPage(page);
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                        contentStream.newLineAtOffset(60, 750);
+                        currentHeight = pageHeight - margin;
+                    }
+                }
+
+                contentStream.stroke();
+            }
+
+
+
             contentStream.close();
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
