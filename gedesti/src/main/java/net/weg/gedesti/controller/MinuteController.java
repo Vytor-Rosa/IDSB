@@ -165,11 +165,11 @@ public class MinuteController {
             contentStream.newLineAtOffset(0, -12);
             contentStream.showText("Início: ");
             contentStream.newLineAtOffset(45, 0);
-            contentStream.showText(minute.getAgenda().getYearAgenda().split("T")[1]);
+            contentStream.showText(minute.getAgenda().getInitialDate().split("T")[1]);
             contentStream.newLineAtOffset(-45, -12);
             contentStream.showText("Término: ");
             contentStream.newLineAtOffset(45, 0);
-            contentStream.showText(minute.getAgenda().getYearAgenda().split("T")[1]);
+            contentStream.showText(minute.getAgenda().getFinalDate().split("T")[1]);
             contentStream.newLineAtOffset(0, -12);
 
             contentStream.newLineAtOffset(-475, 0);

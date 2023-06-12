@@ -6,6 +6,7 @@ import net.weg.gedesti.model.entity.Commission;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.entity.Worker;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -19,7 +20,9 @@ public class AgendaDTO {
     @Positive
     private Integer sequentialNumber;
     @NotNull
-    private String yearAgenda;
+    private String initialDate;
+    @NotNull
+    private String finalDate;
     @NotNull
     List<Commission> commission;
     @NotNull
