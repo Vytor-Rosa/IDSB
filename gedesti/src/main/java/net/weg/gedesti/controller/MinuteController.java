@@ -150,7 +150,7 @@ public class MinuteController {
                 }
             }
 
-            contentStream.showText("ATA REUNIÃO" + comission.toUpperCase());
+            contentStream.showText("ATA " + comission.toUpperCase());
             contentStream.newLineAtOffset(0, -40);
 
 
