@@ -34,11 +34,11 @@ public class Agenda {
     @OneToMany(mappedBy = "agenda")
     private List<Minute> minutes;
 
-    @ManyToMany
+    @ManyToOne
     @JoinTable(name = "agenda_commission",
             joinColumns = @JoinColumn(name = "agendaCode"),
             inverseJoinColumns = @JoinColumn(name = "commissionCode"))
-    List<Commission> commission;
+    private Commission commission;
 
     @ManyToMany
     @JoinTable(name = "agenda_proposal",
