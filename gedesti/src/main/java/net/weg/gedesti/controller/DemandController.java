@@ -461,7 +461,7 @@ public class DemandController {
             }
 
             // Benefício Qualitativo
-            contentStream.newLineAtOffset(0, -40);
+            contentStream.newLineAtOffset(0, -20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
@@ -542,9 +542,6 @@ public class DemandController {
             contentStream.showText(interalControlsRequirements);
 
             // Centros de custos
-            int textX = -60;
-            int textY = 0;
-
             // Tabela
             contentStream.endText();
             contentStream.setStrokingColor(Color.BLACK);
@@ -553,11 +550,13 @@ public class DemandController {
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
             int initX = 60;
-            int initY = (int) (currentHeight - 100);
+            System.out.println(currentHeight);
+            int initY = (int) (100 - currentHeight);
             int sizeHeight = 20;
             int sizeWidth = 246;
             int columns = 2;
             int lines = ListCostCenter.size();
+
 
             contentStream.addRect(initX, initY, sizeWidth, sizeHeight);
             contentStream.beginText();
@@ -612,8 +611,8 @@ public class DemandController {
             contentStream.stroke();
 
             //Classificação
-            textX = 0;
-            textY = -40;
+            int textX = 0;
+            int textY = -40;
 
             contentStream.beginText();
             if (!demand.getDemandStatus().equals("Backlog")) {
