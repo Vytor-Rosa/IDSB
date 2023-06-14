@@ -36,7 +36,6 @@ public class Demand {
 
     private String demandTitle;
 
-    @Size(max = 5000)
     private String currentProblem;
 
     private String demandObjective;
