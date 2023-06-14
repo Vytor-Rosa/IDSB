@@ -116,21 +116,6 @@ public class DemandController {
             contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
             contentStream.newLineAtOffset(0, -30);
 
-            currentHeight -= (fontTitle + 60);
-
-            if (currentHeight <= 0) {
-                contentStream.endText();
-                contentStream.close();
-
-                page = new PDPage();
-                document.addPage(page);
-                contentStream = new PDPageContentStream(document, page);
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                contentStream.newLineAtOffset(60, 750);
-                currentHeight = pageHeight - margin;
-            }
-
             //Data e hora
             Color color1 = Color.decode("#000000");
             contentStream.setNonStrokingColor(color1);
@@ -140,42 +125,12 @@ public class DemandController {
             contentStream.showText(demand.getDemandDate() + " - " + demand.getDemandHour() + "h");
             contentStream.newLineAtOffset(0, -20);
 
-            currentHeight -= (fontInformations + 20);
-
-            if (currentHeight <= 0) {
-                contentStream.endText();
-                contentStream.close();
-
-                page = new PDPage();
-                document.addPage(page);
-                contentStream = new PDPageContentStream(document, page);
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                contentStream.newLineAtOffset(60, 750);
-                currentHeight = pageHeight - margin;
-            }
-
             //Solicitante
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Solicitante: ");
             contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
             contentStream.showText(demand.getRequesterRegistration().getWorkerName());
             contentStream.newLineAtOffset(0, -20);
-
-            currentHeight -= (fontInformations + 20);
-
-            if (currentHeight <= 0) {
-                contentStream.endText();
-                contentStream.close();
-
-                page = new PDPage();
-                document.addPage(page);
-                contentStream = new PDPageContentStream(document, page);
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                contentStream.newLineAtOffset(60, 750);
-                currentHeight = pageHeight - margin;
-            }
 
             //Status
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
@@ -184,8 +139,10 @@ public class DemandController {
             contentStream.showText(demand.getDemandStatus());
             contentStream.newLineAtOffset(0, -40);
 
-            currentHeight -= (fontInformations + 20);
+            // VERIFICA O TAMANHO DO TITULO, DATA, SOLICITANTE E STATUS
+            currentHeight -= (fontTitle + 60 + (fontInformations * 3) + (20 * 3));
 
+            System.out.println("Tamanho da página: " + currentHeight);
             if (currentHeight <= 0) {
                 contentStream.endText();
                 contentStream.close();
@@ -228,33 +185,42 @@ public class DemandController {
             Document doc = Jsoup.parse(currentProblem);
             String currentProblemFinal = doc.text();
             StringBuilder lineBuilder = new StringBuilder();
+            Integer textLength = 0;
 
-            for (String word : currentProblemFinal.split(" ")) {
-                float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
-                if (currentWidth + wordWidth > maxWidth) {
-                    currentHeight -= fontInformations;
+            if (PDType1Font.HELVETICA.getStringWidth(currentProblemFinal) / 1000f * fontInformations <= maxWidth) {
+                contentStream.showText(currentProblemFinal);
+            } else {
+                for (String word : currentProblemFinal.split(" ")) {
+                    float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
+                    textLength++;
 
-                    if (currentHeight <= 0) {
-                        contentStream.endText();
-                        contentStream.close();
+                    if (currentWidth + wordWidth > maxWidth) {
+                        currentHeight -= fontInformations;
 
-                        page = new PDPage();
-                        document.addPage(page);
-                        contentStream = new PDPageContentStream(document, page);
-                        contentStream.beginText();
-                        contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                        contentStream.newLineAtOffset(60, 750);
-                        currentHeight = pageHeight - margin;
+                        if (currentHeight <= 0) {
+                            contentStream.endText();
+                            contentStream.close();
+
+                            page = new PDPage();
+                            document.addPage(page);
+                            contentStream = new PDPageContentStream(document, page);
+                            contentStream.beginText();
+                            contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                            contentStream.newLineAtOffset(60, 750);
+                            currentHeight = pageHeight - margin;
+                        }
+
+                        contentStream.showText(lineBuilder.toString());
+                        contentStream.newLineAtOffset(0, -20);
+                        lineBuilder.setLength(0);
+                        currentWidth = 0;
+                    } else if (currentProblemFinal.split(" ").length == textLength) {
+                        contentStream.showText(lineBuilder.toString() + word);
                     }
 
-                    contentStream.showText(lineBuilder.toString());
-                    contentStream.newLineAtOffset(0, -20);
-                    lineBuilder.setLength(0);
-                    currentWidth = 0;
+                    lineBuilder.append(word).append(" ");
+                    currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
                 }
-
-                lineBuilder.append(word).append(" ");
-                currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
             }
 
             contentStream.newLineAtOffset(0, -20);
@@ -847,7 +813,7 @@ public class DemandController {
         String formattedString = createDate.format(formatter);
 
         demand.setDemandDate(formattedString);
-        
+
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
         demand.setDemandCode(size + 1);
