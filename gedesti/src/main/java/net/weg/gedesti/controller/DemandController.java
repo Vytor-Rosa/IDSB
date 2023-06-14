@@ -612,7 +612,7 @@ public class DemandController {
             contentStream.stroke();
 
             //Classificação
-            textX = -150;
+            textX = 0;
             textY = -40;
 
             contentStream.beginText();
