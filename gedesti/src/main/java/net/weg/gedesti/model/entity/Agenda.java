@@ -35,9 +35,6 @@ public class Agenda {
     private List<Minute> minutes;
 
     @ManyToOne
-    @JoinTable(name = "agenda_commission",
-            joinColumns = @JoinColumn(name = "agendaCode"),
-            inverseJoinColumns = @JoinColumn(name = "commissionCode"))
     private Commission commission;
 
     @ManyToMany
