@@ -24,7 +24,7 @@ public class AgendaDTO {
     @NotNull
     private String finalDate;
     @NotNull
-    List<Commission> commission;
+    private Commission commission;
     @NotNull
     private String agendaDate;
     @NotNull

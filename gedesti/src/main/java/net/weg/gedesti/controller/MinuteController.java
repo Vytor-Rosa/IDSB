@@ -139,18 +139,10 @@ public class MinuteController {
 
             contentStream.newLineAtOffset(0, -20);
 
-            List<Commission> commissionList = minute.getAgenda().getCommission();
-            String comission = "";
+            Commission commission = minute.getAgenda().getCommission();
+            String commissionString = commission.getCommissionName().split("–")[0] + " , " + commission.getCommissionName().split("–")[1];
 
-            for (int i = 0; i < commissionList.size(); i++) {
-                if (i + 1 == commissionList.size()) {
-                    comission += commissionList.get(i).getCommissionName().split("–")[1];
-                } else {
-                    comission += commissionList.get(i).getCommissionName().split("–")[1] + " , ";
-                }
-            }
-
-            contentStream.showText("ATA " + comission.toUpperCase());
+            contentStream.showText("ATA " + commissionString.toUpperCase());
             contentStream.newLineAtOffset(0, -40);
 
 
