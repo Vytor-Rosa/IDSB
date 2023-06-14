@@ -5,6 +5,7 @@ import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.ProposalDTO;
 import net.weg.gedesti.model.entity.*;
+import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.ExpenseService;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.ProposalService;
@@ -45,6 +46,9 @@ import javax.validation.Valid;
 import java.awt.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +60,7 @@ public class ProposalController {
     private ProposalService proposalService;
     private ProposalRepository proposalRepository;
     private ExpensesService expensesService;
+    private DemandService demandService;
 
     @GetMapping
     public ResponseEntity<List<Proposal>> findAll() {
@@ -66,6 +71,16 @@ public class ProposalController {
     public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
         int pageNumber = pageable.getPageNumber();
         pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
+
+        List<Proposal> proposals = proposalService.findAll();
+        for(Proposal proposal : proposals) {
+            if(proposal.getScore() == null) {
+                proposal.setScore(score(proposal.getDemand()));
+                proposalRepository.saveAndFlush(proposal);
+            }
+            System.out.println(proposal.getDemand().getScore());
+        }
+
         return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll(pageable));
     }
 
@@ -73,6 +88,8 @@ public class ProposalController {
     public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO proposalDTO) {
         Proposal proposal = new Proposal();
         BeanUtils.copyProperties(proposalDTO, proposal);
+        System.out.println("SCORE RETORNADO QUANDO CRIADA A PROPOSTA ---> " + proposal.getDemand());
+        proposal.setScore(proposal.getDemand().getScore());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalService.save(proposal));
     }
 
@@ -144,6 +161,39 @@ public class ProposalController {
         Proposal proposal = proposalRepository.findById(proposalCode).get();
         BeanUtils.copyProperties(proposalDTO, proposal);
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
+    }
+
+    public Double score(Demand demand) {
+        Integer demandSize = 0;
+
+        List<Demand> demandList = demandService.findAllByDemandCode(demand.getDemandCode());
+        Demand demandDate = new Demand();
+
+        for (Demand demand1 : demandList) {
+            if (demand1.getDemandVersion() == 1) {
+                demandDate = demand1;
+            }
+        }
+
+        LocalDate actualDate = LocalDate.now();
+        String createDate = demandDate.getDemandDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+        long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
+
+        if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
+            demandSize = 1;
+        } else if (demand.getClassification().getClassificationSize().equals("Pequeno")) {
+            demandSize = 41;
+        } else if (demand.getClassification().getClassificationSize().equals("Médio")) {
+            demandSize = 301;
+        } else if (demand.getClassification().getClassificationSize().equals("Grande")) {
+            demandSize = 1001;
+        } else if (demand.getClassification().getClassificationSize().equals("Muito Grande")) {
+            demandSize = 3001;
+        }
+        Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
+        System.out.println("Função score() retornou: " + score);
+        return score;
     }
 
     @GetMapping("/pdf/{proposalCode}")

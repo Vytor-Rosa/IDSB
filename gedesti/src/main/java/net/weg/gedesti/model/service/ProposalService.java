@@ -18,11 +18,11 @@ public class ProposalService {
     private ProposalRepository proposalRepository;
 
     public List<Proposal> findAll() {
-        return proposalRepository.findAll();
+        return proposalRepository.findAllOrderByScoreDesc();
     }
 
     public Page<Proposal> findAll(Pageable pageable) {
-        return proposalRepository.findAll(pageable);
+        return proposalRepository.findAllOrderByScoreDesc(pageable);
     }
 
     public <S extends Proposal> S save(S entity) {

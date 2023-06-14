@@ -78,4 +78,5 @@ public class Proposal {
     @JsonIgnore
     private List<Expenses> expensesList;
 
+    private Double score;
 }
