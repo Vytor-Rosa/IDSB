@@ -178,7 +178,6 @@ public class DemandController {
             // VERIFICA O TAMANHO DO TITULO, DATA, SOLICITANTE E STATUS
             currentHeight -= (fontTitle + 60 + (fontInformations * 3) + (20 * 3));
 
-            System.out.println("Tamanho da página: " + currentHeight);
             if (currentHeight <= 0) {
                 contentStream.endText();
                 contentStream.close();
@@ -805,6 +804,7 @@ public class DemandController {
                     contentStream.showText("Código PPM: ");
                     contentStream.setFont(PDType1Font.HELVETICA, 10);
                     contentStream.showText(demand.getClassification().getPpmCode());
+
                     contentStream.newLineAtOffset(0, -20);
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
                     contentStream.showText("Link Epic do Jira: ");
