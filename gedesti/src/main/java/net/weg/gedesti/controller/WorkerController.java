@@ -1,5 +1,7 @@
 package net.weg.gedesti.controller;
 
+import com.workday.insights.timeseries.arima.Arima;
+import com.workday.insights.timeseries.arima.ArimaSolver;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.component.UserPresenceManager;
 import net.weg.gedesti.dto.WorkerDTO;
@@ -11,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCrypt;
-//import org.springframework.net.weg.gedesti.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import com.workday.insights.timeseries.arima.struct.ArimaModel;
+import com.workday.insights.timeseries.arima.struct.ArimaParams;
+import com.workday.insights.timeseries.arima.struct.ForecastResult;
+import com.workday.insights.timeseries.timeseriesutil.ForecastUtil;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -190,5 +194,42 @@ public class WorkerController {
     public ResponseEntity<Boolean> isUserOnline(@PathVariable("userId") Integer userId) {
         boolean isOnline = userPresenceManager.isUserOnline(workerSerivce.findById(userId).get().getCorporateEmail());
         return ResponseEntity.ok(isOnline);
+    }
+
+
+    @GetMapping("/user/graphic")
+    public ResponseEntity<Object> graphic(){
+        double[] dataArray = new double[] {1,2,3, 4, 5, 6, 7, 8, 9, 10};
+
+        int p = 3;
+        int d = 0;
+        int q = 3;
+        int P = 1;
+        int D = 1;
+        int Q = 0;
+        int m = 0;
+
+        int forecastSize = 1;
+
+        final ArimaParams paramsForecast = new ArimaParams(p, d, q, P, D, Q, m);
+        final ArimaParams paramsXValidation = new ArimaParams(p, d, q, P, D, Q, m);
+
+        final ArimaModel fittedModel = ArimaSolver.estimateARIMA(
+                paramsForecast, dataArray, dataArray.length, dataArray.length + 1);
+
+        final double rmseValidation = ArimaSolver.computeRMSEValidation(
+                dataArray, ForecastUtil.testSetPercentage, paramsXValidation);
+
+        fittedModel.setRMSE(rmseValidation);
+        final ForecastResult forecastResult = fittedModel.forecast(forecastSize);
+
+
+
+        // populate confidence interval
+        forecastResult.setSigma2AndPredicationInterval(fittedModel.getParams());
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(forecastResult);
     }
 }
