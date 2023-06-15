@@ -11,11 +11,9 @@ import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.WorkerService;
 import net.weg.gedesti.repository.DemandRepository;
 import net.weg.gedesti.util.DemandUtil;
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
@@ -23,18 +21,14 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -110,13 +104,55 @@ public class DemandController {
             contentStream.newLineAtOffset(60, 750);
 
             //Titulo
+            contentStream.newLineAtOffset(0,-20);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
             Color color = Color.decode("#00579D");
             contentStream.setNonStrokingColor(color);
-            contentStream.showText(demand.getDemandTitle() + " - " + demand.getDemandCode());
+            String titulo=demand.getDemandTitle() + " - " + demand.getDemandCode();
             contentStream.newLineAtOffset(0, -30);
 
+            float maxWidth = 500;
+            float currentWidth = 0;
+            Integer textLength = 0;
+            StringBuilder lineBuilder = new StringBuilder();
+            if (PDType1Font.HELVETICA.getStringWidth(titulo) / 1000f * fontTitle <= maxWidth) {
+                contentStream.showText(titulo);
+            } else {
+                for (String word : titulo.split(" ")) {
+                    float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontTitle;
+                    textLength++;
+
+                    if (currentWidth + wordWidth > maxWidth) {
+                        currentHeight -= fontTitle;
+
+                        if (currentHeight <= 0) {
+                            contentStream.endText();
+                            contentStream.close();
+
+                            page = new PDPage();
+                            document.addPage(page);
+                            contentStream = new PDPageContentStream(document, page);
+                            contentStream.beginText();
+                            contentStream.setFont(PDType1Font.HELVETICA, fontTitle);
+                            contentStream.newLineAtOffset(60, 750);
+                            currentHeight = pageHeight - margin;
+                        }
+
+                        contentStream.showText(lineBuilder.toString());
+                        contentStream.newLineAtOffset(0, -20);
+                        lineBuilder.setLength(0);
+                        currentWidth = 0;
+                    } else if (titulo.split(" ").length == textLength) {
+                        contentStream.showText(lineBuilder.toString() + word);
+                    }
+
+                    lineBuilder.append(word).append(" ");
+                    currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontTitle;
+                }
+            }
+
             //Data e hora
+            contentStream.newLineAtOffset(0,-20);
             Color color1 = Color.decode("#000000");
             contentStream.setNonStrokingColor(color1);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
@@ -177,15 +213,15 @@ public class DemandController {
                 currentHeight = pageHeight - margin;
             }
 
-            float maxWidth = 500;
-            float currentWidth = 0;
+            maxWidth = 500;
+            currentWidth = 0;
 
             String currentProblem = demand.getCurrentProblem();
             currentProblem = currentProblem.replaceAll("&nbsp;", " ");
             Document doc = Jsoup.parse(currentProblem);
             String currentProblemFinal = doc.text();
-            StringBuilder lineBuilder = new StringBuilder();
-            Integer textLength = 0;
+            lineBuilder = new StringBuilder();
+            textLength = 0;
 
             if (PDType1Font.HELVETICA.getStringWidth(currentProblemFinal) / 1000f * fontInformations <= maxWidth) {
                 contentStream.showText(currentProblemFinal);
@@ -222,8 +258,6 @@ public class DemandController {
                     currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
                 }
             }
-
-            ;
 
             //Objetivo
             contentStream.newLineAtOffset(0, -30);
