@@ -78,7 +78,6 @@ public class ProposalController {
                 proposal.setScore(score(proposal.getDemand()));
                 proposalRepository.saveAndFlush(proposal);
             }
-            System.out.println(proposal.getDemand().getScore());
         }
 
         return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll(pageable));
@@ -88,7 +87,6 @@ public class ProposalController {
     public ResponseEntity<Object> save(@RequestBody @Valid ProposalDTO proposalDTO) {
         Proposal proposal = new Proposal();
         BeanUtils.copyProperties(proposalDTO, proposal);
-        System.out.println("SCORE RETORNADO QUANDO CRIADA A PROPOSTA ---> " + proposal.getDemand());
         proposal.setScore(proposal.getDemand().getScore());
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalService.save(proposal));
     }
@@ -192,7 +190,6 @@ public class ProposalController {
             demandSize = 3001;
         }
         Double score = ((2 * demand.getRealBenefit().getRealMonthlyValue()) + demand.getPotentialBenefit().getPotentialMonthlyValue() + days) / demandSize;
-        System.out.println("Função score() retornou: " + score);
         return score;
     }
 
