@@ -285,7 +285,7 @@ public class DemandController {
                         contentStream.newLineAtOffset(0, -20);
                         lineBuilder.setLength(0);
                         currentWidth = 0;
-                    } else if (currentProblemFinal.split(" ").length == textLength) {
+                    } else if (objectiveFinal.split(" ").length == textLength) {
                         contentStream.showText(lineBuilder.toString() + word);
                     }
 
@@ -370,7 +370,7 @@ public class DemandController {
                         contentStream.newLineAtOffset(0, -20);
                         lineBuilder.setLength(0);
                         currentWidth = 0;
-                    } else if (currentProblemFinal.split(" ").length == textLength) {
+                    } else if (realBenefitDescriptionFinal.split(" ").length == textLength) {
                         contentStream.showText(lineBuilder.toString() + word);
                     }
 
@@ -381,7 +381,7 @@ public class DemandController {
 
 
             // Benefício Potencial
-            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -30);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Potencial");
             contentStream.newLineAtOffset(0, -20);
@@ -416,18 +416,18 @@ public class DemandController {
             maxWidth = 500;
             currentWidth = 0;
 
-            String PotentialBenefitDescription = demand.getPotentialBenefit().getPotentialBenefitDescription();
-            PotentialBenefitDescription = PotentialBenefitDescription.replaceAll("&nbsp;", " ");
-            doc = Jsoup.parse(PotentialBenefitDescription);
-            String PotentialBenefitDescriptionFinal = doc.text();
+            String potentialBenefitDescription = demand.getPotentialBenefit().getPotentialBenefitDescription();
+            potentialBenefitDescription = potentialBenefitDescription.replaceAll("&nbsp;", " ");
+            doc = Jsoup.parse(potentialBenefitDescription);
+            String potentialBenefitDescriptionFinal = doc.text();
             lineBuilder = new StringBuilder();
 
             textLength = 0;
 
-            if (PDType1Font.HELVETICA.getStringWidth(PotentialBenefitDescriptionFinal) / 1000f * fontInformations <= maxWidth) {
-                contentStream.showText(PotentialBenefitDescriptionFinal);
+            if (PDType1Font.HELVETICA.getStringWidth(potentialBenefitDescriptionFinal) / 1000f * fontInformations <= maxWidth) {
+                contentStream.showText(potentialBenefitDescriptionFinal);
             } else {
-                for (String word : PotentialBenefitDescriptionFinal.split(" ")) {
+                for (String word : potentialBenefitDescriptionFinal.split(" ")) {
                     float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
                     textLength++;
 
@@ -451,7 +451,7 @@ public class DemandController {
                         contentStream.newLineAtOffset(0, -20);
                         lineBuilder.setLength(0);
                         currentWidth = 0;
-                    } else if (currentProblemFinal.split(" ").length == textLength) {
+                    } else if (potentialBenefitDescriptionFinal.split(" ").length == textLength) {
                         contentStream.showText(lineBuilder.toString() + word);
                     }
 
@@ -461,7 +461,7 @@ public class DemandController {
             }
 
             // Benefício Qualitativo
-            contentStream.newLineAtOffset(0, -20);
+            contentStream.newLineAtOffset(0, -30);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
             contentStream.showText("Benefício Qualitativo");
             contentStream.newLineAtOffset(0, -20);
@@ -489,7 +489,6 @@ public class DemandController {
             doc = Jsoup.parse(qualitativeBenefitDescription);
             String qualitativeBenefitDescriptionFinal = doc.text();
             lineBuilder = new StringBuilder();
-
             textLength = 0;
 
             if (PDType1Font.HELVETICA.getStringWidth(qualitativeBenefitDescriptionFinal) / 1000f * fontInformations <= maxWidth) {
@@ -519,7 +518,7 @@ public class DemandController {
                         contentStream.newLineAtOffset(0, -20);
                         lineBuilder.setLength(0);
                         currentWidth = 0;
-                    } else if (currentProblemFinal.split(" ").length == textLength) {
+                    } else if (qualitativeBenefitDescription.split(" ").length == textLength) {
                         contentStream.showText(lineBuilder.toString() + word);
                     }
 
@@ -528,7 +527,6 @@ public class DemandController {
                 }
             }
 
-            contentStream.showText(lineBuilder.toString());
             contentStream.newLineAtOffset(0, -20);
 
             String interalControlsRequirements = "Não";
