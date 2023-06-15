@@ -2,11 +2,13 @@ package net.weg.gedesti.model.entity;
 
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.context.annotation.Bean;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,8 +38,10 @@ public class Demand {
 
     private String demandTitle;
 
+    @Length(max = 5000)
     private String currentProblem;
 
+    @Length(max = 5000)
     private String demandObjective;
 
     private String demandStatus;
