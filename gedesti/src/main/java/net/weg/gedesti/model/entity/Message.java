@@ -32,8 +32,8 @@ public class Message {
     @Column(nullable = false)
     private String message;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Attachment messageAttachment;
+    @OneToOne
+    private Attachment messageAttachment;
 //
 //    @Bean
 //    public void setAttachment(MultipartFile messageAttachment) {

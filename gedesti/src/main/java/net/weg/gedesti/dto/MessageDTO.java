@@ -21,4 +21,5 @@ public class MessageDTO {
     private Integer demandCode;
     @NotNull
     private Worker sender;
+    private Attachment attachment;
 }
