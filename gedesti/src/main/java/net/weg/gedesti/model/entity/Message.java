@@ -33,7 +33,7 @@ public class Message {
     private String message;
 
     @OneToOne
-    private Attachment messageAttachment;
+    private Attachment attachment;
 //
 //    @Bean
 //    public void setAttachment(MultipartFile messageAttachment) {
