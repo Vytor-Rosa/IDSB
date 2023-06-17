@@ -70,11 +70,9 @@ public class MessageController {
     public Message save(@Payload MessageDTO messageDTO) {
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
-
-//        if (file != null) {
-//            message.setAttachment(file);
-//        }
-
+        if(message.getAttachment() == null && message.getMessage() == null) {
+            return null;
+        }
         return messageService.save(message);
     }
 

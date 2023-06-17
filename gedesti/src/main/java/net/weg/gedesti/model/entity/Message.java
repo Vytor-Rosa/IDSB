@@ -29,7 +29,7 @@ public class Message {
     @OneToOne
     private Worker sender;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String message;
 
     @OneToOne

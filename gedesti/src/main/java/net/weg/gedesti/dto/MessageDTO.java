@@ -12,8 +12,6 @@ import java.util.Date;
 
 @Data
 public class MessageDTO {
-
-    @NotBlank
     private String message;
     @NotNull
     private String dateMessage;
