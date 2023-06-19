@@ -45,6 +45,10 @@ public class WorkerController {
 
     @PostMapping("/{workerOffice}")
     public ResponseEntity<Object> save(@RequestBody @Valid WorkerDTO workerDTO, @PathVariable(value = "workerOffice") Integer workerOffice) {
+
+        System.out.println("/api/worker - save");
+
+
 //        workerDTO.setWorkerOffice(workerOffice);
         Worker worker = new Worker();
         BeanUtils.copyProperties(workerDTO, worker);
