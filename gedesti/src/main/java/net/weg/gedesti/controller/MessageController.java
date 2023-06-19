@@ -71,7 +71,7 @@ public class MessageController {
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
         if(message.getAttachment() == null && message.getMessage() == null) {
-            return null;
+            throw new RuntimeException("Error! Message is empty!");
         }
         return messageService.save(message);
     }
