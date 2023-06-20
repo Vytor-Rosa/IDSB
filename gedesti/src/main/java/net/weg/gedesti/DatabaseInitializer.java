@@ -32,10 +32,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     public void addWorkers(){
-        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", false, false, false, false, false, 24);
-        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24);
-        Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", false, false, false, false, false, 24);
-        Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false, false, false, false, false, 24);
+        Worker requester = new Worker(1, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", false, false, false, false, false, 24, null);
+        Worker analyst = new Worker(2, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24, null);
+        Worker ti = new Worker(3, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", false, false, false, false, false, 24, null);
+        Worker business = new Worker(4, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false, false, false, false, false, 24, null);
         workerRepository.save(requester);
         workerRepository.save(analyst);
         workerRepository.save(ti);

@@ -197,7 +197,7 @@ public class WorkerController {
 
     @Modifying
     @Transactional
-    @PutMapping("/fontSize/{workerCode}")
+    @PutMapping("/photo/{workerCode}")
     public ResponseEntity<Object> updatePhoto(@PathVariable(value = "workerCode") Integer workerCode, @RequestParam("file") MultipartFile file) {
         if (!workerSerivce.existsById(workerCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
