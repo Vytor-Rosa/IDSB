@@ -1,6 +1,8 @@
 package net.weg.gedesti.model.entity;
 
 import lombok.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.MultipartFile;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.net.weg.gedesti.security.core.GrantedAuthority;
 //import org.springframework.net.weg.gedesti.security.core.authority.SimpleGrantedAuthority;
@@ -58,5 +60,21 @@ public class Worker {
 
     @Column(nullable = false)
     private Integer fontSize;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Attachment workerPhoto;
+
+    @Bean
+    public void setAttachment(MultipartFile workerPhoto) {
+        try {
+            this.workerPhoto = new Attachment(
+                    workerPhoto.getOriginalFilename(),
+                    workerPhoto.getContentType(),
+                    workerPhoto.getBytes()
+            );
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 
 }

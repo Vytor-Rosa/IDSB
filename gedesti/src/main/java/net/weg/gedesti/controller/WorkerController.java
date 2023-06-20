@@ -20,6 +20,7 @@ import com.workday.insights.timeseries.arima.struct.ArimaModel;
 import com.workday.insights.timeseries.arima.struct.ArimaParams;
 import com.workday.insights.timeseries.arima.struct.ForecastResult;
 import com.workday.insights.timeseries.timeseriesutil.ForecastUtil;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -191,6 +192,18 @@ public class WorkerController {
 
         Worker worker = workerRepository.findById(workerCode).get();
         worker.setFontSize(workerDTO.getFontSize());
+        return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/fontSize/{workerCode}")
+    public ResponseEntity<Object> updatePhoto(@PathVariable(value = "workerCode") Integer workerCode, @RequestParam("file") MultipartFile file) {
+        if (!workerSerivce.existsById(workerCode)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doesn't exist");
+        }
+        Worker worker = workerRepository.findById(workerCode).get();
+        worker.setAttachment(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(workerRepository.saveAndFlush(worker));
     }
 

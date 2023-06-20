@@ -1,6 +1,7 @@
 package net.weg.gedesti.dto;
 
 import lombok.Data;
+import net.weg.gedesti.model.entity.Attachment;
 
 import javax.persistence.Column;
 import javax.validation.constraints.*;
@@ -34,5 +35,6 @@ public class WorkerDTO {
     private Boolean square;
 
     private Integer fontSize;
+
 
 }
