@@ -1267,6 +1267,16 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.OK).body(returnDemand);
     }
 
+    @GetMapping("/approver/{workerCode}")
+    public ResponseEntity<Object> findByApproverCode(@PathVariable(value = "workerCode") Worker workerCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByApprover(workerCode));
+    }
+
+    @GetMapping("/analyst/{workerCode}")
+    public ResponseEntity<Object> findByAnalystCode(@PathVariable(value = "workerCode") Worker workerCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByClassificationByAnalystRegistration(workerCode));
+    }
+
     @GetMapping("/requester/{workerCode}")
     public ResponseEntity<Object> findByWorkerCode(@PathVariable(value = "workerCode") Worker workerCode) {
         return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByRequesterRegistration(workerCode));

@@ -26,4 +26,6 @@ public interface DemandRepository extends JpaRepository<Demand, Integer> {
     List<Demand> findByDemandCode(Integer integer);
     List<Demand> findAllByDemandCode(Integer integer);
     Demand findByDemandCodeAndDemandVersion(Integer demandCode, Integer demandVersion);
+    List<Demand> findAllByApprover(Worker worker);
+    List<Demand> findAllByClassificationAnalistRegistry(Worker worker);
 }

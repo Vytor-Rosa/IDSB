@@ -64,6 +64,14 @@ public class DemandService {
         return demandRepository.findAllByRequesterRegistration(worker);
     }
 
+    public List<Demand> findAllByApprover(Worker worker){
+        return demandRepository.findAllByApprover(worker);
+    }
+
+    public List<Demand> findAllByClassificationByAnalystRegistration(Worker worker){
+        return demandRepository.findAllByClassificationAnalistRegistry(worker);
+    }
+
     public Demand findByDemandCodeAndDemandVersion(Integer demandCode, Integer demandVersion) {
         return demandRepository.findByDemandCodeAndDemandVersion(demandCode, demandVersion);
     }
