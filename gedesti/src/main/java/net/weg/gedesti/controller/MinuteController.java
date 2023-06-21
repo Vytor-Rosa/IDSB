@@ -177,23 +177,96 @@ public class MinuteController {
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
                 contentStream.setNonStrokingColor(color);
                 contentStream.showText(proposalsList.get(i).getProposalName() + " – " + proposalsList.get(i).getProposalCode());
-                contentStream.newLineAtOffset(0, -20);
-
                 contentStream.setNonStrokingColor(color2);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
-                contentStream.showText("Objetivo: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
 
+                //Objetivo
+                contentStream.newLineAtOffset(0, -30);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
+                contentStream.showText("Objetivo ");
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                Document objective = Jsoup.parse(proposalsList.get(i).getDemand().getDemandObjective());
-                showText(objective, contentStream);
+
+                currentHeight -= (fontInformations + 40);
+
+                if (currentHeight <= 0) {
+                    contentStream.endText();
+                    contentStream.close();
+
+                    page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                    contentStream.newLineAtOffset(60, 750);
+                    currentHeight = pageHeight - margin;
+                }
+
+                maxWidth = 500;
+                currentWidth = 0;
+
+                String objective = proposalsList.get(i).getDemand().getDemandObjective();
+                objective = objective.replaceAll("&nbsp;", " ");
+                doc = Jsoup.parse(objective);
+                String objectiveFinal = doc.text();
+                lineBuilder = new StringBuilder();
+
+                int textLength = 0;
+
+                if (PDType1Font.HELVETICA.getStringWidth(objectiveFinal) / 1000f * fontInformations <= maxWidth) {
+                    contentStream.showText(objectiveFinal);
+                } else {
+                    for (String word : objectiveFinal.split(" ")) {
+                        float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
+                        textLength++;
+
+                        if (currentWidth + wordWidth > maxWidth) {
+                            currentHeight -= fontInformations;
+
+                            if (currentHeight <= 0) {
+                                contentStream.endText();
+                                contentStream.close();
+
+                                page = new PDPage();
+                                document.addPage(page);
+                                contentStream = new PDPageContentStream(document, page);
+                                contentStream.beginText();
+                                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                                contentStream.newLineAtOffset(60, 750);
+                                currentHeight = pageHeight - margin;
+                            }
+
+                            contentStream.showText(lineBuilder.toString());
+                            contentStream.newLineAtOffset(0, -20);
+                            lineBuilder.setLength(0);
+                            currentWidth = 0;
+                        } else if (objectiveFinal.split(" ").length == textLength) {
+                            contentStream.showText(lineBuilder.toString() + word);
+                        }
+
+                        lineBuilder.append(word).append(" ");
+                        currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
+                    }
+                }
+
+                currentHeight -= (fontInformations * 3 + 20);
+
+                if (currentHeight <= 0) {
+                    contentStream.endText();
+                    contentStream.close();
+
+                    page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
+                    contentStream.newLineAtOffset(60, 750);
+                    currentHeight = pageHeight - margin;
+                }
 
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
                 contentStream.newLineAtOffset(0, -20);
                 contentStream.showText("Escopo do Projeto: ");
                 contentStream.newLineAtOffset(0, -20);
-
                 contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
                 Document escope = Jsoup.parse(proposalsList.get(i).getDescriptiveProposal());
                 showText(escope, contentStream);
