@@ -849,10 +849,12 @@ public class DemandController {
     }
 
     @PostMapping("/excel")
-    public void saveExcel(final String attachmentName, final List<Demand> demands) throws IOException {
-        try (var workbook = new XSSFWorkbook();
-             var outputStream = new FileOutputStream(attachmentName)) {
+    public void saveExcel(final String attachmentPath, final List<Demand> demands) throws IOException {
+        String downloadFolderPath = System.getProperty("user.home") + "/Downloads/";
+        String fullPath = downloadFolderPath + attachmentPath;
 
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new FileOutputStream(fullPath)) {
             CellStyle style = workbook.createCellStyle();
 
             Font font = workbook.createFont();
@@ -1003,10 +1005,9 @@ public class DemandController {
                 }
                 index++;
             }
-
             workbook.write(outputStream);
             outputStream.close();
-            openFile(attachmentName);
+            openFile(fullPath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -1014,7 +1015,7 @@ public class DemandController {
 
     public void openFile(String attachmentName) throws IOException {
         try {
-            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\GitHub\\IDSB\\gedesti\\" + attachmentName);
+            File file = new File(attachmentName);
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command("cmd.exe", "/c", "start", "", file.toString());
             processBuilder.start();
@@ -1147,11 +1148,11 @@ public class DemandController {
     }
 
     @GetMapping("/filter/{type}/{value}")
-    public ResponseEntity<Object> filter(@PathVariable(value = "type") String
-                                                 type, @PathVariable(value = "value") String value) throws IOException {
+    public ResponseEntity<Object> filter(@PathVariable(value = "type") String type, @PathVariable(value = "value") String value) throws IOException {
         if (type.equals("status")) {
             List<Demand> demands = findByStatus(value);
-            saveExcel("demands(" + demands.size() + ").xlsx", demands);
+            String attachmentPath = "demands(" + demands.size() + ").xlsx";
+            saveExcel(attachmentPath, demands);
             return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
         }
 
