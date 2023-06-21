@@ -58,4 +58,6 @@ public class ProposalDTO {
     private String commissionOpinion;
 
     private Boolean published;
+
+    private String dgopinion;
 }

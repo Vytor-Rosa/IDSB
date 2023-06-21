@@ -78,5 +78,8 @@ public class Proposal {
     @JsonIgnore
     private List<Expenses> expensesList;
 
+    @Column(nullable = true)
+    private String dgOpinion;
+
     private Double score;
 }
