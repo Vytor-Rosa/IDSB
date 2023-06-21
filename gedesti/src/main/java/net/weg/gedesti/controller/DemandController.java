@@ -1269,4 +1269,9 @@ public class DemandController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(returnDemand);
     }
+
+    @GetMapping("/demand/{workerCode}")
+    public ResponseEntity<Object> findByWorkerCode(@PathVariable(value = "workerCode") Worker workerCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByRequesterRegistration(workerCode));
+    }
 }
