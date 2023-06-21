@@ -582,7 +582,6 @@ public class DemandController {
             List<CostCenter> ListCostCenter = demand.getCostCenter();
 
             int initX = 60;
-//            int initY = (int) (100 - currentHeight);
             int initY = (int) (currentHeight );
             int sizeHeight = 20;
             int sizeWidth = 246;
@@ -643,8 +642,6 @@ public class DemandController {
             contentStream.stroke();
 
             //Classificação
-//            int textX = 0;
-//            int textY = 40;
 
             contentStream.beginText();
             if (!demand.getDemandStatus().equals("Backlog")) {
