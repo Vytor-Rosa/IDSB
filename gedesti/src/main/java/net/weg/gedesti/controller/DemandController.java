@@ -668,16 +668,37 @@ public class DemandController {
 
     @GetMapping("/approver/{workerCode}")
     public ResponseEntity<Object> findByApproverCode(@PathVariable(value = "workerCode") Worker workerCode) {
-        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByApprover(workerCode));
+        List<Demand> demandList = demandService.findAllByApprover(workerCode);
+        List<Demand> activeDemands = new ArrayList<>();
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                activeDemands.add(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(activeDemands);
     }
 
     @GetMapping("/analyst/{workerCode}")
     public ResponseEntity<Object> findByAnalystCode(@PathVariable(value = "workerCode") Worker workerCode) {
-        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByClassificationByAnalystRegistration(workerCode));
+        List<Demand> demandList = demandService.findAllByClassificationByAnalystRegistration(workerCode);
+        List<Demand> activeDemands = new ArrayList<>();
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                activeDemands.add(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(activeDemands);
     }
 
     @GetMapping("/requester/{workerCode}")
     public ResponseEntity<Object> findByWorkerCode(@PathVariable(value = "workerCode") Worker workerCode) {
-        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByRequesterRegistration(workerCode));
+        List<Demand> demandList = demandService.findAllByRequesterRegistration(workerCode);
+        List<Demand> activeDemands = new ArrayList<>();
+        for (Demand demand : demandList) {
+            if (demand.getActiveVersion() == true) {
+                activeDemands.add(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(activeDemands);
     }
 }

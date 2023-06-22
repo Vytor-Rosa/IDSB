@@ -22,13 +22,10 @@ public interface DemandRepository extends JpaRepository<Demand, Integer> {
     Page<Demand> findAllByActiveVersionOrderByScoreDesc(Pageable pageable);
     @Query("SELECT d FROM Demand d WHERE d.activeVersion = true ORDER BY d.score DESC")
     List<Demand> findAllByActiveVersionOrderByScoreDesc();
-    @Query("SELECT d FROM Demand d WHERE d.activeVersion = true")
     List<Demand> findAllByRequesterRegistration(Worker worker);
     List<Demand> findByDemandCode(Integer integer);
     List<Demand> findAllByDemandCode(Integer integer);
     Demand findByDemandCodeAndDemandVersion(Integer demandCode, Integer demandVersion);
-    @Query("SELECT d FROM Demand d WHERE d.activeVersion = true")
     List<Demand> findAllByApprover(Worker worker);
-    @Query("SELECT d FROM Demand d WHERE d.activeVersion = true")
     List<Demand> findAllByClassificationAnalistRegistry(Worker worker);
 }
