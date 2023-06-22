@@ -392,4 +392,10 @@ public class ProposalController {
         }
     }
 
+    @GetMapping("/analyst/{workerCode}")
+    public ResponseEntity<List<Proposal>> findAllByAnalyst(@PathVariable("workerCode") Worker workerCode) {
+        List<Proposal> proposalList = proposalService.findAllByResponsibleAnalystWorkerCode(workerCode);
+        return ResponseEntity.ok().body(proposalList);
+    }
+
 }
