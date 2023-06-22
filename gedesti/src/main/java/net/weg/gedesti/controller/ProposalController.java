@@ -284,19 +284,30 @@ public class ProposalController {
             document.add(objectiveAdd);
             document.add(quebra);
 
-            // Benefício Real
-            Paragraph realBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Real: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-            document.add(realBenefitTitle);
-            Paragraph realBenefitMonthlyValue = new Paragraph(new Phrase(20F, demand.getRealBenefit().getRealCurrency()
-                    + " " + demand.getRealBenefit().getRealMonthlyValue(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(realBenefitMonthlyValue);
-            String realBenefitTitleDescription = demand.getRealBenefit().getRealBenefitDescription();
-            realBenefitTitleDescription = realBenefitTitleDescription.replaceAll("&nbsp;", " ");
-            doc = Jsoup.parse(realBenefitTitleDescription);
-            String realBenefitTitleDescripitionFinal = doc.text();
-            Paragraph realBenefitTitleDescripitionAdd = new Paragraph(new Phrase(20F, realBenefitTitleDescripitionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(realBenefitTitleDescripitionAdd);
+            //Escopo do projeto
+            Paragraph descriptiveProposalTitle = new Paragraph(new Phrase(20F, "Espoco do projeto:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
+            document.add( descriptiveProposalTitle);
+            String descriptiveProposal = proposal.getDescriptiveProposal();
+            descriptiveProposal= descriptiveProposal.replaceAll("&nbsp"," ");
+            doc= Jsoup.parse(descriptiveProposal);
+            String descriptiveProposalFinal = doc.text();
+            Paragraph descriptiveProposalAdd= new Paragraph(new Phrase(20F, descriptiveProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(descriptiveProposalAdd);
             document.add(quebra);
+
+//            // Benefício Real
+//            Paragraph realBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Real: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+//            document.add(realBenefitTitle);
+//            Paragraph realBenefitMonthlyValue = new Paragraph(new Phrase(20F, demand.getRealBenefit().getRealCurrency()
+//                    + " " + demand.getRealBenefit().getRealMonthlyValue(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+//            document.add(realBenefitMonthlyValue);
+//            String realBenefitTitleDescription = demand.getRealBenefit().getRealBenefitDescription();
+//            realBenefitTitleDescription = realBenefitTitleDescription.replaceAll("&nbsp;", " ");
+//            doc = Jsoup.parse(realBenefitTitleDescription);
+//            String realBenefitTitleDescripitionFinal = doc.text();
+//            Paragraph realBenefitTitleDescripitionAdd = new Paragraph(new Phrase(20F, realBenefitTitleDescripitionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+//            document.add(realBenefitTitleDescripitionAdd);
+//            document.add(quebra);
 
             // Benefício Potencial
             Paragraph potentialBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Potencial: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
@@ -356,9 +367,49 @@ public class ProposalController {
                 tableCostCenter.addCell(columnCell);
             }
 
-            //
-
             document.add(tableCostCenter);
+
+            //Classificação
+            Paragraph classificationTitle = new Paragraph(new Phrase(20F, "Classificação:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
+            document.add( classificationTitle);
+
+            Paragraph sizeTitle = new Paragraph(new Phrase(20F, "Tamanho:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
+            document.add( sizeTitle);
+            String size = demand.getClassification().getClassificationSize();
+            size= size.replaceAll("&nbsp"," ");
+            doc= Jsoup.parse(size);
+            String sizeFinal = doc.text();
+            Paragraph sizeAdd= new Paragraph(new Phrase(20F, sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(sizeAdd);
+            document.add(quebra);
+
+            Paragraph requesterBUTitle = new Paragraph(new Phrase(20F, "BU solicitante:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
+            document.add( requesterBUTitle);
+            String  requesterBU= demand.getClassification().getRequesterBu().getBu();
+            requesterBU= requesterBU.replaceAll("&nbsp"," ");
+            doc= Jsoup.parse(requesterBU);
+            String requesterBUFinal = doc.text();
+            Paragraph requesterBUAdd= new Paragraph(new Phrase(20F, requesterBUFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(requesterBUAdd);
+            document.add(quebra);
+
+            Paragraph beneficiariesBUsTitle = new Paragraph(new Phrase(20F, "BUs Beneficiadas:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
+            document.add( beneficiariesBUsTitle);
+            List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+            for (Bu bu : requestersBUsList) {
+                String  beneficiariesBUs= bu.getBu();
+                beneficiariesBUs= beneficiariesBUs.replaceAll("&nbsp"," ");
+                doc= Jsoup.parse(beneficiariesBUs);
+                String beneficiariesBUsFinal = doc.text();
+                Paragraph beneficiariesBUsAdd= new Paragraph(new Phrase(20F, beneficiariesBUsFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(beneficiariesBUsAdd);
+                document.add(quebra);
+            }
+
+
+
+
             document.close();
         } catch (Exception e) {
             throw new IOException();
