@@ -77,8 +77,8 @@ public class ProposalController {
         pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
 
         List<Proposal> proposals = proposalService.findAll();
-        for(Proposal proposal : proposals) {
-            if(proposal.getScore() == null) {
+        for (Proposal proposal : proposals) {
+            if (proposal.getScore() == null) {
                 proposal.setScore(score(proposal.getDemand()));
                 proposalRepository.saveAndFlush(proposal);
             }
@@ -222,7 +222,7 @@ public class ProposalController {
             int blue = Integer.parseInt(hexColor.substring(5, 7), 16);
             BaseColor baseColor = new BaseColor(red, green, blue);
 
-            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
+            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle() + " - "+ demand.getDemandCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
             document.add(title);
             Paragraph quebra = new Paragraph();
             quebra.add(" ");
@@ -262,6 +262,17 @@ public class ProposalController {
             document.add(status);
             document.add(quebra);
 
+            //Analista
+            Paragraph analist = new Paragraph();
+            boldChunk = new Chunk("Analista Responsavel: ");
+            boldChunk.setFont(fontBold);
+            normalChunk = new Chunk(demand.getClassification().getAnalistRegistry().getWorkerName());
+            normalChunk.setFont(fontNormal);
+            analist.add(boldChunk);
+            analist.add(normalChunk);
+            document.add(analist);
+            document.add(quebra);
+
             // Situação atual
             Paragraph currentProblemTitle = new Paragraph(new Phrase(20F, "Situação Atual: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(currentProblemTitle);
@@ -282,17 +293,6 @@ public class ProposalController {
             String objectiveFinal = doc.text();
             Paragraph objectiveAdd = new Paragraph(new Phrase(20F, objectiveFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
             document.add(objectiveAdd);
-            document.add(quebra);
-
-            //Escopo do projeto
-            Paragraph descriptiveProposalTitle = new Paragraph(new Phrase(20F, "Espoco do projeto:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
-            document.add( descriptiveProposalTitle);
-            String descriptiveProposal = proposal.getDescriptiveProposal();
-            descriptiveProposal= descriptiveProposal.replaceAll("&nbsp"," ");
-            doc= Jsoup.parse(descriptiveProposal);
-            String descriptiveProposalFinal = doc.text();
-            Paragraph descriptiveProposalAdd= new Paragraph(new Phrase(20F, descriptiveProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(descriptiveProposalAdd);
             document.add(quebra);
 
 //            // Benefício Real
@@ -320,9 +320,11 @@ public class ProposalController {
             if (demand.getPotentialBenefit().getLegalObrigation() == false) {
                 legalObrigation = "Não";
             }
-            Paragraph potentialBenefitLegalObrigation = new Paragraph(new Phrase(20F, "Obrigação legal: "
-                    + legalObrigation, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(potentialBenefitLegalObrigation);
+
+            Paragraph paragraph = new Paragraph();
+            paragraph.add(new Phrase(20F, "Obrigação legal: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            paragraph.add(new Phrase(20F, legalObrigation, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(paragraph);
 
             String potentialBenefitDescription = demand.getPotentialBenefit().getPotentialBenefitDescription();
             potentialBenefitDescription = potentialBenefitDescription.replaceAll("&nbsp;", " ");
@@ -343,7 +345,7 @@ public class ProposalController {
             document.add(qualitativeBenefitDescriptionAdd);
             document.add(quebra);
 
-            // Centros de custo
+            //Centros de custo (Tabela)
             Paragraph costCenterTitle = new Paragraph(new Phrase(20F, "Centros de Custo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(costCenterTitle);
             document.add(quebra);
@@ -368,44 +370,126 @@ public class ProposalController {
             }
 
             document.add(tableCostCenter);
+            document.add(quebra);
 
             //Classificação
-            Paragraph classificationTitle = new Paragraph(new Phrase(20F, "Classificação:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
-            document.add( classificationTitle);
-
-            Paragraph sizeTitle = new Paragraph(new Phrase(20F, "Tamanho:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
-            document.add( sizeTitle);
+            Paragraph classificationTitle = new Paragraph(new Phrase(20F, "Classificação:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(classificationTitle);
+            //Tamanho
             String size = demand.getClassification().getClassificationSize();
-            size= size.replaceAll("&nbsp"," ");
-            doc= Jsoup.parse(size);
+            size = size.replaceAll("&nbsp", " ");
+            doc = Jsoup.parse(size);
             String sizeFinal = doc.text();
-            Paragraph sizeAdd= new Paragraph(new Phrase(20F, sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(sizeAdd);
-            document.add(quebra);
+            Phrase sizeTitle = new Phrase(20F, "Tamanho: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase sizeAdd = new Phrase(20F,sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            Phrase combined = new Phrase();
+            combined.add(sizeTitle);
+            combined.add(sizeAdd);
+            document.add(combined);
+            document.add(new Paragraph(""));
 
-            Paragraph requesterBUTitle = new Paragraph(new Phrase(20F, "BU solicitante:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
-            document.add( requesterBUTitle);
-            String  requesterBU= demand.getClassification().getRequesterBu().getBu();
-            requesterBU= requesterBU.replaceAll("&nbsp"," ");
-            doc= Jsoup.parse(requesterBU);
+            //BU solicitante
+            String requesterBU = demand.getClassification().getRequesterBu().getBu();
+            requesterBU = requesterBU.replaceAll("&nbsp", " ");
+            doc = Jsoup.parse(requesterBU);
             String requesterBUFinal = doc.text();
-            Paragraph requesterBUAdd= new Paragraph(new Phrase(20F, requesterBUFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(requesterBUAdd);
-            document.add(quebra);
+            Phrase requesterBUTitle = new Phrase(20F, "BU solicitante: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase requesterBUAdd = new Phrase(20F, requesterBUFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            combined = new Phrase();
+            combined.add(requesterBUTitle);
+            combined.add(requesterBUAdd);
+            document.add(combined);
+            document.add(new Paragraph(""));
 
-            Paragraph beneficiariesBUsTitle = new Paragraph(new Phrase(20F, "BUs Beneficiadas:", FontFactory.getFont(FontFactory.HELVETICA_BOLD,10)));
-            document.add( beneficiariesBUsTitle);
+            //BUs beneficiadas
+            Paragraph beneficiariesBUsTitle = new Paragraph(new Phrase(20F, "BUs Beneficiadas:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(beneficiariesBUsTitle);
             List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
 
             for (Bu bu : requestersBUsList) {
-                String  beneficiariesBUs= bu.getBu();
-                beneficiariesBUs= beneficiariesBUs.replaceAll("&nbsp"," ");
-                doc= Jsoup.parse(beneficiariesBUs);
+                String beneficiariesBUs = bu.getBu();
+                beneficiariesBUs = beneficiariesBUs.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(beneficiariesBUs);
                 String beneficiariesBUsFinal = doc.text();
-                Paragraph beneficiariesBUsAdd= new Paragraph(new Phrase(20F, beneficiariesBUsFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                Paragraph beneficiariesBUsAdd = new Paragraph(new Phrase(20F, "     " + beneficiariesBUsFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 document.add(beneficiariesBUsAdd);
-                document.add(quebra);
             }
+            //Sessão TI responsavel
+            String itSection = demand.getClassification().getRequesterBu().getBu();
+            itSection = itSection.replaceAll("&nbsp", " ");
+            doc = Jsoup.parse(itSection);
+            String itSectionFinal = doc.text();
+            Phrase itSectionTitle = new Phrase(20F, "Sessão de TI Responsável: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase itSectionAdd = new Phrase(20F, itSectionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            combined = new Phrase();
+            combined.add(itSectionTitle);
+            combined.add(itSectionAdd);
+            document.add(combined);
+            document.add(new Paragraph(""));
+
+
+            //Codigo PPM
+            String ppmCode = demand.getClassification().getPpmCode();
+            ppmCode = ppmCode.replaceAll("&nbsp", " ");
+            doc = Jsoup.parse(ppmCode);
+            String ppmCodeFinal = doc.text();
+            Phrase ppmCodeTitle =new Phrase(20F, "Código PPM:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase ppmCodeAdd = new Phrase(20F, ppmCodeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            combined = new Phrase();
+            combined.add(ppmCodeTitle);
+            combined.add(ppmCodeAdd);
+            document.add(combined);
+            document.add(new Paragraph(""));
+
+            //Link Epic Jira
+            String linkJira = demand.getClassification().getEpicJiraLink();
+            linkJira = linkJira.replaceAll("&nbsp", " ");
+            doc = Jsoup.parse(linkJira);
+            String linkJiraFinal = doc.text();
+            Phrase linkJiraTitle = new Phrase(20F, "Link Epic Jira:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase linkJiraAdd = new Phrase(20F, linkJiraFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            combined = new Phrase();
+            combined.add(linkJiraTitle);
+            combined.add(linkJiraAdd);
+            document.add(combined);
+            document.add(quebra);
+
+
+
+            //Despesas (Tabela)
+            Paragraph expensesTitle = new Paragraph(new Phrase(20F, "Despesas: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(expensesTitle);
+            document.add(quebra);
+
+            PdfPTable tableexpenses = new PdfPTable(2);
+            tableexpenses.setWidthPercentage(100);
+
+            // Adicionar cabeçalho da tabela
+            headerCell = new PdfPCell();
+            headerCell.setPhrase(new Phrase("Perfil da despesa", fontBold));
+            tableCostCenter.addCell(headerCell);
+            headerCell.setPhrase(new Phrase("Esforço", fontBold));
+            tableCostCenter.addCell(headerCell);
+            headerCell.setPhrase(new Phrase("Valor hora", fontBold));
+            tableCostCenter.addCell(headerCell);
+            headerCell.setPhrase(new Phrase("Valor total da despesa", fontBold));
+            tableCostCenter.addCell(headerCell);
+            headerCell.setPhrase(new Phrase("Centro de custo", fontBold));
+            tableCostCenter.addCell(headerCell);
+
+
+//            // Adicionar linhas da tabela
+//            if(proposal.getExpensesList())
+//            for (: ) {
+//                PdfPCell columnCell = new PdfPCell();
+//                columnCell.setPhrase(new Phrase(costCenter.getCostCenterCode() + "", fontNormal));
+//                tableCostCenter.addCell(columnCell);
+//                columnCell.setPhrase(new Phrase(costCenter.getCostCenter(), fontNormal));
+//                tableCostCenter.addCell(columnCell);
+//            }
+//
+//            document.add(tableCostCenter);
+            document.add(quebra);
 
 
 
@@ -421,18 +505,18 @@ public class ProposalController {
         document.outputSettings(new Document.OutputSettings().prettyPrint(false));
         document.select("br").append("\\n");
 
-        for(int j = 0; j < document.text().length(); j++) {
-            if(j+1 == document.text().length()) {
+        for (int j = 0; j < document.text().length(); j++) {
+            if (j + 1 == document.text().length()) {
                 contentStream.showText(String.valueOf(document.text().charAt(j)));
                 break;
             }
-            if(j == 0){
+            if (j == 0) {
                 contentStream.showText(String.valueOf(document.text().charAt(j)));
             } else {
                 String n = document.text().charAt(j) + "" + document.text().charAt(j + 1);
                 String n2 = document.text().charAt(j - 1) + "" + document.text().charAt(j);
 
-                if(!n2.equals("\\n")){
+                if (!n2.equals("\\n")) {
                     if (n.equals("\\n")) {
                         contentStream.newLineAtOffset(0, -20);
                     } else {

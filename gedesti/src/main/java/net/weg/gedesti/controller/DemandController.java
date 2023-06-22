@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
+import net.weg.gedesti.model.entity.Bu;
 import net.weg.gedesti.model.entity.CostCenter;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Worker;
@@ -41,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.Phaser;
 
 @RestController
 @AllArgsConstructor
@@ -95,7 +97,7 @@ public class DemandController {
             int blue = Integer.parseInt(hexColor.substring(5, 7), 16);
             BaseColor baseColor = new BaseColor(red, green, blue);
 
-            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
+            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle() + " - " + demand.getDemandCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
             document.add(title);
             Paragraph quebra = new Paragraph();
             quebra.add(" ");
@@ -133,6 +135,19 @@ public class DemandController {
             status.add(boldChunk);
             status.add(normalChunk);
             document.add(status);
+            document.add(quebra);
+
+            //Analista
+            if (!demand.getDemandStatus().equals("Backlog")) {
+                Paragraph analist = new Paragraph();
+                boldChunk = new Chunk("Analista Responsavel: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(demand.getClassification().getAnalistRegistry().getWorkerName());
+                normalChunk.setFont(fontNormal);
+                analist.add(boldChunk);
+                analist.add(normalChunk);
+                document.add(analist);
+            }
             document.add(quebra);
 
             // Situação atual
@@ -182,9 +197,11 @@ public class DemandController {
             if (demand.getPotentialBenefit().getLegalObrigation() == false) {
                 legalObrigation = "Não";
             }
-            Paragraph potentialBenefitLegalObrigation = new Paragraph(new Phrase(20F, "Obrigação legal: "
-                    + legalObrigation, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            document.add(potentialBenefitLegalObrigation);
+
+            Paragraph paragraph = new Paragraph();
+            paragraph.add(new Phrase(20F, "Obrigação legal: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            paragraph.add(new Phrase(20F, legalObrigation, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(paragraph);
 
             String potentialBenefitDescription = demand.getPotentialBenefit().getPotentialBenefitDescription();
             potentialBenefitDescription = potentialBenefitDescription.replaceAll("&nbsp;", " ");
@@ -205,7 +222,7 @@ public class DemandController {
             document.add(qualitativeBenefitDescriptionAdd);
             document.add(quebra);
 
-            // Centros de custo
+            //Centros de custo (Tabela)
             Paragraph costCenterTitle = new Paragraph(new Phrase(20F, "Centros de Custo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(costCenterTitle);
             document.add(quebra);
@@ -229,10 +246,94 @@ public class DemandController {
                 tableCostCenter.addCell(columnCell);
             }
 
-            //Classificação******
-            //Complemento******
-
             document.add(tableCostCenter);
+            document.add(quebra);
+
+            //Classificação
+            if (!demand.getDemandStatus().equals("Backlog")) {
+                Paragraph classificationTitle = new Paragraph(new Phrase(20F, "Classificação:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(classificationTitle);
+                //Tamanho
+                String size = demand.getClassification().getClassificationSize();
+                size = size.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(size);
+                String sizeFinal = doc.text();
+                Phrase sizeTitle = new Phrase(20F, "Tamanho: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+                Phrase sizeAdd = new Phrase(20F, sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+                Phrase combined = new Phrase();
+                combined.add(sizeTitle);
+                combined.add(sizeAdd);
+                document.add(combined);
+                document.add(new Paragraph(""));
+
+                //BU solicitante
+                String requesterBU = demand.getClassification().getRequesterBu().getBu();
+                requesterBU = requesterBU.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(requesterBU);
+                String requesterBUFinal = doc.text();
+                Phrase requesterBUTitle = new Phrase(20F, "BU solicitante: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+                Phrase requesterBUAdd = new Phrase(20F, requesterBUFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+                combined = new Phrase();
+                combined.add(requesterBUTitle);
+                combined.add(requesterBUAdd);
+                document.add(combined);
+                document.add(new Paragraph(""));
+
+                //BUs beneficiadas
+                Paragraph beneficiariesBUsTitle = new Paragraph(new Phrase(20F, "BUs Beneficiadas:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(beneficiariesBUsTitle);
+                List<Bu> requestersBUsList = demand.getClassification().getBeneficiaryBu();
+
+                for (Bu bu : requestersBUsList) {
+                    String beneficiariesBUs = bu.getBu();
+                    beneficiariesBUs = beneficiariesBUs.replaceAll("&nbsp", " ");
+                    doc = Jsoup.parse(beneficiariesBUs);
+                    String beneficiariesBUsFinal = doc.text();
+                    Paragraph beneficiariesBUsAdd = new Paragraph(new Phrase(20F, "     " + beneficiariesBUsFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                    document.add(beneficiariesBUsAdd);
+                }
+                //Sessão TI responsavel
+                String itSection = demand.getClassification().getRequesterBu().getBu();
+                itSection = itSection.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(itSection);
+                String itSectionFinal = doc.text();
+                Phrase itSectionTitle = new Phrase(20F, "Sessão de TI Responsável: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+                Phrase itSectionAdd = new Phrase(20F, itSectionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+                combined = new Phrase();
+                combined.add(itSectionTitle);
+                combined.add(itSectionAdd);
+                document.add(combined);
+                document.add(new Paragraph(""));
+
+            }
+            if (!demand.getDemandStatus().equals("BacklogRanked") || demand.getDemandStatus().equals("BacklogRankApproved")) {
+                //Codigo PPM
+                String ppmCode = demand.getClassification().getPpmCode();
+                ppmCode = ppmCode.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(ppmCode);
+                String ppmCodeFinal = doc.text();
+                Phrase ppmCodeTitle = new Phrase(20F, "Código PPM:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+                Phrase ppmCodeAdd = new Phrase(20F, ppmCodeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+                Phrase combined = new Phrase();
+                combined.add(ppmCodeTitle);
+                combined.add(ppmCodeAdd);
+                document.add(combined);
+                document.add(new Paragraph(""));
+
+                //Link Epic Jira
+                String linkJira = demand.getClassification().getEpicJiraLink();
+                linkJira = linkJira.replaceAll("&nbsp", " ");
+                doc = Jsoup.parse(linkJira);
+                String linkJiraFinal = doc.text();
+                Phrase linkJiraTitle = new Phrase(20F, "Link Epic Jira:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+                Phrase linkJiraAdd = new Phrase(20F, linkJiraFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+                combined = new Phrase();
+                combined.add(linkJiraTitle);
+                combined.add(linkJiraAdd);
+                document.add(combined);
+                document.add(quebra);
+            }
+
             document.close();
         } catch (Exception e) {
             throw new IOException();
