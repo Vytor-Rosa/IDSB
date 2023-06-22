@@ -216,7 +216,7 @@ public class WorkerController {
 
     @GetMapping("/user/graphic")
     public ResponseEntity<Object> graphic(){
-        double[] dataArray = new double[] {1,2,3, 4, 5, 6, 7, 8, 9, 10};
+        double[] dataArray = new double[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         int p = 3;
         int d = 0;
