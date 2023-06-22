@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -214,10 +215,8 @@ public class WorkerController {
     }
 
 
-    @GetMapping("/user/graphic")
-    public ResponseEntity<Object> graphic(){
-        double[] dataArray = new double[] {1,2,3, 4, 5, 6, 7, 8, 9, 10};
-
+    @PostMapping("/user/graphic")
+    public ResponseEntity<Object> graphic(@RequestBody double[] dataArray){
         int p = 3;
         int d = 0;
         int q = 3;
@@ -244,8 +243,6 @@ public class WorkerController {
 
         // populate confidence interval
         forecastResult.setSigma2AndPredicationInterval(fittedModel.getParams());
-
-
 
         return ResponseEntity.status(HttpStatus.OK).body(forecastResult);
     }
