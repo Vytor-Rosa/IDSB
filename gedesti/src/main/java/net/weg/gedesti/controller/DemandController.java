@@ -471,19 +471,19 @@ public class DemandController {
                 } else {
                     cell = row.createCell(9);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue("");
+                    cell.setCellValue("N/A");
                     cell = row.createCell(10);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue("");
+                    cell.setCellValue("N/A");
                     cell = row.createCell(11);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue("");
+                    cell.setCellValue("N/A");
                     cell = row.createCell(12);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue("");
+                    cell.setCellValue("N/A");
                     cell = row.createCell(13);
                     cell.setCellStyle(bodyStyle);
-                    cell.setCellValue("");
+                    cell.setCellValue("N/A");
                 }
                 index++;
             }
@@ -629,16 +629,13 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
-    @GetMapping("/filter/{type}/{value}")
-    public ResponseEntity<Object> filter(@PathVariable(value = "type") String type, @PathVariable(value = "value") String value) throws IOException {
-        if (type.equals("status")) {
-            List<Demand> demands = findByStatus(value);
-            String attachmentPath = "demands(" + demands.size() + ").xlsx";
-            saveExcel(attachmentPath, demands);
-            return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findByDemandStatus(value));
+    @PostMapping("/filter")
+    public ResponseEntity<Object> filter(@RequestBody List<Demand> demands) throws IOException {
+        if(!demands.isEmpty()) {
+            saveExcel("Demands.xls", demands);
+            return ResponseEntity.status(HttpStatus.FOUND).body(demands);
         }
-
-        return ResponseEntity.status(HttpStatus.FOUND).body("No demands found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No demands found!");
     }
 
     @GetMapping("/page")
