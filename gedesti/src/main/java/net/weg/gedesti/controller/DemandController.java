@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +44,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Phaser;
 
 @RestController
 @AllArgsConstructor
@@ -82,8 +83,9 @@ public class DemandController {
             }
 
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\"
-                    + demand.getDemandTitle() + " - " + demand.getDemandCode() + ".pdf"));
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, byteArrayOutputStream);
+
             document.open();
 
             String path = new File(".").getCanonicalPath();
@@ -301,6 +303,7 @@ public class DemandController {
                     combined.add(ppmCodeTitle);
                     combined.add(ppmCodeAdd);
                     document.add(combined);
+                    document.add(quebra);
 
                     //Link Epic Jira
                     Phrase linkJiraTitle = new Phrase(20F, "Link Epic Jira:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
@@ -313,11 +316,17 @@ public class DemandController {
                 }
             }
             document.close();
+
+            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header("Content-Disposition", "attachment; filename=" + demand.getDemandTitle() + " - " + demand.getDemandCode() + ".pdf")
+                    .body(resource);
         } catch (
                 Exception e) {
             throw new IOException();
         }
-        return null;
     }
 
 
@@ -631,7 +640,7 @@ public class DemandController {
 
     @PostMapping("/filter")
     public ResponseEntity<Object> filter(@RequestBody List<Demand> demands) throws IOException {
-        if(!demands.isEmpty()) {
+        if (!demands.isEmpty()) {
             saveExcel("Demands.xls", demands);
             return ResponseEntity.status(HttpStatus.FOUND).body(demands);
         }

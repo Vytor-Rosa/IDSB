@@ -1,37 +1,32 @@
 package net.weg.gedesti.controller;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.MinuteDTO;
 import net.weg.gedesti.model.entity.*;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.MinuteService;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
-import org.jsoup.safety.Whitelist;
-import org.jsoup.select.Elements;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.NodeTraversor;
-import org.jsoup.select.NodeVisitor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -110,276 +105,45 @@ public class MinuteController {
     }
 
     @GetMapping("/pdf/{minuteCode}")
-    public void savePdf(@PathVariable(value = "minuteCode") Integer minuteCode, HttpServletResponse response) {
+    public ResponseEntity<InputStreamResource> savePdf(@PathVariable(value = "minuteCode") Integer minuteCode, HttpServletResponse response) throws IOException {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
         Minute minute = minuteOptional.get();
 
-        try {
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage();
-            document.addPage(page);
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        try{
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, byteArrayOutputStream);
 
-            float pageHeight = page.getMediaBox().getHeight();
-            float margin = 100;
-            float fontTitle = 12;
-            float fontInformations = 10;
-            float currentHeight = pageHeight - margin * 2; // Subtrai as margens superiores
+            document.open();
 
             String path = new File(".").getCanonicalPath();
-            PDImageXObject weg = PDImageXObject.createFromFile(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png", document);
-            contentStream.drawImage(weg, 500, 730, 55, 40);
+            com.itextpdf.text.Image logo = com.itextpdf.text.Image.getInstance(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png");
+            logo.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+            logo.scaleToFit(50, 50);
+            document.add(logo);
 
+            String hexColor = "#00579D";
+            int red = Integer.parseInt(hexColor.substring(1, 3), 16);
+            int green = Integer.parseInt(hexColor.substring(3, 5), 16);
+            int blue = Integer.parseInt(hexColor.substring(5, 7), 16);
+            BaseColor baseColor = new BaseColor(red, green, blue);
 
-            contentStream.beginText();
-            contentStream.newLineAtOffset(60, 760);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-            Color color = Color.decode("#00579D");
-            contentStream.setNonStrokingColor(color);
+            Paragraph title = new Paragraph(new Phrase(20F, "ATA REUNIÃO" + minute.getAgenda().getCommission(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 15, baseColor)));
+            document.add(title);
+            Paragraph quebra = new Paragraph();
+            quebra.add(" ");
+            document.add(quebra);
 
-            contentStream.newLineAtOffset(0, -20);
-
-            Commission commission = minute.getAgenda().getCommission();
-            String commissionString = commission.getCommissionName().split("–")[0] + " , " + commission.getCommissionName().split("–")[1];
-
-            contentStream.showText("ATA " + commissionString.toUpperCase());
-            contentStream.newLineAtOffset(0, -40);
-
-
-            Color color2 = Color.decode("#00000");
-            contentStream.setNonStrokingColor(color2);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
-
-            contentStream.newLineAtOffset(430, 0);
-            contentStream.showText("ATA Nº: " + minute.getMinuteCode() + "/" + minute.getMinuteStartDate().split("/")[2]);
-            contentStream.newLineAtOffset(0, -12);
-            contentStream.showText("Data: " + minute.getMinuteStartDate());
-            contentStream.newLineAtOffset(0, -12);
-            contentStream.showText("Início: ");
-            contentStream.newLineAtOffset(45, 0);
-            contentStream.showText(minute.getAgenda().getInitialDate().split("T")[1]);
-            contentStream.newLineAtOffset(-45, -12);
-            contentStream.showText("Término: ");
-            contentStream.newLineAtOffset(45, 0);
-            contentStream.showText(minute.getAgenda().getFinalDate().split("T")[1]);
-            contentStream.newLineAtOffset(0, -12);
-
-            contentStream.newLineAtOffset(-475, 0);
-
-            List<Proposal> proposalsList = minute.getAgenda().getProposals();
-
-            Document doc = new Document("");
-            StringBuilder lineBuilder = new StringBuilder();
-            float currentWidth = 0;
-            float maxWidth = 500;
-
-            for (int i = 0; i < proposalsList.size(); i++) {
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.setNonStrokingColor(color);
-                contentStream.showText(proposalsList.get(i).getProposalName() + " – " + proposalsList.get(i).getProposalCode());
-                contentStream.setNonStrokingColor(color2);
-
-                //Objetivo
-                contentStream.newLineAtOffset(0, -30);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontInformations);
-                contentStream.showText("Objetivo ");
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-
-                currentHeight -= (fontInformations + 40);
-
-                if (currentHeight <= 0) {
-                    contentStream.endText();
-                    contentStream.close();
-
-                    page = new PDPage();
-                    document.addPage(page);
-                    contentStream = new PDPageContentStream(document, page);
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                    contentStream.newLineAtOffset(60, 750);
-                    currentHeight = pageHeight - margin;
-                }
-
-                maxWidth = 500;
-                currentWidth = 0;
-
-                String objective = proposalsList.get(i).getDemand().getDemandObjective();
-                objective = objective.replaceAll("&nbsp;", " ");
-                doc = Jsoup.parse(objective);
-                String objectiveFinal = doc.text();
-                lineBuilder = new StringBuilder();
-
-                int textLength = 0;
-
-                if (PDType1Font.HELVETICA.getStringWidth(objectiveFinal) / 1000f * fontInformations <= maxWidth) {
-                    contentStream.showText(objectiveFinal);
-                } else {
-                    for (String word : objectiveFinal.split(" ")) {
-                        float wordWidth = PDType1Font.HELVETICA.getStringWidth(word) / 1000f * fontInformations;
-                        textLength++;
-
-                        if (currentWidth + wordWidth > maxWidth) {
-                            currentHeight -= fontInformations;
-
-                            if (currentHeight <= 0) {
-                                contentStream.endText();
-                                contentStream.close();
-
-                                page = new PDPage();
-                                document.addPage(page);
-                                contentStream = new PDPageContentStream(document, page);
-                                contentStream.beginText();
-                                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                                contentStream.newLineAtOffset(60, 750);
-                                currentHeight = pageHeight - margin;
-                            }
-
-                            contentStream.showText(lineBuilder.toString());
-                            contentStream.newLineAtOffset(0, -20);
-                            lineBuilder.setLength(0);
-                            currentWidth = 0;
-                        } else if (objectiveFinal.split(" ").length == textLength) {
-                            contentStream.showText(lineBuilder.toString() + word);
-                        }
-
-                        lineBuilder.append(word).append(" ");
-                        currentWidth += wordWidth + PDType1Font.HELVETICA.getStringWidth(" ") / 1000f * fontInformations;
-                    }
-                }
-
-                currentHeight -= (fontInformations * 3 + 20);
-
-                if (currentHeight <= 0) {
-                    contentStream.endText();
-                    contentStream.close();
-
-                    page = new PDPage();
-                    document.addPage(page);
-                    contentStream = new PDPageContentStream(document, page);
-                    contentStream.beginText();
-                    contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                    contentStream.newLineAtOffset(60, 750);
-                    currentHeight = pageHeight - margin;
-                }
-
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Escopo do Projeto: ");
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                Document escope = Jsoup.parse(proposalsList.get(i).getDescriptiveProposal());
-                showText(escope, contentStream);
-
-                contentStream.newLineAtOffset(0, -20);
-
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.showText("Resultados Esperados (Qualitativos): ");
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                Document benefitsQualitative = Jsoup.parse(proposalsList.get(i).getDemand().getQualitativeBenefit().getQualitativeBenefitDescription());
-                showText(benefitsQualitative, contentStream);
-
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.showText("Benefícios potencias: ");
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA, fontInformations);
-                Document benefitsPotential = Jsoup.parse(proposalsList.get(i).getDemand().getPotentialBenefit().getPotentialBenefitDescription());
-                showText(benefitsPotential, contentStream);
-                contentStream.newLineAtOffset(0, -20);
-
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.showText("Periodo de execução: ");
-                contentStream.newLineAtOffset(130, 0);
-                contentStream.setFont(PDType1Font.HELVETICA, fontTitle);
-                contentStream.showText(proposalsList.get(i).getInitialRunPeriod().getDay() + "/" + proposalsList.get(i).getInitialRunPeriod().getMonth() + "/" + proposalsList.get(i).getInitialRunPeriod().getYear() + " à " + proposalsList.get(i).getFinalExecutionPeriod().getDay() + "/" + proposalsList.get(i).getFinalExecutionPeriod().getMonth()  + "/" + proposalsList.get(i).getFinalExecutionPeriod().getYear());
-
-
-                contentStream.newLineAtOffset(-130, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-
-                contentStream.showText("Responsável pelo negócio: ");
-                contentStream.setFont(PDType1Font.HELVETICA, fontTitle);
-                contentStream.newLineAtOffset(160, 0);
-                contentStream.showText(proposalsList.get(i).getWorkers().get(0).getWorkerName());
-                contentStream.newLineAtOffset(-160, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontTitle);
-                contentStream.showText("Parecer da comissão: " + proposalsList.get(i).getProposalStatus());
-
-
-                contentStream.newLineAtOffset(0, -20);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                contentStream.showText("Custos de Execução: ");
-                contentStream.setFont(PDType1Font.HELVETICA, 10);
-                List<Expenses> expensesList = expensesService.findAllByProposalProposalCode(proposalsList.get(i).getProposalCode());
-
-                for (Expenses expenses : expensesList) {
-                    contentStream.newLineAtOffset(0, -20);
-                    contentStream.showText(expenses.getExpensesType());
-                    contentStream.newLineAtOffset(0, -20);
-
-                    List<Expense> expenseList = expenses.getExpense();
-                    List<ExpensesCostCenters> expensesCostCentersList = expenses.getExpensesCostCenters();
-
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    contentStream.showText("DESPESAS");
-                    for (Expense expense : expenseList) {
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.showText("Perfil da despesa: " );
-                        contentStream.setFont(PDType1Font.HELVETICA, 10);
-                        contentStream.showText(expense.getExpenseProfile());
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                        contentStream.showText("Quantidade de horas: " );
-                        contentStream.setFont(PDType1Font.HELVETICA, 10);
-                        contentStream.showText(expense.getAmountOfHours() + "h");
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                        contentStream.showText("Valor hora: R$" );
-                        contentStream.setFont(PDType1Font.HELVETICA, 10);
-                        contentStream.showText(String.valueOf(expense.getHourValue()));
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                        contentStream.showText("Valor total: R$" );
-                        contentStream.setFont(PDType1Font.HELVETICA, 10);
-                        contentStream.showText(String.valueOf(expense.getTotalValue()));
-                    }
-
-                    for (ExpensesCostCenters expensesCostCenters : expensesCostCentersList) {
-                        contentStream.newLineAtOffset(0, -20);
-                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                        contentStream.showText("Centro de custo: ");
-                        contentStream.setFont(PDType1Font.HELVETICA, 10);
-                        contentStream.showText(expensesCostCenters.getCostCenter().getCostCenter() + " - " + expensesCostCenters.getPercent()+ "%");
-                    }
-                }
-
-            }
-
-            contentStream.endText();
-            contentStream.close();
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            document.save(byteArrayOutputStream);
             document.close();
 
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
 
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=file.pdf");
-            response.setHeader("Content-Length", String.valueOf(byteArray.length));
-            response.setHeader("Content-Transfer-Encoding", "binary");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setHeader("Pragma", "no-cache");
-            response.setDateHeader("Expires", 0);
-            response.getOutputStream().write(byteArray);
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-
-            ResponseEntity.ok().build();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header("Content-Disposition", "attachment; filename=ATA REUNIÃO" + minute.getAgenda().getCommission() + ".pdf")
+                    .body(resource);
+        } catch (Exception e){
+            throw new IOException();
         }
     }
 
@@ -387,18 +151,18 @@ public class MinuteController {
         document.outputSettings(new Document.OutputSettings().prettyPrint(false));
         document.select("br").append("\\n");
 
-        for(int j = 0; j < document.text().length(); j++) {
-            if(j+1 == document.text().length()) {
+        for (int j = 0; j < document.text().length(); j++) {
+            if (j + 1 == document.text().length()) {
                 contentStream.showText(String.valueOf(document.text().charAt(j)));
                 break;
             }
-            if(j == 0){
+            if (j == 0) {
                 contentStream.showText(String.valueOf(document.text().charAt(j)));
             } else {
                 String n = document.text().charAt(j) + "" + document.text().charAt(j + 1);
                 String n2 = document.text().charAt(j - 1) + "" + document.text().charAt(j);
 
-                if(!n2.equals("\\n")){
+                if (!n2.equals("\\n")) {
                     if (n.equals("\\n")) {
                         contentStream.newLineAtOffset(0, -20);
                     } else {
