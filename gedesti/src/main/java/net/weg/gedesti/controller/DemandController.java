@@ -791,4 +791,9 @@ public class DemandController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(activeDemands);
     }
+
+    @GetMapping("/version")
+    public ResponseEntity<Object> findAllByDemandVersion() {
+        return ResponseEntity.status(HttpStatus.OK).body(demandService.findAllByVersion(1));
+    }
 }
