@@ -454,45 +454,105 @@ public class ProposalController {
             document.add(combined);
             document.add(quebra);
 
-
-
             //Despesas (Tabela)
             Paragraph expensesTitle = new Paragraph(new Phrase(20F, "Despesas: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(expensesTitle);
             document.add(quebra);
 
-            PdfPTable tableexpenses = new PdfPTable(2);
-            tableexpenses.setWidthPercentage(100);
+            PdfPTable tableExpenses = new PdfPTable(3);
+            tableExpenses.setWidthPercentage(100);
 
             // Adicionar cabeçalho da tabela
-            headerCell = new PdfPCell();
-            headerCell.setPhrase(new Phrase("Perfil da despesa", fontBold));
-            tableCostCenter.addCell(headerCell);
-            headerCell.setPhrase(new Phrase("Esforço", fontBold));
-            tableCostCenter.addCell(headerCell);
-            headerCell.setPhrase(new Phrase("Valor hora", fontBold));
-            tableCostCenter.addCell(headerCell);
-            headerCell.setPhrase(new Phrase("Valor total da despesa", fontBold));
-            tableCostCenter.addCell(headerCell);
-            headerCell.setPhrase(new Phrase("Centro de custo", fontBold));
-            tableCostCenter.addCell(headerCell);
+            PdfPCell headerCellExpenses = new PdfPCell();
+            headerCellExpenses.setPhrase(new Phrase("Perfil da despesa", fontBold));
+            tableExpenses.addCell(headerCellExpenses);
+            headerCellExpenses.setPhrase(new Phrase("Esforço", fontBold));
+            tableExpenses.addCell(headerCellExpenses);
+            headerCellExpenses.setPhrase(new Phrase("Valor hora", fontBold));
+            tableExpenses.addCell(headerCellExpenses);
 
 
-//            // Adicionar linhas da tabela
-//            if(proposal.getExpensesList())
-//            for (: ) {
-//                PdfPCell columnCell = new PdfPCell();
-//                columnCell.setPhrase(new Phrase(costCenter.getCostCenterCode() + "", fontNormal));
-//                tableCostCenter.addCell(columnCell);
-//                columnCell.setPhrase(new Phrase(costCenter.getCostCenter(), fontNormal));
-//                tableCostCenter.addCell(columnCell);
-//            }
-//
-//            document.add(tableCostCenter);
+            // Adicionar linhas da tabela
+            List<Expenses> expensesListProposal = expensesService.findAllByProposal(proposal);
+
+            for (Expenses expenses: expensesListProposal) {
+                PdfPCell columnCellExpenses = new PdfPCell();
+                List<Expense> expenseList = expenses.getExpense();
+                for(Expense expense : expenseList) {
+                    if(expense.getExpenseType().equals("expenses")){
+                        System.out.println(expense.getExpenseProfile());
+                        columnCellExpenses.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
+                        tableExpenses.addCell(columnCellExpenses);
+                        columnCellExpenses.setPhrase(new Phrase(String.valueOf(expense.getAmountOfHours()), fontNormal));
+                        tableExpenses.addCell(columnCellExpenses);
+                        columnCellExpenses.setPhrase(new Phrase(String.valueOf(expense.getHourValue()), fontNormal));
+                        tableExpenses.addCell(columnCellExpenses);
+                    }
+                }
+
+            }
+            //total e centro de custo
+
+            Paragraph costCenter = new Paragraph();
+            boldChunk = new Chunk("Centros de custo: ");
+            boldChunk.setFont(fontBold);
+            for (Expenses expenses: expensesListProposal) {
+                List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
+                for(ExpensesCostCenters costCenter1: costCenterList){
+                    normalChunk = new Chunk(costCenter1.getCostCenter().getCostCenter());
+                }
+
+            }
+            normalChunk.setFont(fontNormal);
+            status.add(boldChunk);
+            status.add(normalChunk);
+            document.add(costCenter);
+            document.add(quebra);
+
+            PdfPCell columnCell = new PdfPCell();
+//            columnCell.setPhrase(new Phrase(, fontNormal));
+            tableCostCenter.addCell(columnCell);
+
+            document.add(tableExpenses);
             document.add(quebra);
 
 
+            //Investimentos/Recorrente (Tabela)
 
+            //Recursos Internos (Tabela)
+            Paragraph InternalResourcesTitle = new Paragraph(new Phrase(20F, "Recursos Internos: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(InternalResourcesTitle);
+            document.add(quebra);
+
+            PdfPTable tableInternalResources = new PdfPTable(4);
+            tableInternalResources.setWidthPercentage(100);
+
+            // Adicionar cabeçalho da tabela
+            PdfPCell headerCellInternalResources = new PdfPCell();
+            headerCellInternalResources.setPhrase(new Phrase("Perfil da despesa", fontBold));
+            tableExpenses.addCell(headerCellInternalResources);
+            headerCellInternalResources.setPhrase(new Phrase("Esforço", fontBold));
+            tableExpenses.addCell(headerCellInternalResources);
+            headerCellInternalResources.setPhrase(new Phrase("Valor hora", fontBold));
+            tableExpenses.addCell(headerCellInternalResources);
+            headerCellInternalResources.setPhrase(new Phrase("Centro de custo", fontBold));
+            tableExpenses.addCell(headerCellInternalResources);
+
+//            // Adicionar linhas da tabela
+//            for (Expenses expenses: proposal.getExpensesList() ) {
+//                PdfPCell columnCellExpenses = new PdfPCell();
+//               List<Expense> expenseList = expenses.getExpense();
+//               for(Expense expense : expenseList) {
+//                   columnCellExpenses.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
+//                   tableExpenses.addCell(columnCellExpenses);
+//               }
+//
+//            }
+
+
+
+            document.add(tableInternalResources);
+            document.add(quebra);
 
             document.close();
         } catch (Exception e) {
