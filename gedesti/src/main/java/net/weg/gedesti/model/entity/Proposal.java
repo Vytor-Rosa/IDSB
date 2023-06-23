@@ -68,7 +68,7 @@ public class Proposal {
     @NotNull
     private String proposalDate;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 5000)
     private String commissionOpinion;
 
     @Column(nullable = true)
