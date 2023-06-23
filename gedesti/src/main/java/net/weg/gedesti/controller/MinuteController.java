@@ -1,9 +1,6 @@
 package net.weg.gedesti.controller;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.MinuteDTO;
@@ -11,6 +8,7 @@ import net.weg.gedesti.model.entity.*;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.MinuteService;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -30,6 +28,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,7 +110,7 @@ public class MinuteController {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
         Minute minute = minuteOptional.get();
 
-        try{
+        try {
             com.itextpdf.text.Document document = new com.itextpdf.text.Document();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, byteArrayOutputStream);
@@ -128,11 +129,133 @@ public class MinuteController {
             int blue = Integer.parseInt(hexColor.substring(5, 7), 16);
             BaseColor baseColor = new BaseColor(red, green, blue);
 
-            Paragraph title = new Paragraph(new Phrase(20F, "ATA REUNIÃO" + minute.getAgenda().getCommission(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 15, baseColor)));
+            com.itextpdf.text.Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+            com.itextpdf.text.Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10);
+
+            // Título
+            Paragraph title = new Paragraph(new Phrase(20F, "ATA REUNIÃO " + minute.getAgenda().getCommission().getCommissionName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
             document.add(title);
             Paragraph quebra = new Paragraph();
             quebra.add(" ");
             document.add(quebra);
+
+            // Número ATA
+            Paragraph numberAta = new Paragraph(new Phrase(20F, "ATA N°" + minute.getMinuteCode(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+            numberAta.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+            document.add(numberAta);
+
+            // Data
+            Paragraph date = new Paragraph(new Phrase(20F, "Data: " + minute.getMinuteStartDate(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+            date.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+            document.add(date);
+
+            // Início
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime dateTimeStart = LocalDateTime.parse(minute.getAgenda().getInitialDate(), formatter);
+            int hourStart = dateTimeStart.getHour();
+            int minuteStart = dateTimeStart.getMinute();
+            Paragraph initial = new Paragraph(new Phrase(20F, "Início: " + hourStart + ":" + minuteStart + "h", FontFactory.getFont(FontFactory.HELVETICA, 8)));
+            initial.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+            document.add(initial);
+
+            // Término
+            LocalDateTime dateTimeEnd = LocalDateTime.parse(minute.getAgenda().getFinalDate(), formatter);
+            int hourEnd = dateTimeEnd.getHour();
+            int minuteEnd = dateTimeEnd.getMinute();
+            Paragraph end = new Paragraph(new Phrase(20F, "Término: " + hourEnd + ":" + minuteEnd + "h", FontFactory.getFont(FontFactory.HELVETICA, 8)));
+            end.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+            document.add(end);
+
+            // Propostas
+            for (Proposal proposal : minute.getAgenda().getProposals()) {
+                // Título Proposta
+                Paragraph titleProposal = new Paragraph(new Phrase(20F, proposal.getProposalName() + " - " + proposal.getProposalCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, baseColor)));
+                document.add(titleProposal);
+                document.add(quebra);
+
+                // Objetivo
+                Paragraph objectiveTitle = new Paragraph(new Phrase(20F, "Objetivo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(objectiveTitle);
+                String objective = proposal.getDemand().getDemandObjective();
+                objective = objective.replaceAll("&nbsp;", " ");
+                Document doc = Jsoup.parse(objective);
+                String objectiveFinal = doc.text();
+                Paragraph objectiveAdd = new Paragraph(new Phrase(20F, objectiveFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(objectiveAdd);
+                document.add(quebra);
+
+                // Escopo da proposta
+                Paragraph scopeProposalTitle = new Paragraph(new Phrase(20F, "Escopo da proposta: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(scopeProposalTitle);
+                String scopeProposal = proposal.getDescriptiveProposal();
+                scopeProposal = scopeProposal.replaceAll("&nbsp;", " ");
+                doc = Jsoup.parse(scopeProposal);
+                String scopeProposalFinal = doc.text();
+                Paragraph scopeProposalAdd = new Paragraph(new Phrase(20F, scopeProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(scopeProposalAdd);
+                document.add(quebra);
+
+                // Custos totais
+                Paragraph totalCosts = new Paragraph();
+                Chunk boldChunk = new Chunk("Custos totais: ");
+                boldChunk.setFont(fontBold);
+                Chunk normalChunk = new Chunk("R$" + proposal.getTotalCosts() + "");
+                normalChunk.setFont(fontNormal);
+                totalCosts.add(boldChunk);
+                totalCosts.add(normalChunk);
+                document.add(totalCosts);
+                document.add(quebra);
+
+                // add tabela da proposta de custos
+
+                // Período de execução
+                Paragraph executionPeriod = new Paragraph();
+                boldChunk = new Chunk("Período de execução: ");
+                boldChunk.setFont(fontBold);
+
+                DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDateTime dateTimeExecution = LocalDateTime.parse(minute.getAgenda().getInitialDate(), formatterDate);
+
+                normalChunk = new Chunk(proposal.getInitialRunPeriod() + " à " + proposal.getFinalExecutionPeriod());
+                normalChunk.setFont(fontNormal);
+                executionPeriod.add(boldChunk);
+                executionPeriod.add(normalChunk);
+                document.add(executionPeriod);
+                document.add(quebra);
+
+                // Payback
+                Paragraph payback = new Paragraph();
+                boldChunk = new Chunk("Payback: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getPayback() + "");
+                normalChunk.setFont(fontNormal);
+                payback.add(boldChunk);
+                payback.add(normalChunk);
+                document.add(payback);
+                document.add(quebra);
+
+                // Responsável pelo negócio
+                Paragraph responsibleForBusiness = new Paragraph();
+                boldChunk = new Chunk("Responsável pelo negócio: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getResponsibleAnalyst().getWorkerName() + "");
+                normalChunk.setFont(fontNormal);
+                responsibleForBusiness.add(boldChunk);
+                responsibleForBusiness.add(normalChunk);
+                document.add(responsibleForBusiness);
+                document.add(quebra);
+
+                // Parecer da comissão
+                Paragraph commissionOpinion = new Paragraph();
+                boldChunk = new Chunk("Parecer da comissão: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getCommissionOpinion() + "");
+                normalChunk.setFont(fontNormal);
+                commissionOpinion.add(boldChunk);
+                commissionOpinion.add(normalChunk);
+                document.add(commissionOpinion);
+
+            }
 
             document.close();
 
@@ -142,7 +265,7 @@ public class MinuteController {
                     .contentType(MediaType.APPLICATION_PDF)
                     .header("Content-Disposition", "attachment; filename=ATA REUNIÃO" + minute.getAgenda().getCommission() + ".pdf")
                     .body(resource);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IOException();
         }
     }
