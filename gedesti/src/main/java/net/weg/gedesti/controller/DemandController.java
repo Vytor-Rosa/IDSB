@@ -339,13 +339,10 @@ public class DemandController {
 
     }
 
-    @PostMapping("/excel")
-    public void saveExcel(final String attachmentPath, final List<Demand> demands) throws IOException {
-        String downloadFolderPath = System.getProperty("user.home") + "/Downloads/";
-        String fullPath = downloadFolderPath + attachmentPath;
-
+    @PostMapping("/filter")
+    public byte[] saveExcel(@RequestBody List<Demand> demands) throws IOException {
         try (var workbook = new XSSFWorkbook();
-             var outputStream = new FileOutputStream(fullPath)) {
+             var outputStream = new ByteArrayOutputStream()) {
             CellStyle style = workbook.createCellStyle();
 
             Font font = workbook.createFont();
@@ -497,10 +494,10 @@ public class DemandController {
                 index++;
             }
             workbook.write(outputStream);
-            outputStream.close();
-            openFile(fullPath);
+            return outputStream.toByteArray();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -638,14 +635,14 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.OK).body("OUT");
     }
 
-    @PostMapping("/filter")
-    public ResponseEntity<Object> filter(@RequestBody List<Demand> demands) throws IOException {
-        if (!demands.isEmpty()) {
-            saveExcel("Demands.xls", demands);
-            return ResponseEntity.status(HttpStatus.FOUND).body(demands);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No demands found!");
-    }
+//    @PostMapping("/filter")
+//    public ResponseEntity<Object> filter(@RequestBody List<Demand> demands) throws IOException {
+//        if (!demands.isEmpty()) {
+//            saveExcel("Demands.xls", demands);
+//            return ResponseEntity.status(HttpStatus.FOUND).body(demands);
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No demands found!");
+//    }
 
     @GetMapping("/page")
     public ResponseEntity<Page<Demand>> findAll
