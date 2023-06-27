@@ -7,6 +7,12 @@ import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.AgendaService;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,5 +91,99 @@ public class AgendaController {
             }
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("Error! No agenda with proposal code: " + proposalCode);
+    }
+
+    @PostMapping("/filter")
+    public byte[] saveExcel(@RequestBody List<Agenda> agendas) throws IOException {
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new ByteArrayOutputStream()) {
+            CellStyle style = workbook.createCellStyle();
+
+            XSSFFont font = workbook.createFont();
+            font.setBold(true);
+            style.setFont(font);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setWrapText(false);
+
+            CellStyle bodyStyle = workbook.createCellStyle();
+            bodyStyle.setBorderBottom(BorderStyle.THIN);
+            bodyStyle.setBorderTop(BorderStyle.THIN);
+            bodyStyle.setBorderRight(BorderStyle.THIN);
+            bodyStyle.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+            bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            bodyStyle.setWrapText(false);
+
+            var sheet = workbook.createSheet();
+            sheet.setColumnWidth(1, 30 * 256);
+            sheet.setColumnWidth(2, 15 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 23 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 25 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 30 * 256);
+            sheet.setColumnWidth(13, 65 * 256);
+
+            int rowNum = 0;
+            var row = sheet.createRow(rowNum);
+            var cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
+            cell.setCellStyle(style);
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue("Código");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue("Numero Sequencial");
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue("Comissão");
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue("Data inicial");
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue("Data final");
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue("Analista");
+            cell.setCellStyle(style);
+                for (Agenda agenda : agendas) {
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getAgendaCode());
+                cell = row.createCell(1);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getSequentialNumber());
+                cell = row.createCell(2);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getCommission().getCommissionName());
+                cell = row.createCell(3);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getInitialDate());
+                cell = row.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getFinalDate());
+                cell = row.createCell(5);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(agenda.getAnalistRegistry().getWorkerName());
+            }
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
