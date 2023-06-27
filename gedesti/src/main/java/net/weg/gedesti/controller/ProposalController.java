@@ -1,6 +1,7 @@
 package net.weg.gedesti.controller;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -24,6 +25,9 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -222,7 +226,7 @@ public class ProposalController {
             int blue = Integer.parseInt(hexColor.substring(5, 7), 16);
             BaseColor baseColor = new BaseColor(red, green, blue);
 
-            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle() + " - "+ demand.getDemandCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
+            Paragraph title = new Paragraph(new Phrase(20F, demand.getDemandTitle() + " - " + demand.getDemandCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, baseColor)));
             document.add(title);
             Paragraph quebra = new Paragraph();
             quebra.add(" ");
@@ -381,7 +385,7 @@ public class ProposalController {
             doc = Jsoup.parse(size);
             String sizeFinal = doc.text();
             Phrase sizeTitle = new Phrase(20F, "Tamanho: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
-            Phrase sizeAdd = new Phrase(20F,sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
+            Phrase sizeAdd = new Phrase(20F, sizeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
             Phrase combined = new Phrase();
             combined.add(sizeTitle);
             combined.add(sizeAdd);
@@ -433,7 +437,7 @@ public class ProposalController {
             ppmCode = ppmCode.replaceAll("&nbsp", " ");
             doc = Jsoup.parse(ppmCode);
             String ppmCodeFinal = doc.text();
-            Phrase ppmCodeTitle =new Phrase(20F, "Código PPM:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase ppmCodeTitle = new Phrase(20F, "Código PPM:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
             Phrase ppmCodeAdd = new Phrase(20F, ppmCodeFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
             combined = new Phrase();
             combined.add(ppmCodeTitle);
@@ -475,11 +479,11 @@ public class ProposalController {
             // Adicionar linhas da tabela
             List<Expenses> expensesListProposal = expensesService.findAllByProposal(proposal);
 
-            for (Expenses expenses: expensesListProposal) {
+            for (Expenses expenses : expensesListProposal) {
                 PdfPCell columnCellExpenses = new PdfPCell();
                 List<Expense> expenseList = expenses.getExpense();
-                for(Expense expense : expenseList) {
-                    if(expense.getExpenseType().equals("expenses")){
+                for (Expense expense : expenseList) {
+                    if (expense.getExpenseType().equals("expenses")) {
                         System.out.println(expense.getExpenseProfile());
                         columnCellExpenses.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
                         tableExpenses.addCell(columnCellExpenses);
@@ -496,9 +500,9 @@ public class ProposalController {
             Paragraph costCenter = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
-            for (Expenses expenses: expensesListProposal) {
+            for (Expenses expenses : expensesListProposal) {
                 List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
-                for(ExpensesCostCenters costCenter1: costCenterList){
+                for (ExpensesCostCenters costCenter1 : costCenterList) {
                     normalChunk = new Chunk(costCenter1.getCostCenter().getCostCenter());
                 }
 
@@ -550,7 +554,6 @@ public class ProposalController {
 //            }
 
 
-
             document.add(tableInternalResources);
             document.add(quebra);
 
@@ -591,6 +594,156 @@ public class ProposalController {
     public ResponseEntity<List<Proposal>> findAllByAnalyst(@PathVariable("workerCode") Worker workerCode) {
         List<Proposal> proposalList = proposalService.findAllByResponsibleAnalystWorkerCode(workerCode);
         return ResponseEntity.ok().body(proposalList);
+    }
+
+    @PostMapping("/filter")
+    public byte[] saveExcel(@RequestBody List<Proposal> proposals) throws IOException {
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new ByteArrayOutputStream()) {
+            CellStyle style = workbook.createCellStyle();
+
+            XSSFFont font = workbook.createFont();
+            font.setBold(true);
+            style.setFont(font);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setWrapText(false);
+
+            CellStyle bodyStyle = workbook.createCellStyle();
+            bodyStyle.setBorderBottom(BorderStyle.THIN);
+            bodyStyle.setBorderTop(BorderStyle.THIN);
+            bodyStyle.setBorderRight(BorderStyle.THIN);
+            bodyStyle.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+            bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            bodyStyle.setWrapText(false);
+
+            var sheet = workbook.createSheet();
+            sheet.setColumnWidth(1, 30 * 256);
+            sheet.setColumnWidth(2, 15 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 23 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 25 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 30 * 256);
+            sheet.setColumnWidth(13, 65 * 256);
+
+            int rowNum = 0;
+            var row = sheet.createRow(rowNum);
+            var cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
+            cell.setCellStyle(style);
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue("Código");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue("Nome");
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue("Data de Criação");
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue("Status");
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue("Payback");
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue("Analista Responsável");
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            cell.setCellValue("Código da Demanda");
+            cell.setCellStyle(style);
+            cell = row.createCell(7);
+            cell.setCellValue("Custos Internos");
+            cell.setCellStyle(style);
+            cell = row.createCell(8);
+            cell.setCellValue("Custos Externos");
+            cell.setCellStyle(style);
+            cell = row.createCell(9);
+            cell.setCellValue("Total de Custos");
+            cell.setCellStyle(style);
+            cell = row.createCell(10);
+            cell.setCellValue("Tipo");
+            cell.setCellStyle(style);
+            cell = row.createCell(11);
+            cell.setCellValue("Score");
+            cell.setCellStyle(style);
+            cell = row.createCell(12);
+            cell.setCellValue("Periodo de Execução Inicial");
+            cell.setCellStyle(style);
+            cell = row.createCell(13);
+            cell.setCellValue("Periodo de Execução Final");
+            cell.setCellStyle(style);
+            for (Proposal proposal : proposals) {
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getProposalCode());
+                cell = row.createCell(1);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getProposalName());
+                cell = row.createCell(2);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getProposalDate());
+                cell = row.createCell(3);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getProposalStatus());
+                cell = row.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getPayback());
+                cell = row.createCell(5);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getResponsibleAnalyst().getWorkerName());
+                cell = row.createCell(6);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getDemand().getDemandCode());
+                cell = row.createCell(7);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getInternalCosts());
+                cell = row.createCell(8);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getExternalCosts());
+                cell = row.createCell(9);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getTotalCosts());
+                cell = row.createCell(10);
+                cell.setCellStyle(bodyStyle);
+                if(proposal.getPublished() != null) {
+                    if (proposal.getPublished()) {
+                        cell.setCellValue("Publicado");
+                    } else if (!proposal.getPublished()) {
+                        cell.setCellValue("Não Publicado");
+                    }
+                } else {
+                    cell.setCellValue("N/A");
+                }
+                cell = row.createCell(11);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getScore());
+                cell = row.createCell(12);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getInitialRunPeriod().toString());
+                cell = row.createCell(13);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(proposal.getFinalExecutionPeriod().toString());
+            }
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
