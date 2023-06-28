@@ -236,16 +236,20 @@ public class DemandController {
             // Adicionar cabeçalho da tabela
             PdfPCell headerCell = new PdfPCell();
             headerCell.setPhrase(new Phrase("Centro de Custo", fontBold));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             tableCostCenter.addCell(headerCell);
             headerCell.setPhrase(new Phrase("Nome do Centro de Custo", fontBold));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             tableCostCenter.addCell(headerCell);
 
             // Adicionar linhas da tabela
             for (CostCenter costCenter : demand.getCostCenter()) {
                 PdfPCell columnCell = new PdfPCell();
                 columnCell.setPhrase(new Phrase(costCenter.getCostCenterCode() + "", fontNormal));
+                columnCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableCostCenter.addCell(columnCell);
                 columnCell.setPhrase(new Phrase(costCenter.getCostCenter(), fontNormal));
+                columnCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableCostCenter.addCell(columnCell);
             }
 

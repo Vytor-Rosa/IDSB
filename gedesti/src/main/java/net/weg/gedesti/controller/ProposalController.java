@@ -30,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -205,20 +207,20 @@ public class ProposalController {
     @GetMapping("/pdf/{proposalCode}")
     public ResponseEntity<Object> savePdf(@PathVariable(value = "proposalCode") Integer proposalCode, HttpServletResponse response) throws IOException, DocumentException {
         try {
-            Optional<Proposal> optionalProposal = proposalService.findById(proposalCode);
-            Proposal proposal = optionalProposal.get();
-            Demand demand = proposal.getDemand();
-
-
             com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-            PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\" + System.getProperty("user.name") + "\\Downloads\\iTextHelloWorld.pdf"));
-            document.open();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, byteArrayOutputStream);
 
+            document.open();
             String path = new File(".").getCanonicalPath();
-            com.itextpdf.text.Image logo = Image.getInstance(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png");
+            Image logo = Image.getInstance(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png");
             logo.setAlignment(Element.ALIGN_RIGHT);
             logo.scaleToFit(50, 50);
             document.add(logo);
+
+            Optional<Proposal> optionalProposal = proposalService.findById(proposalCode);
+            Proposal proposal = optionalProposal.get();
+            Demand demand = proposal.getDemand();
 
             String hexColor = "#00579D";
             int red = Integer.parseInt(hexColor.substring(1, 3), 16);
@@ -299,19 +301,19 @@ public class ProposalController {
             document.add(objectiveAdd);
             document.add(quebra);
 
-//            // Benefício Real
-//            Paragraph realBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Real: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-//            document.add(realBenefitTitle);
-//            Paragraph realBenefitMonthlyValue = new Paragraph(new Phrase(20F, demand.getRealBenefit().getRealCurrency()
-//                    + " " + demand.getRealBenefit().getRealMonthlyValue(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
-//            document.add(realBenefitMonthlyValue);
-//            String realBenefitTitleDescription = demand.getRealBenefit().getRealBenefitDescription();
-//            realBenefitTitleDescription = realBenefitTitleDescription.replaceAll("&nbsp;", " ");
-//            doc = Jsoup.parse(realBenefitTitleDescription);
-//            String realBenefitTitleDescripitionFinal = doc.text();
-//            Paragraph realBenefitTitleDescripitionAdd = new Paragraph(new Phrase(20F, realBenefitTitleDescripitionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-//            document.add(realBenefitTitleDescripitionAdd);
-//            document.add(quebra);
+            // Benefício Real
+            Paragraph realBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Real: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(realBenefitTitle);
+            Paragraph realBenefitMonthlyValue = new Paragraph(new Phrase(20F, demand.getRealBenefit().getRealCurrency()
+                    + " " + demand.getRealBenefit().getRealMonthlyValue(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(realBenefitMonthlyValue);
+            String realBenefitTitleDescription = demand.getRealBenefit().getRealBenefitDescription();
+            realBenefitTitleDescription = realBenefitTitleDescription.replaceAll("&nbsp;", " ");
+            doc = Jsoup.parse(realBenefitTitleDescription);
+            String realBenefitTitleDescripitionFinal = doc.text();
+            Paragraph realBenefitTitleDescripitionAdd = new Paragraph(new Phrase(20F, realBenefitTitleDescripitionFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            document.add(realBenefitTitleDescripitionAdd);
+            document.add(quebra);
 
             // Benefício Potencial
             Paragraph potentialBenefitTitle = new Paragraph(new Phrase(20F, "Benefício Potencial: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
@@ -372,13 +374,13 @@ public class ProposalController {
                 columnCell.setPhrase(new Phrase(costCenter.getCostCenter(), fontNormal));
                 tableCostCenter.addCell(columnCell);
             }
-
             document.add(tableCostCenter);
             document.add(quebra);
 
             //Classificação
             Paragraph classificationTitle = new Paragraph(new Phrase(20F, "Classificação:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(classificationTitle);
+
             //Tamanho
             String size = demand.getClassification().getClassificationSize();
             size = size.replaceAll("&nbsp", " ");
@@ -418,6 +420,7 @@ public class ProposalController {
                 Paragraph beneficiariesBUsAdd = new Paragraph(new Phrase(20F, "     " + beneficiariesBUsFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 document.add(beneficiariesBUsAdd);
             }
+
             //Sessão TI responsavel
             String itSection = demand.getClassification().getRequesterBu().getBu();
             itSection = itSection.replaceAll("&nbsp", " ");
@@ -430,7 +433,6 @@ public class ProposalController {
             combined.add(itSectionAdd);
             document.add(combined);
             document.add(new Paragraph(""));
-
 
             //Codigo PPM
             String ppmCode = demand.getClassification().getPpmCode();
@@ -475,7 +477,6 @@ public class ProposalController {
             headerCellExpenses.setPhrase(new Phrase("Valor hora", fontBold));
             tableExpenses.addCell(headerCellExpenses);
 
-
             // Adicionar linhas da tabela
             List<Expenses> expensesListProposal = expensesService.findAllByProposal(proposal);
 
@@ -497,8 +498,7 @@ public class ProposalController {
             }
             document.add(tableExpenses);
 
-            //total e centro de custo
-
+            // Total e centro de custo
             Paragraph costCenterExpensesParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
@@ -522,8 +522,7 @@ public class ProposalController {
                 }
             }
 
-
-            //Investimentos/Recorrente (Tabela)
+            // Investimentos/Recorrente (Tabela)
             document.add(quebra);
             Paragraph RecurrentTitle = new Paragraph(new Phrase(20F, "Investimento / Recorrente: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(RecurrentTitle);
@@ -560,8 +559,7 @@ public class ProposalController {
             }
             document.add(tableRecurrent);
 
-            //total e centro de custo
-
+            // Total e centro de custo
             Paragraph costCenterRecurrentParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
@@ -584,7 +582,7 @@ public class ProposalController {
                 }
             }
 
-            //Recursos Internos (Tabela)
+            // Recursos Internos (Tabela)
             document.add(quebra);
             Paragraph InternalResourcesTitle = new Paragraph(new Phrase(20F, "Recursos Internos: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(InternalResourcesTitle);
@@ -593,7 +591,7 @@ public class ProposalController {
             PdfPTable tableInternalResources = new PdfPTable(3);
             tableInternalResources.setWidthPercentage(100);
 
-                // Adicionar cabeçalho da tabela
+            // Adicionar cabeçalho da tabela
             PdfPCell headerCellInternalResources = new PdfPCell();
             headerCellInternalResources.setPhrase(new Phrase("Perfil da despesa", fontBold));
             tableInternalResources.addCell(headerCellInternalResources);
@@ -603,7 +601,7 @@ public class ProposalController {
             tableInternalResources.addCell(headerCellInternalResources);
 
 
-                // Adicionar linhas da tabela
+            // Adicionar linhas da tabela
             List<Expenses> InternalResourcesListProposal = expensesService.findAllByProposal(proposal);
 
             for (Expenses expenses : InternalResourcesListProposal) {
@@ -622,11 +620,9 @@ public class ProposalController {
                 }
 
             }
-
             document.add(tableInternalResources);
 
-                //total e centro de custo
-
+            // Total e centro de custo
             Paragraph costCenterInternalResourcesParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
@@ -651,11 +647,65 @@ public class ProposalController {
             }
             document.add(quebra);
 
+            // Período de execução
+            Paragraph executionPeriod = new Paragraph();
+            boldChunk = new Chunk("Período de execução: ");
+            boldChunk.setFont(fontBold);
+
+            String sourceFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS";
+            String targetFormat = "dd/MM/yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(sourceFormat);
+
+            Date initialDate = sdf.parse(proposal.getInitialRunPeriod().toString());
+            Date finalDate = sdf.parse(proposal.getFinalExecutionPeriod().toString());
+
+            LocalDate localDateIntial = initialDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            LocalDate localDateFinal = finalDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(targetFormat);
+
+            String dateFormattedInitial = localDateIntial.format(formatter);
+            String dateFormattedFinal = localDateFinal.format(formatter);
+
+            normalChunk = new Chunk(dateFormattedInitial + " à " + dateFormattedFinal);
+            normalChunk.setFont(fontNormal);
+            executionPeriod.add(boldChunk);
+            executionPeriod.add(normalChunk);
+            document.add(executionPeriod);
+
+            //Payback
+            Paragraph payback = new Paragraph();
+            boldChunk = new Chunk("Payback: ");
+            boldChunk.setFont(fontBold);
+            normalChunk = new Chunk(proposal.getPayback() + "");
+            normalChunk.setFont(fontNormal);
+            payback.add(boldChunk);
+            payback.add(normalChunk);
+            document.add(payback);
+
+            // Responsáveis pelo negócio
+            Paragraph reponsibleForBussines = new Paragraph(new Phrase(20F, "Responsáveis pelo negócios:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+            document.add(reponsibleForBussines);
+
+            List<Worker> responsibleForBussinesList = proposal.getWorkers();
+
+            for (Worker worker : responsibleForBussinesList) {
+                String responsible = worker.getWorkerName();
+                Paragraph responsibleAdd = new Paragraph(new Phrase(20F, "• " + responsible, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(responsibleAdd);
+            }
+
             document.close();
+            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header("Content-Disposition", "attachment; filename=" + proposal.getProposalName() + " - " + proposal.getProposalCode() + ".pdf")
+                    .body(resource);
+
         } catch (Exception e) {
             throw new IOException();
         }
-        return null;
     }
 
     public void showText(Document document, PDPageContentStream contentStream) throws IOException {
