@@ -8,6 +8,12 @@ import net.weg.gedesti.model.entity.*;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.MinuteService;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.BeanUtils;
@@ -24,10 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -293,6 +296,110 @@ public class MinuteController {
                     }
                 }
             }
+        }
+    }
+
+    @PostMapping("/filter")
+    public byte[] saveExcel(@RequestBody List<Minute> minutes) throws IOException {
+        try (var workbook = new XSSFWorkbook();
+             var outputStream = new ByteArrayOutputStream()) {
+            CellStyle style = workbook.createCellStyle();
+
+            XSSFFont font = workbook.createFont();
+            font.setBold(true);
+            style.setFont(font);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setWrapText(false);
+
+            CellStyle bodyStyle = workbook.createCellStyle();
+            bodyStyle.setBorderBottom(BorderStyle.THIN);
+            bodyStyle.setBorderTop(BorderStyle.THIN);
+            bodyStyle.setBorderRight(BorderStyle.THIN);
+            bodyStyle.setBorderLeft(BorderStyle.THIN);
+            bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+            bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            bodyStyle.setWrapText(false);
+
+            var sheet = workbook.createSheet();
+            sheet.setColumnWidth(1, 30 * 256);
+            sheet.setColumnWidth(2, 15 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 23 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 25 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 30 * 256);
+            sheet.setColumnWidth(13, 65 * 256);
+
+            int rowNum = 0;
+            var row = sheet.createRow(rowNum);
+            var cell = row.createCell(0);
+            sheet.autoSizeColumn(0);
+            cell.setCellStyle(style);
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue("Código");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue("Numero Sequencial");
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue("Código Pauta");
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue("Data inicial");
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue("Data final");
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue("Tipo da Ata");
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            cell.setCellValue("Diretor");
+            cell.setCellStyle(style);
+            for (Minute minute : minutes) {
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getMinuteCode());
+                cell = row.createCell(1);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getMinuteCode());
+                cell = row.createCell(2);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getAgenda().getAgendaCode());
+                cell = row.createCell(3);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getMinuteStartDate());
+                cell = row.createCell(4);
+                cell.setCellStyle(bodyStyle);
+                if(minute.getMinuteEndDate() != null) {
+                    cell.setCellValue(minute.getMinuteEndDate());
+                } else{
+                    cell.setCellValue("N/A");
+                }
+                cell = row.createCell(5);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getMinuteType());
+                cell = row.createCell(6);
+                cell.setCellStyle(bodyStyle);
+                cell.setCellValue(minute.getDirector().getWorkerName());
+            }
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
