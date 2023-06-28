@@ -59,9 +59,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -465,7 +464,7 @@ public class ProposalController {
             document.add(expensesTitle);
             document.add(quebra);
 
-            PdfPTable tableExpenses = new PdfPTable(3);
+            PdfPTable tableExpenses = new PdfPTable(4);
             tableExpenses.setWidthPercentage(100);
 
             // Adicionar cabeçalho da tabela
@@ -476,6 +475,9 @@ public class ProposalController {
             tableExpenses.addCell(headerCellExpenses);
             headerCellExpenses.setPhrase(new Phrase("Valor hora", fontBold));
             tableExpenses.addCell(headerCellExpenses);
+            headerCellExpenses.setPhrase(new Phrase("Valor total das despesas", fontBold));
+            tableExpenses.addCell(headerCellExpenses);
+
 
             // Adicionar linhas da tabela
             List<Expenses> expensesListProposal = expensesService.findAllByProposal(proposal);
@@ -492,18 +494,44 @@ public class ProposalController {
                         tableExpenses.addCell(columnCellExpenses);
                         columnCellExpenses.setPhrase(new Phrase(String.valueOf(expense.getHourValue()), fontNormal));
                         tableExpenses.addCell(columnCellExpenses);
+                        columnCellExpenses.setPhrase(new Phrase(String.valueOf(expense.getTotalValue()), fontNormal));
+                        tableExpenses.addCell(columnCellExpenses);
                     }
                 }
 
             }
             document.add(tableExpenses);
 
-            // Total e centro de custo
+            // Valor total despesas
+            double totalExpenses = 0.0;
+
+            for (Expenses expenses : expensesListProposal) {
+                List<Expense> expenseList = expenses.getExpense();
+                for (Expense expense : expenseList) {
+                    if (expense.getExpenseType().equals("expenses")) {
+                        double expenseValue = expense.getTotalValue();
+                        totalExpenses += expenseValue;
+                    }
+                }
+            }
+            Paragraph totalParagraph = new Paragraph();
+            boldChunk = new Chunk("Valor total: ");
+            boldChunk.setFont(fontBold);
+            totalParagraph.add(boldChunk);
+            normalChunk = new Chunk(Double.toString(totalExpenses));
+            normalChunk.setFont(fontNormal);
+            totalParagraph.add(normalChunk);
+            document.add(totalParagraph);
+
+            //total e centro de custo
+
             Paragraph costCenterExpensesParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
             costCenterExpensesParagraph.add(boldChunk);
             document.add(costCenterExpensesParagraph);
+
+            Set<String> uniqueCostCentersExpenses = new HashSet<>();
 
             for (Expenses expenses : expensesListProposal) {
                 List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
@@ -512,23 +540,31 @@ public class ProposalController {
                 for (ExpensesCostCenters costCenterExpenses : costCenterList) {
                     for (Expense expense : expenseList) {
                         if (expense.getExpenseType().equals("expenses")) {
-                            Paragraph costCenterExpensesParagraph2 = new Paragraph();
-                            normalChunk = new Chunk(costCenterExpenses.getCostCenter().getCostCenter() + " - " + costCenterExpenses.getPercent().toString() + "%");
-                            normalChunk.setFont(fontNormal);
-                            costCenterExpensesParagraph2.add(normalChunk);
-                            document.add(costCenterExpensesParagraph2);
+                            String costCenterText = costCenterExpenses.getCostCenter().getCostCenter() + " - " + costCenterExpenses.getPercent().toString();
+                            uniqueCostCentersExpenses.add(costCenterText);
                         }
                     }
                 }
             }
 
-            // Investimentos/Recorrente (Tabela)
+            Paragraph costCenterExpensesParagraph2 = new Paragraph();
+            for (String costCenter : uniqueCostCentersExpenses) {
+                normalChunk = new Chunk(costCenter);
+                normalChunk.setFont(fontNormal);
+                costCenterExpensesParagraph2.add(normalChunk);
+                costCenterExpensesParagraph2.add(new Chunk("\n"));
+            }
+
+            document.add(costCenterExpensesParagraph2);
+
+
+            //Investimentos/Recorrente (Tabela)
             document.add(quebra);
             Paragraph RecurrentTitle = new Paragraph(new Phrase(20F, "Investimento / Recorrente: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(RecurrentTitle);
             document.add(quebra);
 
-            PdfPTable tableRecurrent = new PdfPTable(3);
+            PdfPTable tableRecurrent = new PdfPTable(4);
             tableRecurrent.setWidthPercentage(100);
 
             // Adicionar cabeçalho da tabela
@@ -538,6 +574,8 @@ public class ProposalController {
             headerCellRecurrent.setPhrase(new Phrase("Esforço", fontBold));
             tableRecurrent.addCell(headerCellRecurrent);
             headerCellRecurrent.setPhrase(new Phrase("Valor hora", fontBold));
+            tableRecurrent.addCell(headerCellRecurrent);
+            headerCellRecurrent.setPhrase(new Phrase("Valor total das despesas", fontBold));
             tableRecurrent.addCell(headerCellRecurrent);
             List<Expenses> recurrentListProposal = expensesService.findAllByProposal(proposal);
 
@@ -553,42 +591,75 @@ public class ProposalController {
                         tableRecurrent.addCell(columnCellRecurrent);
                         columnCellRecurrent.setPhrase(new Phrase(String.valueOf(expense.getHourValue()), fontNormal));
                         tableRecurrent.addCell(columnCellRecurrent);
+                        columnCellRecurrent.setPhrase(new Phrase(String.valueOf(expense.getTotalValue()), fontNormal));
+                        tableRecurrent.addCell(columnCellRecurrent);
                     }
                 }
 
             }
             document.add(tableRecurrent);
 
-            // Total e centro de custo
+            // Valor total despesas
+            double totalRecurrent = 0.0;
+
+            for (Expenses expenses : expensesListProposal) {
+                List<Expense> expenseList = expenses.getExpense();
+                for (Expense expense : expenseList) {
+                    if (expense.getExpenseType().equals("recurrent")) {
+                        double recurrentValue = expense.getTotalValue();
+                        totalRecurrent += recurrentValue;
+                    }
+                }
+            }
+            totalParagraph = new Paragraph();
+            boldChunk = new Chunk("Valor total: ");
+            boldChunk.setFont(fontBold);
+            totalParagraph.add(boldChunk);
+            normalChunk = new Chunk(Double.toString(totalRecurrent));
+            normalChunk.setFont(fontNormal);
+            totalParagraph.add(normalChunk);
+            document.add(totalParagraph);
+
+            //total e centro de custo
+
             Paragraph costCenterRecurrentParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
             costCenterRecurrentParagraph.add(boldChunk);
             document.add(costCenterRecurrentParagraph);
 
+            Set<String> uniqueCostCentersRecurrent = new HashSet<>();
+
             for (Expenses expenses : expensesListProposal) {
                 List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
                 List<Expense> expenseList = expenses.getExpense();
+
                 for (ExpensesCostCenters costCenterExpenses : costCenterList) {
                     for (Expense expense : expenseList) {
                         if (expense.getExpenseType().equals("recurrent")) {
-                            Paragraph costCenterRecurrentParagraph2 = new Paragraph();
-                            normalChunk = new Chunk(costCenterExpenses.getCostCenter().getCostCenter() + " - " + costCenterExpenses.getPercent().toString() + "%");
-                            normalChunk.setFont(fontNormal);
-                            costCenterRecurrentParagraph2.add(normalChunk);
-                            document.add(costCenterRecurrentParagraph2);
+                            String costCenterText = costCenterExpenses.getCostCenter().getCostCenter() + " - " + costCenterExpenses.getPercent().toString();
+                            uniqueCostCentersRecurrent.add(costCenterText);
                         }
                     }
                 }
             }
 
-            // Recursos Internos (Tabela)
+            Paragraph costCenterRecurrentParagraph2 = new Paragraph();
+            for (String costCenter : uniqueCostCentersRecurrent) {
+                normalChunk = new Chunk(costCenter);
+                normalChunk.setFont(fontNormal);
+                costCenterRecurrentParagraph2.add(normalChunk);
+                costCenterRecurrentParagraph2.add(new Chunk("\n"));
+            }
+            document.add(costCenterRecurrentParagraph2);
+
+            //Recursos Internos (Tabela)
             document.add(quebra);
             Paragraph InternalResourcesTitle = new Paragraph(new Phrase(20F, "Recursos Internos: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             document.add(InternalResourcesTitle);
             document.add(quebra);
 
-            PdfPTable tableInternalResources = new PdfPTable(3);
+            PdfPTable tableInternalResources = new PdfPTable(4);
             tableInternalResources.setWidthPercentage(100);
 
             // Adicionar cabeçalho da tabela
@@ -598,6 +669,8 @@ public class ProposalController {
             headerCellInternalResources.setPhrase(new Phrase("Esforço", fontBold));
             tableInternalResources.addCell(headerCellInternalResources);
             headerCellInternalResources.setPhrase(new Phrase("Valor hora", fontBold));
+            tableInternalResources.addCell(headerCellInternalResources);
+            headerCellInternalResources.setPhrase(new Phrase("Valor total das despesas", fontBold));
             tableInternalResources.addCell(headerCellInternalResources);
 
 
@@ -616,35 +689,69 @@ public class ProposalController {
                         tableInternalResources.addCell(columnCellInternalResources);
                         columnCellInternalResources.setPhrase(new Phrase(String.valueOf(expense.getHourValue()), fontNormal));
                         tableInternalResources.addCell(columnCellInternalResources);
+                        columnCellInternalResources.setPhrase(new Phrase(String.valueOf(expense.getTotalValue()), fontNormal));
+                        tableInternalResources.addCell(columnCellInternalResources);
                     }
                 }
 
             }
+
             document.add(tableInternalResources);
 
-            // Total e centro de custo
+            // Valor total despesas
+            double totalInternalResources = 0.0;
+
+            for (Expenses expenses : expensesListProposal) {
+                List<Expense> expenseList = expenses.getExpense();
+                for (Expense expense : expenseList) {
+                    if (expense.getExpenseType().equals("internal")) {
+                        double InternalResourcesValue = expense.getTotalValue();
+                        totalInternalResources += InternalResourcesValue;
+                    }
+                }
+            }
+            totalParagraph = new Paragraph();
+            boldChunk = new Chunk("Valor total: ");
+            boldChunk.setFont(fontBold);
+            totalParagraph.add(boldChunk);
+            normalChunk = new Chunk(Double.toString(totalInternalResources));
+            normalChunk.setFont(fontNormal);
+            totalParagraph.add(normalChunk);
+            document.add(totalParagraph);
+
+            //total e centro de custo
+
             Paragraph costCenterInternalResourcesParagraph = new Paragraph();
             boldChunk = new Chunk("Centros de custo: ");
             boldChunk.setFont(fontBold);
             costCenterInternalResourcesParagraph.add(boldChunk);
             document.add(costCenterInternalResourcesParagraph);
 
+            Set<String> uniqueCostCenters = new HashSet<>();
+
             for (Expenses expenses : expensesListProposal) {
                 List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
                 List<Expense> expenseList = expenses.getExpense();
 
-                for (ExpensesCostCenters costCenterInternalResources2 : costCenterList) {
+                for (ExpensesCostCenters costCenter : costCenterList) {
                     for (Expense expense : expenseList) {
                         if (expense.getExpenseType().equals("internal")) {
-                            Paragraph costCenterInternalResourcesParagraph2 = new Paragraph();
-                            normalChunk = new Chunk(costCenterInternalResources2.getCostCenter().getCostCenter() + " - " + costCenterInternalResources2.getPercent().toString() + "%");
-                            normalChunk.setFont(fontNormal);
-                            costCenterInternalResourcesParagraph2.add(normalChunk);
-                            document.add(costCenterInternalResourcesParagraph2);
+                            String costCenterText = costCenter.getCostCenter().getCostCenter() + " - " + costCenter.getPercent().toString();
+                            uniqueCostCenters.add(costCenterText);
                         }
                     }
                 }
             }
+
+            Paragraph costCenterInternalResourcesParagraph2 = new Paragraph();
+            for (String costCenter : uniqueCostCenters) {
+                normalChunk = new Chunk(costCenter);
+                normalChunk.setFont(fontNormal);
+                costCenterInternalResourcesParagraph2.add(normalChunk);
+                costCenterInternalResourcesParagraph2.add(new Chunk("\n"));
+            }
+
+            document.add(costCenterInternalResourcesParagraph2);
             document.add(quebra);
 
             // Período de execução
