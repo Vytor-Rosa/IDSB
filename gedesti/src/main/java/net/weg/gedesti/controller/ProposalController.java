@@ -495,30 +495,35 @@ public class ProposalController {
                 }
 
             }
-            //total e centro de custo
-
-            Paragraph costCenter = new Paragraph();
-            boldChunk = new Chunk("Centros de custo: ");
-            boldChunk.setFont(fontBold);
-            for (Expenses expenses : expensesListProposal) {
-                List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
-                for (ExpensesCostCenters costCenter1 : costCenterList) {
-                    normalChunk = new Chunk(costCenter1.getCostCenter().getCostCenter());
-                }
-
-            }
-            normalChunk.setFont(fontNormal);
-            status.add(boldChunk);
-            status.add(normalChunk);
-            document.add(costCenter);
-            document.add(quebra);
-
-            PdfPCell columnCell = new PdfPCell();
-//            columnCell.setPhrase(new Phrase(, fontNormal));
-            tableCostCenter.addCell(columnCell);
 
             document.add(tableExpenses);
             document.add(quebra);
+
+            //total e centro de custo
+
+            Paragraph costCenter = new Paragraph();
+             boldChunk = new Chunk("Centros de custo: ");
+            boldChunk.setFont(fontBold);
+            costCenter.add(boldChunk);
+
+            for (Expenses expenses : expensesListProposal) {
+                List<ExpensesCostCenters> costCenterList = expenses.getExpensesCostCenters();
+                List<Expense> expenseList = expenses.getExpense();
+
+                for (ExpensesCostCenters costCenter1 : costCenterList) {
+                    for (Expense expense : expenseList) {
+                        if (expense.getExpenseType().equals("expenses")) {
+                             normalChunk = new Chunk(costCenter1.getCostCenter().getCostCenter() + " - " + costCenter1.getPercent().toString() + "%");
+                            normalChunk.setFont(fontNormal);
+                            costCenter.add(normalChunk);
+                            document.add(quebra);
+                        }
+                    }
+                }
+            }
+
+            document.add(costCenter);
+
 
 
             //Investimentos/Recorrente (Tabela)
