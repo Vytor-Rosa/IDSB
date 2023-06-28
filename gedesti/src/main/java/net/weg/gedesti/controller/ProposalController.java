@@ -132,7 +132,15 @@ public class ProposalController {
 
         Proposal proposal = proposalRepository.findById(proposalCode).get();
         proposal.setProposalStatus(proposalDTO.getProposalStatus());
-        proposal.setCommissionOpinion(proposalDTO.getCommissionOpinion());
+
+        if (proposalDTO.getCommissionOpinion() != null) {
+            proposal.setCommissionOpinion(proposalDTO.getCommissionOpinion());
+        } else if (proposalDTO.getDgOpinion() != null) {
+            proposal.setDgOpinion(proposalDTO.getDgOpinion());
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("conflict");
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(proposalRepository.saveAndFlush(proposal));
     }
 

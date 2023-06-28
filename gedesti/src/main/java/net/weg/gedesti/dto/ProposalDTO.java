@@ -59,5 +59,5 @@ public class ProposalDTO {
 
     private Boolean published;
 
-    private String dgopinion;
+    private String dgOpinion;
 }
