@@ -7,6 +7,7 @@ import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.AgendaService;
+import net.weg.gedesti.repository.AgendaRepository;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -18,12 +19,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -38,6 +41,7 @@ import java.util.Optional;
 public class AgendaController {
 
     private AgendaService agendaService;
+    private AgendaRepository agendaRepository;
 
     @GetMapping
     public ResponseEntity<List<Agenda>> findAll() {
@@ -91,6 +95,20 @@ public class AgendaController {
             }
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("Error! No agenda with proposal code: " + proposalCode);
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/{agendaCode}")
+    public ResponseEntity<Object> update(@PathVariable(value = "agendaCode") Integer agendaCode, @RequestBody @Valid AgendaDTO agendaDTO) {
+        Optional<Agenda> optionalAgenda = agendaService.findById(agendaCode);
+        if (optionalAgenda.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No agenda with code: " + agendaCode);
+        }
+        Agenda agenda = optionalAgenda.get();
+        BeanUtils.copyProperties(agendaDTO, agenda);
+        agendaRepository.saveAndFlush(agenda);
+        return ResponseEntity.status(HttpStatus.OK).body(agenda);
     }
 
     @PostMapping("/filter")
