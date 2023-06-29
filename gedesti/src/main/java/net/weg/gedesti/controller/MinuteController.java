@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -172,213 +173,130 @@ public class MinuteController {
             document.add(end);
 
             // Propostas
-            for (Proposal proposal : minute.getAgenda().getProposals()) {
-                if (proposal.getPublished() && (minute.getMinuteType().equals("Published") || minute.getMinuteType().equals("DG"))) {
-                    Paragraph titleProposal = new Paragraph(new Phrase(20F, proposal.getProposalName() + " - " + proposal.getProposalCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, baseColor)));
-                    document.add(titleProposal);
-                    document.add(quebra);
+            List<Proposal> proposalList = new ArrayList<>();
 
-                    // Objetivo
-                    Paragraph objectiveTitle = new Paragraph(new Phrase(20F, "Objetivo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-                    document.add(objectiveTitle);
-                    String objective = proposal.getDemand().getDemandObjective();
-                    objective = objective.replaceAll("&nbsp;", " ");
-                    Document doc = Jsoup.parse(objective);
-                    String objectiveFinal = doc.text();
-                    Paragraph objectiveAdd = new Paragraph(new Phrase(20F, objectiveFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                    document.add(objectiveAdd);
-                    document.add(quebra);
-
-                    // Escopo da proposta
-                    Paragraph scopeProposalTitle = new Paragraph(new Phrase(20F, "Escopo da proposta: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-                    document.add(scopeProposalTitle);
-                    String scopeProposal = proposal.getDescriptiveProposal();
-                    scopeProposal = scopeProposal.replaceAll("&nbsp;", " ");
-                    doc = Jsoup.parse(scopeProposal);
-                    String scopeProposalFinal = doc.text();
-                    Paragraph scopeProposalAdd = new Paragraph(new Phrase(20F, scopeProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                    document.add(scopeProposalAdd);
-                    document.add(quebra);
-
-                    // Custos totais
-                    Paragraph totalCosts = new Paragraph();
-                    Chunk boldChunk = new Chunk("Custos totais: ");
-                    boldChunk.setFont(fontBold);
-                    Chunk normalChunk = new Chunk("R$" + proposal.getTotalCosts() + "");
-                    normalChunk.setFont(fontNormal);
-                    totalCosts.add(boldChunk);
-                    totalCosts.add(normalChunk);
-                    document.add(totalCosts);
-                    document.add(quebra);
-
-                    // add tabela da proposta de custos
-
-                    // Período de execução
-                    Paragraph executionPeriod = new Paragraph();
-                    boldChunk = new Chunk("Período de execução: ");
-                    boldChunk.setFont(fontBold);
-
-                    String sourceFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS";
-                    String targetFormat = "dd/MM/yyyy";
-                    SimpleDateFormat sdf = new SimpleDateFormat(sourceFormat);
-
-                    Date initialDate = sdf.parse(proposal.getInitialRunPeriod().toString());
-                    Date finalDate = sdf.parse(proposal.getFinalExecutionPeriod().toString());
-
-                    LocalDate localDateIntial = initialDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-                    LocalDate localDateFinal = finalDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-
-                    DateTimeFormatter formatterExecutionPeriod = DateTimeFormatter.ofPattern(targetFormat);
-
-                    String dateFormattedInitial = localDateIntial.format(formatterExecutionPeriod);
-                    String dateFormattedFinal = localDateFinal.format(formatterExecutionPeriod);
-
-                    normalChunk = new Chunk(dateFormattedInitial + " à " + dateFormattedFinal);
-                    normalChunk.setFont(fontNormal);
-                    executionPeriod.add(boldChunk);
-                    executionPeriod.add(normalChunk);
-                    document.add(executionPeriod);
-
-                    // Payback
-                    Paragraph payback = new Paragraph();
-                    boldChunk = new Chunk("Payback: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getPayback() + "");
-                    normalChunk.setFont(fontNormal);
-                    payback.add(boldChunk);
-                    payback.add(normalChunk);
-                    document.add(payback);
-
-                    // Responsável pelo negócio
-                    Paragraph responsibleForBusiness = new Paragraph();
-                    boldChunk = new Chunk("Responsável pelo negócio: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getResponsibleAnalyst().getWorkerName() + "");
-                    normalChunk.setFont(fontNormal);
-                    responsibleForBusiness.add(boldChunk);
-                    responsibleForBusiness.add(normalChunk);
-                    document.add(responsibleForBusiness);
-                    document.add(quebra);
-
-                    // Parecer da comissão
-                    Paragraph commissionOpinion = new Paragraph();
-                    boldChunk = new Chunk("Parecer da comissão: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getCommissionOpinion() + "");
-                    normalChunk.setFont(fontNormal);
-                    commissionOpinion.add(boldChunk);
-                    commissionOpinion.add(normalChunk);
-                    document.add(commissionOpinion);
-                    document.add(quebra);
-
-                    // Parecer da DG
-                    if (proposal.getDgOpinion() != null) {
-                        Paragraph dgOpinion = new Paragraph();
-                        boldChunk = new Chunk("Parecer da DG: ");
-                        boldChunk.setFont(fontBold);
-                        normalChunk = new Chunk(proposal.getDgOpinion() + "");
-                        normalChunk.setFont(fontNormal);
-                        dgOpinion.add(boldChunk);
-                        dgOpinion.add(normalChunk);
-                        document.add(dgOpinion);
-                        document.add(quebra);
+            if (minute.getMinuteType().equals("Published") || minute.getMinuteType().equals("DG")) {
+                for (Proposal proposal : minute.getAgenda().getProposals()) {
+                    if (proposal.getProposalStatus().equals("ApprovedDG") || proposal.getProposalStatus().equals("RejectedDG")) {
+                        proposalList.add(proposal);
                     }
-                } else {
-                    Paragraph titleProposal = new Paragraph(new Phrase(20F, proposal.getProposalName() + " - " + proposal.getProposalCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, baseColor)));
-                    document.add(titleProposal);
-                    document.add(quebra);
+                }
+            } else {
+                for (Proposal proposal : minute.getAgenda().getProposals()) {
+                    if (proposal.getProposalStatus().equals("ApprovedComission") || proposal.getProposalStatus().equals("RejectedComission")) {
+                        proposalList.add(proposal);
+                    }
+                }
+            }
 
-                    // Objetivo
-                    Paragraph objectiveTitle = new Paragraph(new Phrase(20F, "Objetivo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-                    document.add(objectiveTitle);
-                    String objective = proposal.getDemand().getDemandObjective();
-                    objective = objective.replaceAll("&nbsp;", " ");
-                    Document doc = Jsoup.parse(objective);
-                    String objectiveFinal = doc.text();
-                    Paragraph objectiveAdd = new Paragraph(new Phrase(20F, objectiveFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                    document.add(objectiveAdd);
-                    document.add(quebra);
+            for (Proposal proposal : proposalList) {
+                Paragraph titleProposal = new Paragraph(new Phrase(20F, proposal.getProposalName() + " - " + proposal.getProposalCode(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, baseColor)));
+                document.add(titleProposal);
+                document.add(quebra);
 
-                    // Escopo da proposta
-                    Paragraph scopeProposalTitle = new Paragraph(new Phrase(20F, "Escopo da proposta: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
-                    document.add(scopeProposalTitle);
-                    String scopeProposal = proposal.getDescriptiveProposal();
-                    scopeProposal = scopeProposal.replaceAll("&nbsp;", " ");
-                    doc = Jsoup.parse(scopeProposal);
-                    String scopeProposalFinal = doc.text();
-                    Paragraph scopeProposalAdd = new Paragraph(new Phrase(20F, scopeProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                    document.add(scopeProposalAdd);
-                    document.add(quebra);
+                // Objetivo
+                Paragraph objectiveTitle = new Paragraph(new Phrase(20F, "Objetivo: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(objectiveTitle);
+                String objective = proposal.getDemand().getDemandObjective();
+                objective = objective.replaceAll("&nbsp;", " ");
+                Document doc = Jsoup.parse(objective);
+                String objectiveFinal = doc.text();
+                Paragraph objectiveAdd = new Paragraph(new Phrase(20F, objectiveFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(objectiveAdd);
+                document.add(quebra);
 
-                    // Custos totais
-                    Paragraph totalCosts = new Paragraph();
-                    Chunk boldChunk = new Chunk("Custos totais: ");
+                // Escopo da proposta
+                Paragraph scopeProposalTitle = new Paragraph(new Phrase(20F, "Escopo da proposta: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                document.add(scopeProposalTitle);
+                String scopeProposal = proposal.getDescriptiveProposal();
+                scopeProposal = scopeProposal.replaceAll("&nbsp;", " ");
+                doc = Jsoup.parse(scopeProposal);
+                String scopeProposalFinal = doc.text();
+                Paragraph scopeProposalAdd = new Paragraph(new Phrase(20F, scopeProposalFinal, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                document.add(scopeProposalAdd);
+                document.add(quebra);
+
+                // Custos totais
+                Paragraph totalCosts = new Paragraph();
+                Chunk boldChunk = new Chunk("Custos totais: ");
+                boldChunk.setFont(fontBold);
+                Chunk normalChunk = new Chunk("R$" + proposal.getTotalCosts() + "");
+                normalChunk.setFont(fontNormal);
+                totalCosts.add(boldChunk);
+                totalCosts.add(normalChunk);
+                document.add(totalCosts);
+                document.add(quebra);
+
+                // add tabela da proposta de custos
+
+                // Período de execução
+                Paragraph executionPeriod = new Paragraph();
+                boldChunk = new Chunk("Período de execução: ");
+                boldChunk.setFont(fontBold);
+
+                String sourceFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS";
+                String targetFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(sourceFormat);
+
+                Date initialDate = sdf.parse(proposal.getInitialRunPeriod().toString());
+                Date finalDate = sdf.parse(proposal.getFinalExecutionPeriod().toString());
+
+                LocalDate localDateIntial = initialDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+                LocalDate localDateFinal = finalDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+                DateTimeFormatter formatterExecutionPeriod = DateTimeFormatter.ofPattern(targetFormat);
+
+                String dateFormattedInitial = localDateIntial.format(formatterExecutionPeriod);
+                String dateFormattedFinal = localDateFinal.format(formatterExecutionPeriod);
+
+                normalChunk = new Chunk(dateFormattedInitial + " à " + dateFormattedFinal);
+                normalChunk.setFont(fontNormal);
+                executionPeriod.add(boldChunk);
+                executionPeriod.add(normalChunk);
+                document.add(executionPeriod);
+
+                // Payback
+                Paragraph payback = new Paragraph();
+                boldChunk = new Chunk("Payback: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getPayback() + "");
+                normalChunk.setFont(fontNormal);
+                payback.add(boldChunk);
+                payback.add(normalChunk);
+                document.add(payback);
+
+                // Responsável pelo negócio
+                Paragraph responsibleForBusiness = new Paragraph();
+                boldChunk = new Chunk("Responsável pelo negócio: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getResponsibleAnalyst().getWorkerName() + "");
+                normalChunk.setFont(fontNormal);
+                responsibleForBusiness.add(boldChunk);
+                responsibleForBusiness.add(normalChunk);
+                document.add(responsibleForBusiness);
+                document.add(quebra);
+
+                // Parecer da comissão
+                Paragraph commissionOpinion = new Paragraph();
+                boldChunk = new Chunk("Parecer da comissão: ");
+                boldChunk.setFont(fontBold);
+                normalChunk = new Chunk(proposal.getCommissionOpinion() + "");
+                normalChunk.setFont(fontNormal);
+                commissionOpinion.add(boldChunk);
+                commissionOpinion.add(normalChunk);
+                document.add(commissionOpinion);
+                document.add(quebra);
+
+                // Parecer da DG
+                if (proposal.getDgOpinion() != null) {
+                    Paragraph dgOpinion = new Paragraph();
+                    boldChunk = new Chunk("Parecer da DG: ");
                     boldChunk.setFont(fontBold);
-                    Chunk normalChunk = new Chunk("R$" + proposal.getTotalCosts() + "");
+                    normalChunk = new Chunk(proposal.getDgOpinion() + "");
                     normalChunk.setFont(fontNormal);
-                    totalCosts.add(boldChunk);
-                    totalCosts.add(normalChunk);
-                    document.add(totalCosts);
-                    document.add(quebra);
-
-                    // add tabela da proposta de custos
-
-                    // Período de execução
-                    Paragraph executionPeriod = new Paragraph();
-                    boldChunk = new Chunk("Período de execução: ");
-                    boldChunk.setFont(fontBold);
-
-                    String sourceFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS";
-                    String targetFormat = "dd/MM/yyyy";
-                    SimpleDateFormat sdf = new SimpleDateFormat(sourceFormat);
-
-                    Date initialDate = sdf.parse(proposal.getInitialRunPeriod().toString());
-                    Date finalDate = sdf.parse(proposal.getFinalExecutionPeriod().toString());
-
-                    LocalDate localDateIntial = initialDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-                    LocalDate localDateFinal = finalDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-
-                    DateTimeFormatter formatterExecutionPeriod = DateTimeFormatter.ofPattern(targetFormat);
-
-                    String dateFormattedInitial = localDateIntial.format(formatterExecutionPeriod);
-                    String dateFormattedFinal = localDateFinal.format(formatterExecutionPeriod);
-
-                    normalChunk = new Chunk(dateFormattedInitial + " à " + dateFormattedFinal);
-                    normalChunk.setFont(fontNormal);
-                    executionPeriod.add(boldChunk);
-                    executionPeriod.add(normalChunk);
-                    document.add(executionPeriod);
-
-                    // Payback
-                    Paragraph payback = new Paragraph();
-                    boldChunk = new Chunk("Payback: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getPayback() + "");
-                    normalChunk.setFont(fontNormal);
-                    payback.add(boldChunk);
-                    payback.add(normalChunk);
-                    document.add(payback);
-
-                    // Responsável pelo negócio
-                    Paragraph responsibleForBusiness = new Paragraph();
-                    boldChunk = new Chunk("Responsável pelo negócio: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getResponsibleAnalyst().getWorkerName() + "");
-                    normalChunk.setFont(fontNormal);
-                    responsibleForBusiness.add(boldChunk);
-                    responsibleForBusiness.add(normalChunk);
-                    document.add(responsibleForBusiness);
-                    document.add(quebra);
-
-                    // Parecer da comissão
-                    Paragraph commissionOpinion = new Paragraph();
-                    boldChunk = new Chunk("Parecer da comissão: ");
-                    boldChunk.setFont(fontBold);
-                    normalChunk = new Chunk(proposal.getCommissionOpinion() + "");
-                    normalChunk.setFont(fontNormal);
-                    commissionOpinion.add(boldChunk);
-                    commissionOpinion.add(normalChunk);
-                    document.add(commissionOpinion);
+                    dgOpinion.add(boldChunk);
+                    dgOpinion.add(normalChunk);
+                    document.add(dgOpinion);
                     document.add(quebra);
                 }
             }
@@ -391,8 +309,7 @@ public class MinuteController {
                     .contentType(MediaType.APPLICATION_PDF)
                     .header("Content-Disposition", "attachment; filename=ATA REUNIÃO" + minute.getAgenda().getCommission() + ".pdf")
                     .body(resource);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             throw new IOException();
         }
 
