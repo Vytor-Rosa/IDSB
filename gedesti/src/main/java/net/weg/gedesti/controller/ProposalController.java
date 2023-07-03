@@ -469,6 +469,7 @@ public class ProposalController {
 //Despesas (Tabela)
             List<Expenses> expensesList = expensesService.findAllByProposal(proposal);
             boolean tabelaCriada = false;
+            System.out.println(expensesList);
             for (Expenses expensesVerificarion : expensesList) {
                 List<Expense> expenseListVerificarion = expensesVerificarion.getExpense();
                 for (Expense expenseVerificarion : expenseListVerificarion) {
@@ -541,13 +542,11 @@ public class ProposalController {
                         document.add(totalParagraph);
 
                         //centro de custo
-
                         Paragraph costCenterExpensesParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
                         boldChunk.setFont(fontBold);
                         costCenterExpensesParagraph.add(boldChunk);
                         document.add(costCenterExpensesParagraph);
-
                         Set<String> uniqueCostCentersExpenses = new HashSet<>();
 
                         for (Expenses expenses : expensesListProposal) {
@@ -571,7 +570,6 @@ public class ProposalController {
                             costCenterExpensesParagraph2.add(normalChunk);
                             costCenterExpensesParagraph2.add(new Chunk("\n"));
                         }
-
                         document.add(costCenterExpensesParagraph2);
                     }
                 }
