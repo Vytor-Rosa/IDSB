@@ -70,7 +70,7 @@ public class MessageController {
     public Message save(@Payload MessageDTO messageDTO) {
         Message message = new Message();
         BeanUtils.copyProperties(messageDTO, message);
-        if(message.getAttachment() == null && message.getMessage() == null) {
+        if (message.getAttachment() == null && message.getMessage() == null) {
             throw new RuntimeException("Error! Message is empty!");
         }
         return messageService.save(message);
@@ -128,8 +128,8 @@ public class MessageController {
             }
         }
         List<Message> messageList = messageService.findAllByDemand(demandFinal.getDemandCode());
-        for(Message message : messageList) {
-            if(message.getSender().getWorkerCode() != workerCode.getWorkerCode()) {
+        for (Message message : messageList) {
+            if (message.getSender().getWorkerCode() != workerCode.getWorkerCode()) {
                 return ResponseEntity.status(HttpStatus.FOUND).body(message.getSender());
             }
         }
@@ -143,6 +143,20 @@ public class MessageController {
         Message message = messageService.findById(messageCode).get();
         message.setViewed(true);
         return ResponseEntity.status(HttpStatus.OK).body(messageRepository.saveAndFlush(message));
+    }
+
+    @GetMapping("/notviewed/{workerCode}/{demandCode}")
+    public ResponseEntity<Object> notViewed(@PathVariable(value = "workerCode") Integer workerCode, @PathVariable(value = "demandCode") Integer demandCode) {
+        List<Message> messagesDemand = messageService.findAllByDemand(demandCode);
+        List<Message> messageList = new ArrayList<>();
+        for (int i = 0; i < messagesDemand.size(); i++) {
+            if (messagesDemand.get(i).getSender().getWorkerCode() != workerCode) {
+                if (messagesDemand.get(i).getViewed() == null) {
+                    messageList.add(messagesDemand.get(i));
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(messageList);
     }
 
 }
