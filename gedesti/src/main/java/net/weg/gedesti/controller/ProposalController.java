@@ -465,7 +465,6 @@ public class ProposalController {
             combined.add(linkJiraTitle);
             combined.add(linkJiraAdd);
             document.add(combined);
-            document.add(quebra);
 
 //Despesas (Tabela)
             List<Expenses> expensesList = expensesService.findAllByProposal(proposal);
@@ -541,7 +540,7 @@ public class ProposalController {
                         totalParagraph.add(normalChunk);
                         document.add(totalParagraph);
 
-                        //total e centro de custo
+                        //centro de custo
 
                         Paragraph costCenterExpensesParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
@@ -651,7 +650,7 @@ public class ProposalController {
                         totalParagraph.add(normalChunk);
                         document.add(totalParagraph);
 
-                        //total e centro de custo
+                        //centro de custo
 
                         Paragraph costCenterRecurrentParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
@@ -763,7 +762,7 @@ public class ProposalController {
                         totalParagraph.add(normalChunk);
                         document.add(totalParagraph);
 
-                        //total e centro de custo
+                        //centro de custo
 
                         Paragraph costCenterInternalResourcesParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
