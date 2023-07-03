@@ -31,6 +31,8 @@ public class DemandDTO {
 
     private PotentialBenefit potentialBenefit;
 
+    private Worker approver;
+
     List<CostCenter> costCenter;
 
     private Classification classification;
