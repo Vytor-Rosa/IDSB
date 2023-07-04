@@ -147,8 +147,8 @@ public class MessageController {
 
     @GetMapping("/notviewed/{workerCode}/{demandCode}")
     public ResponseEntity<Object> notViewed(@PathVariable(value = "workerCode") Integer workerCode, @PathVariable(value = "demandCode") Integer demandCode) {
-        List<Message> messagesDemand = messageService.findAllByDemand(demandCode);
         List<Message> messageList = new ArrayList<>();
+        List<Message> messagesDemand = messageService.findAllByDemand(demandCode);
         for (int i = 0; i < messagesDemand.size(); i++) {
             if (messagesDemand.get(i).getSender().getWorkerCode() != workerCode) {
                 if (messagesDemand.get(i).getViewed() == null) {
