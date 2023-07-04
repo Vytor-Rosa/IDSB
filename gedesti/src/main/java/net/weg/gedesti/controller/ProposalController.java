@@ -459,7 +459,7 @@ public class ProposalController {
             linkJira = linkJira.replaceAll("&nbsp", " ");
             doc = Jsoup.parse(linkJira);
             String linkJiraFinal = doc.text();
-            Phrase linkJiraTitle = new Phrase(20F, "Link Epic Jira:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
+            Phrase linkJiraTitle = new Phrase(20F, "Link Epic Jira: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
             Phrase linkJiraAdd = new Phrase(20F, linkJiraFinal, FontFactory.getFont(FontFactory.HELVETICA, 10));
             combined = new Phrase();
             combined.add(linkJiraTitle);
@@ -541,7 +541,7 @@ public class ProposalController {
                         totalParagraph.add(normalChunk);
                         document.add(totalParagraph);
 
-                        //centro de custo
+                        // Centro de custo
                         Paragraph costCenterExpensesParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
                         boldChunk.setFont(fontBold);
@@ -760,7 +760,7 @@ public class ProposalController {
                         totalParagraph.add(normalChunk);
                         document.add(totalParagraph);
 
-                        //centro de custo
+                        // Centro de custo
 
                         Paragraph costCenterInternalResourcesParagraph = new Paragraph();
                         boldChunk = new Chunk("Centros de custo: ");
