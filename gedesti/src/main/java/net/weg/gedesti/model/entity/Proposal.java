@@ -1,7 +1,7 @@
 package net.weg.gedesti.model.entity;
 
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -74,7 +74,7 @@ public class Proposal {
     @Column(nullable = true)
     private Boolean published;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Expenses> expensesList;
 

@@ -2,7 +2,6 @@ package net.weg.gedesti.model.entity;
 
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,11 +22,12 @@ public class Expenses {
     private String expensesType;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "proposal_code")
+    @JsonIgnore
     private Proposal proposal;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "expenses")
+    @JsonIgnore
     private List<ExpensesCostCenters> expensesCostCenters;
 
     @OneToMany(cascade = CascadeType.ALL)

@@ -113,15 +113,15 @@ public class MinuteController {
 
     @GetMapping("/pdf/{minuteCode}")
     public ResponseEntity<InputStreamResource> savePdf(@PathVariable(value = "minuteCode") Integer minuteCode, HttpServletResponse response) throws IOException {
-        Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
-        Minute minute = minuteOptional.get();
-
         try {
             com.itextpdf.text.Document document = new com.itextpdf.text.Document();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, byteArrayOutputStream);
 
             document.open();
+
+            Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
+            Minute minute = minuteOptional.get();
 
             String path = new File(".").getCanonicalPath();
             com.itextpdf.text.Image logo = com.itextpdf.text.Image.getInstance(path + "\\src\\main\\java\\net\\weg\\gedesti\\controller\\filePdf\\img.png");
@@ -307,8 +307,9 @@ public class MinuteController {
 
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
-                    .header("Content-Disposition", "attachment; filename=ATA REUNIÃO" + minute.getAgenda().getCommission() + ".pdf")
+                    .header("Content-Disposition", "attachment; filename=ATA - " + minute.getAgenda().getCommission().getCommissionName() + ".pdf")
                     .body(resource);
+
         } catch (Exception e) {
             throw new IOException();
         }
