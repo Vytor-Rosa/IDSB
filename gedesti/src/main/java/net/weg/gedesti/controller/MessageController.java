@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -114,6 +115,7 @@ public class MessageController {
                     messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));
             }
         }
+        messageList.sort(Comparator.comparing(Message::getDateMessage).reversed());
         return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
     }
 
