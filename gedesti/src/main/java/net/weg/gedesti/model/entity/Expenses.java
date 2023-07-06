@@ -27,7 +27,6 @@ public class Expenses {
     private Proposal proposal;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "expenses")
-    @JsonIgnore
     private List<ExpensesCostCenters> expensesCostCenters;
 
     @OneToMany(cascade = CascadeType.ALL)

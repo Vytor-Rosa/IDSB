@@ -1,30 +1,18 @@
 package net.weg.gedesti.controller;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
-import net.weg.gedesti.dto.AgendaDTO;
-import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.dto.ProposalDTO;
 import net.weg.gedesti.model.entity.*;
 import net.weg.gedesti.model.service.DemandService;
-import net.weg.gedesti.model.service.ExpenseService;
 import net.weg.gedesti.model.service.ExpensesService;
 import net.weg.gedesti.model.service.ProposalService;
-import net.weg.gedesti.repository.ExpenseRepository;
 import net.weg.gedesti.repository.ProposalRepository;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -40,20 +28,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.awt.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -469,7 +449,6 @@ public class ProposalController {
 //Despesas (Tabela)
             List<Expenses> expensesList = expensesService.findAllByProposal(proposal);
             boolean tabelaCriada = false;
-            System.out.println(expensesList);
             for (Expenses expensesVerificarion : expensesList) {
                 List<Expense> expenseListVerificarion = expensesVerificarion.getExpense();
                 for (Expense expenseVerificarion : expenseListVerificarion) {
@@ -502,7 +481,6 @@ public class ProposalController {
                                 List<Expense> expenseList = expenses.getExpense();
                                 for (Expense expense : expenseList) {
                                     if (expense.getExpenseType().equals("expenses")) {
-                                        System.out.println(expense.getExpenseProfile());
                                         columnCellExpenses.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
                                         tableExpenses.addCell(columnCellExpenses);
                                         columnCellExpenses.setPhrase(new Phrase(String.valueOf(expense.getAmountOfHours()), fontNormal));
@@ -610,7 +588,6 @@ public class ProposalController {
                                 List<Expense> expenseList = expenses.getExpense();
                                 for (Expense expense : expenseList) {
                                     if (expense.getExpenseType().equals("recurrent")) {
-                                        System.out.println(expense.getExpenseProfile());
                                         columnCellRecurrent.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
                                         tableRecurrent.addCell(columnCellRecurrent);
                                         columnCellRecurrent.setPhrase(new Phrase(String.valueOf(expense.getAmountOfHours()), fontNormal));
@@ -721,7 +698,6 @@ public class ProposalController {
                                 List<Expense> InternalResourcesList = expenses.getExpense();
                                 for (Expense expense : InternalResourcesList) {
                                     if (expense.getExpenseType().equals("internal")) {
-                                        System.out.println(expense.getExpenseProfile());
                                         columnCellInternalResources.setPhrase(new Phrase(expense.getExpenseProfile(), fontNormal));
                                         tableInternalResources.addCell(columnCellInternalResources);
                                         columnCellInternalResources.setPhrase(new Phrase(String.valueOf(expense.getAmountOfHours()), fontNormal));
