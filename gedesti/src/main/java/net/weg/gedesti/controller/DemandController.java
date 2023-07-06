@@ -59,6 +59,31 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAll());
     }
 
+    @GetMapping("/order/{name}/{type}")
+    public ResponseEntity<List<Demand>> order(@PathVariable(value = "name") String name, @PathVariable(value = "type") String type) {
+        List<Demand> demands = demandService.findAll();
+        if(name.equals("score")){
+            if(type.equals("up")) {
+                demands.sort(Comparator.comparing(Demand::getScore).reversed());
+            }else{
+                demands.sort(Comparator.comparing(Demand::getScore));
+            }
+        }else if(name.equals("dates")){
+            if(type.equals("up")) {
+                demands.sort(Comparator.comparing(Demand::getDemandDate).reversed());
+            }else{
+                demands.sort(Comparator.comparing(Demand::getDemandDate));
+            }
+        }else if(name.equals("code")){
+            if(type.equals("up")) {
+                demands.sort(Comparator.comparing(Demand::getDemandCode).reversed());
+            }else{
+                demands.sort(Comparator.comparing(Demand::getDemandCode));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(demands);
+    }
+
     public List<Demand> findByStatus(String value) {
         List<Demand> demandList = demandService.findAll();
         List<Demand> demandsStatus = new ArrayList<>();
