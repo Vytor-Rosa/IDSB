@@ -65,8 +65,13 @@ public class ProposalController {
         List<Proposal> proposals = proposalService.findAll();
         for (Proposal proposal : proposals) {
             if (proposal.getScore() == null) {
-                proposal.setScore(score(proposal.getDemand()));
-                proposalRepository.saveAndFlush(proposal);
+                List<Demand> demandList = demandService.findByDemandCode(proposal.getDemand().getDemandCode());
+                for (Demand demand : demandList) {
+                    if (demand.getDemandVersion() == 1.0) {
+                        proposal.setScore(score(demand));
+                        proposalRepository.saveAndFlush(proposal);
+                    }
+                }
             }
         }
 
