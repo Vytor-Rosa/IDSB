@@ -32,7 +32,7 @@ public class Demand {
 
     private Boolean activeVersion;
 
-    private String demandDate;
+    private Date demandDate;
 
     private LocalTime demandHour;
 

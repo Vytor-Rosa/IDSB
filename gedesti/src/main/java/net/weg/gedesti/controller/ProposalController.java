@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -171,9 +172,11 @@ public class ProposalController {
         }
 
         LocalDate actualDate = LocalDate.now();
-        String createDate = demandDate.getDemandDate();
+        Date createDate = demandDate.getDemandDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
-        long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
+        DateFormat dateFormat = new SimpleDateFormat("dd/M/yyyy");
+        String formatDate = dateFormat.format(createDate);
+        long days = ChronoUnit.DAYS.between(LocalDate.parse(formatDate, formatter), actualDate);
 
         if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
             demandSize = 1;

@@ -38,8 +38,12 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -70,6 +74,7 @@ public class DemandController {
             }
         }else if(name.equals("dates")){
             if(type.equals("up")) {
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 demands.sort(Comparator.comparing(Demand::getDemandDate).reversed());
             }else{
                 demands.sort(Comparator.comparing(Demand::getDemandDate));
@@ -548,17 +553,15 @@ public class DemandController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam(value = "demand") @Valid String
-                                               demandJson, @RequestParam(value = "demandAttachments", required = false) List<MultipartFile> demandAttachment) {
+                                               demandJson, @RequestParam(value = "demandAttachments", required = false) List<MultipartFile> demandAttachment) throws ParseException {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         demand.setDemandVersion(1);
         demand.setDemandHour(LocalTime.now());
 
         LocalDate createDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
-        String formattedString = createDate.format(formatter);
-
-        demand.setDemandDate(formattedString);
+        Date date = Date.from(createDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        demand.setDemandDate(date);
 
         List<Demand> demands = demandRepository.findAllByActiveVersion();
         Integer size = demands.size();
@@ -568,6 +571,8 @@ public class DemandController {
         if (demandAttachment != null) {
             demand.setDemandAttachment(demandAttachment);
         }
+
+        demand.setScore(0.0);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(demandService.save(demand));
     }
@@ -601,7 +606,7 @@ public class DemandController {
     public ResponseEntity<Object> update(@RequestParam(value = "demand") @Valid String demandJson,
                                          @PathVariable(value = "demandCode") Integer demandCode,
                                          @RequestParam(value = "demandAttachment", required = false) List<MultipartFile> demandAttachment) throws
-            IOException {
+            IOException, ParseException {
         DemandUtil demandUtil = new DemandUtil();
         Demand demand = demandUtil.convertJsonToModel(demandJson);
         if (demandAttachment != null) {
@@ -620,10 +625,12 @@ public class DemandController {
             }
         }
         demand.setDemandHour(LocalTime.now());
+
         LocalDate createDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
-        String formattedString = createDate.format(formatter);
-        demand.setDemandDate(formattedString);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(Date.from(createDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        Date date = dateFormat.parse(strDate);
+        demand.setDemandDate(date);
         demand.setDemandVersion(maxVersion + 1);
         demand.setActiveVersion(true);
 
@@ -681,7 +688,7 @@ public class DemandController {
 
         List<Demand> demandList = demandService.findAll();
         for (Demand demand : demandList) {
-            if (demand.getScore() != null) {
+            if (demand.getScore() != 0.0) {
                 demand.setScore(score(demand));
                 demandRepository.saveAndFlush(demand);
             }
@@ -718,9 +725,11 @@ public class DemandController {
         }
 
         LocalDate actualDate = LocalDate.now();
-        String createDate = demandDate.getDemandDate();
+        Date createDate = demandDate.getDemandDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
-        long days = ChronoUnit.DAYS.between(LocalDate.parse(createDate, formatter), actualDate);
+        DateFormat dateFormat = new SimpleDateFormat("dd/M/yyyy");
+        String formatDate = dateFormat.format(createDate);
+        long days = ChronoUnit.DAYS.between(LocalDate.parse(formatDate, formatter), actualDate);
 
         if (demand.getClassification().getClassificationSize().equals("Muito Pequeno")) {
             demandSize = 1;
