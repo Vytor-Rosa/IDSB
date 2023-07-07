@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.AgendaDTO;
 import net.weg.gedesti.model.entity.Agenda;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.Minute;
 import net.weg.gedesti.model.entity.Proposal;
 import net.weg.gedesti.model.service.AgendaService;
 import net.weg.gedesti.repository.AgendaRepository;
@@ -32,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,25 @@ public class AgendaController {
     @GetMapping
     public ResponseEntity<List<Agenda>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(agendaService.findAll());
+    }
+
+    @GetMapping("/order/{name}/{type}")
+    public ResponseEntity<List<Agenda>> order(@PathVariable(value = "name") String name, @PathVariable(value = "type") String type) {
+        List<Agenda> agendas = agendaService.findAll();
+        if(name.equals("dates")){
+            if(type.equals("up")) {
+                agendas.sort(Comparator.comparing(Agenda::getAgendaDate).reversed());
+            }else{
+                agendas.sort(Comparator.comparing(Agenda::getAgendaDate));
+            }
+        }else if(name.equals("code")){
+            if(type.equals("up")) {
+                agendas.sort(Comparator.comparing(Agenda::getAgendaCode).reversed());
+            }else{
+                agendas.sort(Comparator.comparing(Agenda::getAgendaCode));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(agendas);
     }
 
     @GetMapping("/page")

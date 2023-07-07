@@ -74,7 +74,6 @@ public class DemandController {
             }
         }else if(name.equals("dates")){
             if(type.equals("up")) {
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 demands.sort(Comparator.comparing(Demand::getDemandDate).reversed());
             }else{
                 demands.sort(Comparator.comparing(Demand::getDemandDate));

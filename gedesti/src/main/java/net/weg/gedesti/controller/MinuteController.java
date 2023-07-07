@@ -35,10 +35,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -51,6 +49,25 @@ public class MinuteController {
     @GetMapping
     public ResponseEntity<List<Minute>> findAll() {
         return ResponseEntity.status(HttpStatus.FOUND).body(minuteService.findAll());
+    }
+
+    @GetMapping("/order/{name}/{type}")
+    public ResponseEntity<List<Minute>> order(@PathVariable(value = "name") String name, @PathVariable(value = "type") String type) {
+        List<Minute> minutes = minuteService.findAll();
+        if(name.equals("dates")){
+            if(type.equals("up")) {
+                minutes.sort(Comparator.comparing(Minute::getMinuteStartDate).reversed());
+            }else{
+                minutes.sort(Comparator.comparing(Minute::getMinuteStartDate));
+            }
+        }else if(name.equals("code")){
+            if(type.equals("up")) {
+                minutes.sort(Comparator.comparing(Minute::getMinuteCode).reversed());
+            }else{
+                minutes.sort(Comparator.comparing(Minute::getMinuteCode));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(minutes);
     }
 
     @GetMapping("/page")

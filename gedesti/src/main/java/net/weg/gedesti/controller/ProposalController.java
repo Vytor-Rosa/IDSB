@@ -57,6 +57,31 @@ public class ProposalController {
         return ResponseEntity.status(HttpStatus.FOUND).body(proposalService.findAll());
     }
 
+    @GetMapping("/order/{name}/{type}")
+    public ResponseEntity<List<Proposal>> order(@PathVariable(value = "name") String name, @PathVariable(value = "type") String type) {
+        List<Proposal> proposals = proposalService.findAll();
+        if(name.equals("score")){
+            if(type.equals("up")) {
+                proposals.sort(Comparator.comparing(Proposal::getScore).reversed());
+            }else{
+                proposals.sort(Comparator.comparing(Proposal::getScore));
+            }
+        }else if(name.equals("dates")){
+            if(type.equals("up")) {
+                proposals.sort(Comparator.comparing(Proposal::getProposalDate).reversed());
+            }else{
+                proposals.sort(Comparator.comparing(Proposal::getProposalDate));
+            }
+        }else if(name.equals("code")){
+            if(type.equals("up")) {
+                proposals.sort(Comparator.comparing(Proposal::getProposalCode).reversed());
+            }else{
+                proposals.sort(Comparator.comparing(Proposal::getProposalCode));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(proposals);
+    }
+
     @GetMapping("/page")
     public ResponseEntity<Page<Proposal>> findAll(@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
         int pageNumber = pageable.getPageNumber();
