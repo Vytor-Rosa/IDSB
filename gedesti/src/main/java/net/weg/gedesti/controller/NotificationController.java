@@ -63,10 +63,13 @@ public class NotificationController {
         notificationService.deleteById(integer);
     }
 
-    @Modifying
-    @Transactional
-    @PutMapping("/update/{notificationCode}")
-    public ResponseEntity<Object> updateVisualized(@PathVariable(value = "notificationCode") Integer notificationCode) {
+//    @Modifying
+//    @Transactional
+//    @PutMapping("/update/{notificationCode}")
+
+    @MessageMapping("/notification/{workerCode}")
+    @SendTo("/notifications/{workerCode}")
+    public ResponseEntity<Object> updateVisualized(@RequestBody Integer notificationCode) {
 
         if (!notificationService.existsById(notificationCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + notificationCode);
