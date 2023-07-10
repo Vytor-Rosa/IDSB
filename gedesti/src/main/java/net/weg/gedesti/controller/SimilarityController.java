@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/similarity")
@@ -29,21 +26,37 @@ public class SimilarityController {
 
     @PostMapping("/compare")
     public ResponseEntity<Object> compareTexts(@RequestBody @Valid SimilarityDTO similarityDTO) {
-        
-        Optional<Demand> demandOne = DemandService.findById(similarityDTO.getDemandOne().getDemandCode());
-        Optional<Demand> demandTwo = DemandService.findById(similarityDTO.getDemandTwo().getDemandCode());
+
+        Similarity similarity = new Similarity();
+        BeanUtils.copyProperties(similarityDTO, similarity);
+
+        List<Demand> demandOne = DemandService.findByDemandCode(similarity.getDemandOne().getDemandCode());
+        List<Demand> demandTwo = DemandService.findByDemandCode(similarity.getDemandTwo().getDemandCode());
+        Demand demandOneActive = new Demand();
+        Demand demandTwoActive = new Demand();
+
+        for(Demand demand : demandOne) {
+            if(demand.getActiveVersion() == true){
+                BeanUtils.copyProperties(demand, demandOneActive);
+            }
+        }
+
+        for(Demand demand : demandTwo) {
+            if(demand.getActiveVersion() == true){
+                BeanUtils.copyProperties(demand, demandTwoActive);
+            }
+        }
 
         if (demandOne.isEmpty() || demandTwo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code:  " + similarityDTO.getDemandOne().getDemandCode() + " or " + similarityDTO.getDemandTwo().getDemandCode());
         }
 
-        String text1 = demandOne.get().getDemandObjective();
-        String text2 = demandTwo.get().getDemandObjective();
+        String text1 = demandOneActive.getDemandObjective();
+        String text2 = demandTwoActive.getDemandObjective();
 
-
-        double similarity = calculateSimilarity(text1, text2);
-        String sentiment = classifySimilarity(similarity);
-        return ResponseEntity.status(HttpStatus.OK).body(0);
+        double similarityCalculate = calculateSimilarity(text1, text2);
+        String sentiment = classifySimilarity(similarityCalculate);
+        return ResponseEntity.status(HttpStatus.OK).body(sentiment);
     }
 
     private double calculateSimilarity(String text1, String text2) {
