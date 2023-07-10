@@ -2,7 +2,10 @@ package net.weg.gedesti.controller;
 
 import lombok.AllArgsConstructor;
 import net.weg.gedesti.dto.DemandDTO;
+import net.weg.gedesti.dto.SimilarityDTO;
 import net.weg.gedesti.model.entity.Demand;
+import net.weg.gedesti.model.entity.Similarity;
+import net.weg.gedesti.model.service.DemandService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -21,15 +25,24 @@ import java.util.Set;
 @AllArgsConstructor
 public class SimilarityController {
 
+    DemandService DemandService;
+
     @PostMapping("/compare")
-    public ResponseEntity<Object> compareTexts(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Object> compareTexts(@RequestBody @Valid SimilarityDTO similarityDTO) {
+        
+        Optional<Demand> demandOne = DemandService.findById(similarityDTO.getDemandOne().getDemandCode());
+        Optional<Demand> demandTwo = DemandService.findById(similarityDTO.getDemandTwo().getDemandCode());
 
-        //String text1 = demandOne.getDemandObjective();
-        //String text2 = demandTwo.getDemandObjective();
+        if (demandOne.isEmpty() || demandTwo.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code:  " + similarityDTO.getDemandOne().getDemandCode() + " or " + similarityDTO.getDemandTwo().getDemandCode());
+        }
+
+        String text1 = demandOne.get().getDemandObjective();
+        String text2 = demandTwo.get().getDemandObjective();
 
 
-        //double similarity = calculateSimilarity(text1, text2);
-        //String sentiment = classifySimilarity(similarity);
+        double similarity = calculateSimilarity(text1, text2);
+        String sentiment = classifySimilarity(similarity);
         return ResponseEntity.status(HttpStatus.OK).body(0);
     }
 
