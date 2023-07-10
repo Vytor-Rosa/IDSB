@@ -60,15 +60,12 @@ public class SimilarityController {
     }
 
     private double calculateSimilarity(String text1, String text2) {
-        // Pré-processamento
         text1 = preprocessText(text1);
         text2 = preprocessText(text2);
 
-        // Criando o conjunto de tokens para cada texto
         Set<String> set1 = createTokenSet(text1);
         Set<String> set2 = createTokenSet(text2);
 
-        // Calculando a similaridade de Jaccard
         double intersection = intersectionSize(set1, set2);
         double union = unionSize(set1, set2);
         double similarity = intersection / union;
