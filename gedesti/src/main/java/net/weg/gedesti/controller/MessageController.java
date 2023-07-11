@@ -115,7 +115,7 @@ public class MessageController {
                     messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));
             }
         }
-        messageList.sort(Comparator.comparing(Message::getDateMessage).reversed());
+//        messageList.sort(Comparator.comparing(Message::getDateMessage).reversed());
         return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
     }
 
