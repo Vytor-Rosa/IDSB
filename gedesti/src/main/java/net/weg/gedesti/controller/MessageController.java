@@ -93,29 +93,31 @@ public class MessageController {
     public ResponseEntity<Object> findChatByDemand(@PathVariable(value = "workerCode") Worker workerCode) {
         List<Demand> demandList = demandService.findAll();
         List<Message> messageList = new ArrayList<>();
-        List<Demand> demandsFinal = new ArrayList<>();
         Demand demandFinal = new Demand();
 
         for (Demand demand : demandList) {
-            if (!messageService.findAllBySenderAndDemand(workerCode, demand.getDemandCode()).isEmpty()) {
-                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()))) {
-                    messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demand.getDemandCode()));
-                }
-            }
-
-            demandsFinal = demandService.findByDemandCode(demand.getDemandCode());
+            List<Demand> demandsFinal = demandService.findAllByDemandCode(demand.getDemandCode());
             for (Demand demandActive : demandsFinal) {
                 if (demandActive.getActiveVersion() == true) {
                     demandFinal = demandActive;
                 }
             }
 
-            if (demandFinal.getRequesterRegistration().getWorkerCode() == workerCode.getWorkerCode()) {
-                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode())))
+            System.out.println(messageService.findAllBySenderAndDemand(workerCode, demandFinal.getDemandCode()));
+
+            if (!messageService.findAllBySenderAndDemand(workerCode, demandFinal.getDemandCode()).isEmpty()) {
+                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()))) {
                     messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));
+                }
+            }
+
+            if (demandFinal.getRequesterRegistration().getWorkerCode() == workerCode.getWorkerCode()) {
+                if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode())) && messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()) != null) {
+                    messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));
+                }
             }
         }
-//        messageList.sort(Comparator.comparing(Message::getDateMessage).reversed());
+        System.out.println(messageList);
         return ResponseEntity.status(HttpStatus.FOUND).body(messageList);
     }
 
