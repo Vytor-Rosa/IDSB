@@ -63,12 +63,9 @@ public class NotificationController {
         notificationService.deleteById(integer);
     }
 
-//    @Modifying
-//    @Transactional
-//    @PutMapping("/update/{notificationCode}")
-
-    @MessageMapping("/notification/{workerCode}")
-    @SendTo("/notifications/{workerCode}")
+    @Modifying
+    @Transactional
+    @PutMapping("/update/{notificationCode}")
     public ResponseEntity<Object> updateVisualized(@RequestBody Integer notificationCode) {
 
         if (!notificationService.existsById(notificationCode)) {
