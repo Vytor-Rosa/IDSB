@@ -1,6 +1,7 @@
 package net.weg.gedesti.model.service;
 
 import lombok.AllArgsConstructor;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Reproach;
 import net.weg.gedesti.repository.RealBenefitRepository;
 import net.weg.gedesti.repository.ReproachRepositry;
@@ -24,5 +25,9 @@ public class ReproachService {
 
     public Optional<Reproach> findById(Integer integer) {
         return reproachRepositry.findById(integer);
+    }
+
+    public Optional<Reproach> findByDemand(Demand demand){
+        return reproachRepositry.findByDemand(demand);
     }
 }

@@ -3,7 +3,9 @@ package net.weg.gedesti.controller;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import net.weg.gedesti.dto.ReproachDTO;
+import net.weg.gedesti.model.entity.Demand;
 import net.weg.gedesti.model.entity.Reproach;
+import net.weg.gedesti.model.service.DemandService;
 import net.weg.gedesti.model.service.ReproachService;
 import net.weg.gedesti.repository.RealBenefitRepository;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequestMapping("/api/reproach")
 public class ReproachController {
     private ReproachService reproachService;
+    private DemandService demandService;
 
     @GetMapping
     public ResponseEntity<List<Reproach>> findAll() {
@@ -41,5 +44,21 @@ public class ReproachController {
         Reproach reproach = new Reproach();
         BeanUtils.copyProperties(reproachDTO, reproach);
         return ResponseEntity.status(HttpStatus.OK).body(reproachService.save(reproach));
+    }
+
+    @GetMapping("/demand/{demandCode}")
+    public ResponseEntity<?> demandReproaches(@PathVariable(value = "demandCode") Integer demandCode) {
+
+        List<Demand> demands = demandService.findByDemandCode(demandCode);
+        Demand demand = new Demand();
+
+        for(Demand d : demands){
+            if(d.getActiveVersion()){
+                demand = d;
+            }
+        }
+
+        Optional<Reproach> reproach = reproachService.findByDemand(demand);
+        return ResponseEntity.status(HttpStatus.FOUND).body(reproach);
     }
 }
