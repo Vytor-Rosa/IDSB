@@ -40,8 +40,8 @@ public class DemandService {
         return demandRepository.findAllByActiveVersionAndDemandStatusOrderByScoreDesc(pageable);
     }
 
-    public Page<Demand> findAllByActiveVersionAndDepartamentOrderByScoreDesc(Pageable pageable) {
-        return demandRepository.findAllByActiveVersionAndDepartmentOrderByScoreDesc(pageable);
+    public Page<Demand> findAllByActiveVersionAndDepartmentOrderByScoreDesc(String department, Pageable pageable) {
+        return demandRepository.findAllByActiveVersionAndDepartmentOrderByScoreDesc(department, pageable);
     }
 
     public List<Demand> findByDemandCode(Integer integer) {

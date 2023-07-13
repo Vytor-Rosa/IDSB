@@ -66,22 +66,22 @@ public class DemandController {
     @GetMapping("/order/{name}/{type}")
     public ResponseEntity<List<Demand>> order(@PathVariable(value = "name") String name, @PathVariable(value = "type") String type) {
         List<Demand> demands = demandService.findAll();
-        if(name.equals("score")){
-            if(type.equals("up")) {
+        if (name.equals("score")) {
+            if (type.equals("up")) {
                 demands.sort(Comparator.comparing(Demand::getScore).reversed());
-            }else{
+            } else {
                 demands.sort(Comparator.comparing(Demand::getScore));
             }
-        }else if(name.equals("dates")){
-            if(type.equals("up")) {
+        } else if (name.equals("dates")) {
+            if (type.equals("up")) {
                 demands.sort(Comparator.comparing(Demand::getDemandDate).reversed());
-            }else{
+            } else {
                 demands.sort(Comparator.comparing(Demand::getDemandDate));
             }
-        }else if(name.equals("code")){
-            if(type.equals("up")) {
+        } else if (name.equals("code")) {
+            if (type.equals("up")) {
                 demands.sort(Comparator.comparing(Demand::getDemandCode).reversed());
-            }else{
+            } else {
                 demands.sort(Comparator.comparing(Demand::getDemandCode));
             }
         }
@@ -711,12 +711,12 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionAndDemandStatusOrderByScoreDesc(pageable));
     }
 
-    @GetMapping("/department/page")
-    public ResponseEntity<Page<Demand>> findAllDepartament
-            (@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+    @GetMapping("/{department}/page")
+    public ResponseEntity<Page<Demand>> findAllDepartament(
+            @PathVariable(value = "department") String department,
+            @PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
         int pageNumber = pageable.getPageNumber();
         pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
-
         List<Demand> demandList = demandService.findAll();
         for (Demand demand : demandList) {
             if (demand.getScore() != 0.0) {
@@ -724,8 +724,8 @@ public class DemandController {
                 demandRepository.saveAndFlush(demand);
             }
         }
-
-        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionAndDepartamentOrderByScoreDesc(pageable));
+        System.out.println(department);
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionAndDepartmentOrderByScoreDesc(department, pageable));
     }
 
     @Modifying
