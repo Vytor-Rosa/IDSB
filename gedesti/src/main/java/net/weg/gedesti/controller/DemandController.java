@@ -724,7 +724,6 @@ public class DemandController {
                 demandRepository.saveAndFlush(demand);
             }
         }
-        System.out.println(department);
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionAndDepartmentOrderByScoreDesc(department, pageable));
     }
 
