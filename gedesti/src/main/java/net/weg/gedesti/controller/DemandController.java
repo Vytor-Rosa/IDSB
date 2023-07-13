@@ -695,6 +695,22 @@ public class DemandController {
         return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionOrderByScoreDesc(pageable));
     }
 
+    @GetMapping("/manager/page")
+    public ResponseEntity<Page<Demand>> findAllManager
+            (@PageableDefault(page = 0, value = 1, size = 5, direction = Sort.Direction.ASC) Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        pageable = PageRequest.of(pageNumber > 0 ? pageNumber - 1 : 0, pageable.getPageSize(), pageable.getSort());
+
+        List<Demand> demandList = demandService.findAll();
+        for (Demand demand : demandList) {
+            if (demand.getScore() != 0.0) {
+                demand.setScore(score(demand));
+                demandRepository.saveAndFlush(demand);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(demandService.findAllByActiveVersionAndDemandStatusOrderByScoreDesc(pageable));
+    }
+
     @Modifying
     @Transactional
     @PutMapping("/approve/{demandCode}/{approver}")

@@ -36,6 +36,10 @@ public class DemandService {
         return demandRepository.findAllByActiveVersionOrderByScoreDesc(pageable);
     }
 
+    public Page<Demand> findAllByActiveVersionAndDemandStatusOrderByScoreDesc(Pageable pageable) {
+        return demandRepository.findAllByActiveVersionAndDemandStatusOrderByScoreDesc(pageable);
+    }
+
     public List<Demand> findByDemandCode(Integer integer) {
         return demandRepository.findByDemandCode(integer);
     }

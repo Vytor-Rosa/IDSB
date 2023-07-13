@@ -29,4 +29,6 @@ public interface DemandRepository extends JpaRepository<Demand, Integer> {
     List<Demand> findAllByApprover(Worker worker);
     List<Demand> findAllByClassificationAnalistRegistry(Worker worker);
     List<Demand> findAllByDemandVersion(Integer integer);
+    @Query("SELECT d FROM Demand d WHERE d.activeVersion = true AND d.demandStatus = 'BacklogRanked' ORDER BY d.score DESC")
+    Page<Demand> findAllByActiveVersionAndDemandStatusOrderByScoreDesc(Pageable pageable);
 }
