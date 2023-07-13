@@ -66,7 +66,7 @@ public class NotificationController {
     @Modifying
     @Transactional
     @PutMapping("/update/{notificationCode}")
-    public ResponseEntity<Object> updateVisualized(@RequestBody Integer notificationCode) {
+    public ResponseEntity<Object> updateVisualized(@PathVariable(value = "notificationCode") Integer notificationCode) {
 
         if (!notificationService.existsById(notificationCode)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! no classification with code: " + notificationCode);
