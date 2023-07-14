@@ -94,7 +94,6 @@ public class MinuteController {
     @GetMapping("/{minuteCode}")
     public ResponseEntity<Object> findById(@PathVariable(value = "minuteCode") Integer minuteCode) {
         Optional<Minute> minuteOptional = minuteService.findById(minuteCode);
-        System.out.println("Minute: " + minuteOptional.get().getMinuteName());
         if (minuteOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No minute with code:" + minuteCode);
         }
