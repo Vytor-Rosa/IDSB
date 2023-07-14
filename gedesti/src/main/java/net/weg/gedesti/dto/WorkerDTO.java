@@ -2,6 +2,7 @@ package net.weg.gedesti.dto;
 
 import lombok.Data;
 import net.weg.gedesti.model.entity.Attachment;
+import net.weg.gedesti.model.entity.Colors;
 
 import javax.persistence.Column;
 import javax.validation.constraints.*;
@@ -36,5 +37,5 @@ public class WorkerDTO {
 
     private Integer fontSize;
 
-
+    private Colors colors;
 }

@@ -61,6 +61,9 @@ public class Worker {
     @Column(nullable = false)
     private Integer fontSize;
 
+    @OneToOne
+    private Colors colors;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Attachment workerPhoto;
 

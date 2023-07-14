@@ -1,26 +1,26 @@
 package net.weg.gedesti;
 
-import net.weg.gedesti.dto.DemandDTO;
 import net.weg.gedesti.model.entity.*;
+import net.weg.gedesti.repository.ColorsRepository;
 import net.weg.gedesti.repository.CommissionRepository;
 import net.weg.gedesti.repository.WorkerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import net.weg.gedesti.repository.BuRepository;
 
-import java.util.List;
-
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
     private final WorkerRepository workerRepository;
     private final BuRepository buRepository;
     private final CommissionRepository commissionRepository;
+    private final ColorsRepository colorsRepository;
 
 
-    public DatabaseInitializer(WorkerRepository workerRepository, BuRepository buRepository, CommissionRepository commissionRepository) {
+    public DatabaseInitializer(WorkerRepository workerRepository, BuRepository buRepository, CommissionRepository commissionRepository, ColorsRepository colorsRepository) {
         this.workerRepository = workerRepository;
         this.buRepository = buRepository;
         this.commissionRepository = commissionRepository;
+        this.colorsRepository = colorsRepository;
     }
 
     @Override
@@ -32,16 +32,24 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     public void addWorkers(){
-        Worker requester = new Worker(72139, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", false, false, false, false, false, 24, null);
-        Worker analyst = new Worker(7334, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24, null);
-        Worker analystSupreme = new Worker(7335, "Analista Augusto Rosa", "analista@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24, null);
-        Worker ti = new Worker(72123, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", false, false, false, false, false, 24, null);
-        Worker business = new Worker(72121, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false, false, false, false, false, 24, null);
+
+        Worker requester = new Worker(72139, "Leonardo Heitor Poglia", "leonardo@weg.net", "123", "requester", "pt", "machining", false, false, false, false, false, 24,  addColor(1), null);
+        Worker analyst = new Worker(7334, "Vytor Augusto Rosa", "vytor@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24, addColor(2), null);
+        Worker analystSupreme = new Worker(7335, "Analista Augusto Rosa", "analista@weg.net", "123", "analyst", "pt", "ti", false, false, false, false, false, 24, addColor(3), null);
+        Worker ti = new Worker(72123, "Ester Girelli", "ester@weg.net", "123", "ti", "pt", "rh", false, false, false, false, false, 24, addColor(4), null);
+        Worker business = new Worker(72121, "Eduarda Campos", "eduarda@weg.net", "123", "business", "pt", "ti", false, false, false, false, false, 24, addColor(5), null);
         workerRepository.save(requester);
         workerRepository.save(analystSupreme);
         workerRepository.save(analyst);
         workerRepository.save(ti);
         workerRepository.save(business);
+    }
+
+    public Colors addColor(int code){
+        Colors color = new Colors(code, "#00579D", "#1976d2", "#0090c5", "#448dca", "#64C3D5", "#C4C4C4", "#36802d", "#d33649", "#f6921d");
+        colorsRepository.save(color);
+
+        return color;
     }
 
     public void addCommissions() {
