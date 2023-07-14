@@ -103,8 +103,6 @@ public class MessageController {
                 }
             }
 
-            System.out.println(messageService.findAllBySenderAndDemand(workerCode, demandFinal.getDemandCode()));
-
             if (!messageService.findAllBySenderAndDemand(workerCode, demandFinal.getDemandCode()).isEmpty()) {
                 if (!messageList.contains(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()))) {
                     messageList.add(messageService.findTopByDemandCodeOrderByMessageCodeDesc(demandFinal.getDemandCode()));

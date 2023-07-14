@@ -22,4 +22,7 @@ public class Reproach {
 
     @OneToOne
     private Demand demand;
+
+    @ManyToOne
+    private Worker worker;
 }
