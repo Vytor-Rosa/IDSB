@@ -43,4 +43,7 @@ public class Colors {
 
     @Column(nullable = false)
     private String color9;
+
+    @Column(nullable = false)
+    private String color10;
 }

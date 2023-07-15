@@ -46,7 +46,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     public Colors addColor(int code){
-        Colors color = new Colors(code, "#00579D", "#1976d2", "#0090c5", "#448dca", "#64C3D5", "#C4C4C4", "#36802d", "#d33649", "#f6921d");
+        Colors color = new Colors(code, "#00579D", "#1976d2", "#0090c5", "#448dca", "#64C3D5", "#C4C4C4", "#36802d", "#d33649", "#f6921d", "#FFFFFF");
         colorsRepository.save(color);
 
         return color;

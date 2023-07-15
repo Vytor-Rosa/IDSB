@@ -22,4 +22,7 @@ public class ColorsDTO {
     private String color8;
 
     private String color9;
+
+    private String color10;
+
 }
