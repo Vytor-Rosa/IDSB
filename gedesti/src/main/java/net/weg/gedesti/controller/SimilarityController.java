@@ -9,54 +9,71 @@ import net.weg.gedesti.model.service.DemandService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/similarity")
 @AllArgsConstructor
 public class SimilarityController {
 
-    DemandService DemandService;
+    DemandService demandService;
 
-    @PostMapping("/compare")
-    public ResponseEntity<Object> compareTexts(@RequestBody @Valid SimilarityDTO similarityDTO) {
+    @PostMapping("/compare/{demandCode}")
+    public ResponseEntity<Object> compareTexts(@PathVariable(value = "demandCode") Integer demandCode) {
+
+        List<Demand> demandOptional = demandService.findByDemandCode(demandCode);
+        Demand demandCompare = null;
+
+        for (Demand demands : demandOptional) {
+            if (demands.getActiveVersion()) {
+                demandCompare = demands;
+                break;
+            }
+        }
+
+        if (demandCompare == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No active demand with code: " + demandCode);
+        }
+
+        List<Demand> demands = demandService.findAll();
+
+        if (demands.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demands found.");
+        }
+
+        Demand mostSimilarDemand = null;
+        double maxSimilarity = Double.MIN_VALUE;
+        String textToCompare = demandCompare.getDemandTitle();
+
+        for (Demand demand : demands) {
+            if (demand.getDemandCode() != demandCompare.getDemandCode()) {
+                String currentText = demand.getDemandTitle();
+                double currentSimilarity = calculateSimilarity(textToCompare, currentText);
+
+                if (currentSimilarity > maxSimilarity) {
+                    maxSimilarity = currentSimilarity;
+                    mostSimilarDemand = demand;
+                }
+            }
+        }
+
+        if (mostSimilarDemand == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No similar demand found.");
+        }
+
+        double similarityPercentage = maxSimilarity * 100;
 
         Similarity similarity = new Similarity();
-        BeanUtils.copyProperties(similarityDTO, similarity);
+        similarity.setDemandOne(demandCompare);
+        similarity.setDemandTwo(mostSimilarDemand);
+        similarity.setSimilarityValue(similarityPercentage);
 
-        List<Demand> demandOne = DemandService.findByDemandCode(similarity.getDemandOne().getDemandCode());
-        List<Demand> demandTwo = DemandService.findByDemandCode(similarity.getDemandTwo().getDemandCode());
-        Demand demandOneActive = new Demand();
-        Demand demandTwoActive = new Demand();
-
-        for(Demand demand : demandOne) {
-            if(demand.getActiveVersion() == true){
-                BeanUtils.copyProperties(demand, demandOneActive);
-            }
-        }
-
-        for(Demand demand : demandTwo) {
-            if(demand.getActiveVersion() == true){
-                BeanUtils.copyProperties(demand, demandTwoActive);
-            }
-        }
-
-        if (demandOne.isEmpty() || demandTwo.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error! No demand with code:  " + similarityDTO.getDemandOne().getDemandCode() + " or " + similarityDTO.getDemandTwo().getDemandCode());
-        }
-
-        String text1 = demandOneActive.getDemandObjective();
-        String text2 = demandTwoActive.getDemandObjective();
-
-        double similarityCalculate = calculateSimilarity(text1, text2);
-        String sentiment = classifySimilarity(similarityCalculate);
-        return ResponseEntity.status(HttpStatus.OK).body(sentiment);
+        return ResponseEntity.status(HttpStatus.OK).body(similarity);
     }
 
     private double calculateSimilarity(String text1, String text2) {
@@ -71,14 +88,6 @@ public class SimilarityController {
         double similarity = intersection / union;
 
         return similarity;
-    }
-
-    private String classifySimilarity(double similarity) {
-        if (similarity > 0.5) {
-            return "positivo";
-        } else {
-            return "negativo";
-        }
     }
 
     private String preprocessText(String text) {
@@ -107,4 +116,3 @@ public class SimilarityController {
         return union.size();
     }
 }
-
