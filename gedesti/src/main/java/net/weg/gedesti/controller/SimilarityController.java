@@ -51,7 +51,7 @@ public class SimilarityController {
         String textToCompare = demandCompare.getDemandTitle();
 
         for (Demand demand : demands) {
-            if (demand.getDemandCode() != demandCompare.getDemandCode()) {
+            if (demand.getDemandCode() != demandCompare.getDemandCode() && !demand.getDemandStatus().equals("Cancelled")) {
                 String currentText = demand.getDemandTitle();
                 double currentSimilarity = calculateSimilarity(textToCompare, currentText);
 
